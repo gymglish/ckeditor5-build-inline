@@ -19,7 +19,7 @@ import LinkUI from './linkui';
  *
  * @extends module:core/plugin~Plugin
  */
-export default class Link extends Plugin {
+export default class SelfRequest extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
@@ -31,7 +31,7 @@ export default class Link extends Plugin {
 	 * @inheritDoc
 	 */
 	static get pluginName() {
-		return 'Link';
+		return 'SelfRequest';
 	}
 }
 

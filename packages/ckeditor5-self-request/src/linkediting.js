@@ -37,7 +37,7 @@ export default class LinkEditing extends Plugin {
 	 * @inheritDoc
 	 */
 	static get pluginName() {
-		return 'LinkEditing';
+		return 'SelectRequestEditing';
 	}
 
 	/**

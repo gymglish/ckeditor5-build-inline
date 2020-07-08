@@ -45,7 +45,7 @@ export default class LinkUI extends Plugin {
 	 * @inheritDoc
 	 */
 	static get pluginName() {
-		return 'LinkUI';
+		return 'SelfRequestUI';
 	}
 
 	/**
