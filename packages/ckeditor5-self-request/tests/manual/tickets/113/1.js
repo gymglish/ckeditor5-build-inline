@@ -12,7 +12,7 @@ import ArticlePluginSet from '@ckeditor/ckeditor5-core/tests/_utils/articleplugi
 ClassicEditor
 	.create( document.querySelector( '#editor-insert' ), {
 		plugins: [ ArticlePluginSet ],
-		toolbar: [ 'undo', 'redo', 'link' ]
+		toolbar: [ 'undo', 'redo', 'selfrequest' ]
 	} )
 	.then( editor => {
 		const element = document.querySelector( '#button-insert' );
@@ -28,7 +28,7 @@ ClassicEditor
 ClassicEditor
 	.create( document.querySelector( '#editor-delete' ), {
 		plugins: [ ArticlePluginSet ],
-		toolbar: [ 'undo', 'redo', 'link' ]
+		toolbar: [ 'undo', 'redo', 'selfrequest' ]
 	} )
 	.then( editor => {
 		const element = document.querySelector( '#button-delete' );

@@ -26,7 +26,7 @@ const emailRegExp = /[\w-]+@[\w-]+\.+[\w-]+/i;
 const VISUAL_SELECTION_MARKER_NAME = 'link-ui';
 
 /**
- * The link UI plugin. It introduces the `'link'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
+ * The link UI plugin. It introduces the `'selfrequest'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
  *
  * It uses the
  * {@link module:ui/panel/balloon/contextualballoon~ContextualBalloon contextual balloon plugin}.
@@ -121,7 +121,7 @@ export default class LinkUI extends Plugin {
 	_createActionsView() {
 		const editor = this.editor;
 		const actionsView = new LinkActionsView( editor.locale );
-		const linkCommand = editor.commands.get( 'link' );
+		const linkCommand = editor.commands.get( 'selfrequest' );
 		const unlinkCommand = editor.commands.get( 'unlink' );
 
 		actionsView.bind( 'href' ).to( linkCommand, 'value' );
@@ -162,7 +162,7 @@ export default class LinkUI extends Plugin {
 	 */
 	_createFormView() {
 		const editor = this.editor;
-		const linkCommand = editor.commands.get( 'link' );
+		const linkCommand = editor.commands.get( 'selfrequest' );
 		const defaultProtocol = editor.config.get( 'link.defaultProtocol' );
 
 		const formView = new LinkFormView( editor.locale, linkCommand, defaultProtocol );
@@ -185,7 +185,7 @@ export default class LinkUI extends Plugin {
 			const protocol = isEmail ? 'mailto:' : defaultProtocol;
 			const parsedValue = value && isProtocolNeeded ? protocol + value : value;
 
-			editor.execute( 'link', parsedValue, formView.getDecoratorSwitchesState() );
+			editor.execute( 'selfrequest', parsedValue, formView.getDecoratorSwitchesState() );
 			this._closeFormView();
 		} );
 
@@ -211,7 +211,7 @@ export default class LinkUI extends Plugin {
 	 */
 	_createToolbarLinkButton() {
 		const editor = this.editor;
-		const linkCommand = editor.commands.get( 'link' );
+		const linkCommand = editor.commands.get( 'selfrequest' );
 		const t = editor.t;
 
 		// Handle the `Ctrl+K` keystroke and show the panel.
@@ -222,7 +222,7 @@ export default class LinkUI extends Plugin {
 			this._showUI( true );
 		} );
 
-		editor.ui.componentFactory.add( 'link', locale => {
+		editor.ui.componentFactory.add( 'selfrequest', locale => {
 			const button = new ButtonView( locale );
 
 			button.isEnabled = true;
@@ -320,7 +320,7 @@ export default class LinkUI extends Plugin {
 		}
 
 		const editor = this.editor;
-		const linkCommand = editor.commands.get( 'link' );
+		const linkCommand = editor.commands.get( 'selfrequest' );
 
 		this._balloon.add( {
 			view: this.formView,
@@ -351,7 +351,7 @@ export default class LinkUI extends Plugin {
 	 * @private
 	 */
 	_closeFormView() {
-		const linkCommand = this.editor.commands.get( 'link' );
+		const linkCommand = this.editor.commands.get( 'selfrequest' );
 
 		// Restore manual decorator states to represent the current model state. This case is important to reset the switch buttons
 		// when the user cancels the editing form.

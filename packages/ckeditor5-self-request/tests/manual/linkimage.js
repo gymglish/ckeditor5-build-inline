@@ -17,7 +17,7 @@ ClassicEditor
 			'|',
 			'bold',
 			'italic',
-			'link',
+			'selfrequest',
 			'bulletedList',
 			'numberedList',
 			'|',

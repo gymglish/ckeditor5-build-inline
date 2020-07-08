@@ -52,7 +52,7 @@ ClassicEditor
 		toolbar: {
 			items: [
 				// ...
-				'link'
+				'selfrequest'
 			],
 		},
 		link: {
@@ -258,7 +258,7 @@ import Link from '@ckeditor/ckeditor5-link/src/link';
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ Link, ... ],
-		toolbar: [ 'link', ... ],
+		toolbar: [ 'selfrequest', ... ],
 	} )
 	.then( ... )
 	.catch( ... );
@@ -266,9 +266,9 @@ ClassicEditor
 
 ## Common API
 
-The {@link module:link/link~Link} plugin registers the UI button component (`'link'`) and the following commands:
+The {@link module:link/link~Link} plugin registers the UI button component (`'selfrequest'`) and the following commands:
 
-* The `'link'` command implemented by {@link module:link/linkcommand~LinkCommand}.
+* The `'selfrequest'` command implemented by {@link module:link/linkcommand~LinkCommand}.
 * The `'unlink'` command implemented by {@link module:link/unlinkcommand~UnlinkCommand}.
 
 The commands can be executed using the {@link module:core/editor/editor~Editor#execute `editor.execute()`} method:
@@ -276,10 +276,10 @@ The commands can be executed using the {@link module:core/editor/editor~Editor#e
 ```js
 // Applies the link to the selected content.
 // When the selection is collapsed, it creates new text wrapped in a link.
-editor.execute( 'link', 'http://example.com' );
+editor.execute( 'selfrequest', 'http://example.com' );
 
 // If there are decorators configured, the command can set their state.
-editor.execute( 'link', 'http://example.com', { linkIsExternal: true } );
+editor.execute( 'selfrequest', 'http://example.com', { linkIsExternal: true } );
 
 // Removes the link from the selection (and all decorators if present).
 editor.execute( 'unlink' );

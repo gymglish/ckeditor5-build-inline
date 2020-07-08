@@ -28,7 +28,7 @@ const EXTERNAL_LINKS_REGEXP = /^(https?:)?\/\//;
  * The link engine feature.
  *
  * It introduces the `selfRequestHref="url"` attribute in the model which renders to the view as a `<a href="url">` element
- * as well as `'link'` and `'unlink'` commands.
+ * as well as `'selfrequest'` and `'unlink'` commands.
  *
  * @extends module:core/plugin~Plugin
  */
@@ -46,7 +46,7 @@ export default class LinkEditing extends Plugin {
 	constructor( editor ) {
 		super( editor );
 
-		editor.config.define( 'link', {
+		editor.config.define( 'selfrequest', {
 			addTargetToExternalLinks: false
 		} );
 	}
@@ -84,7 +84,7 @@ export default class LinkEditing extends Plugin {
 			} );
 
 		// Create linking commands.
-		editor.commands.add( 'link', new LinkCommand( editor ) );
+		editor.commands.add( 'selfrequest', new LinkCommand( editor ) );
 		editor.commands.add( 'unlink', new UnlinkCommand( editor ) );
 
 		const linkDecorators = getLocalizedDecorators( editor.t, normalizeDecorators( editor.config.get( 'link.decorators' ) ) );
@@ -165,7 +165,7 @@ export default class LinkEditing extends Plugin {
 		}
 
 		const editor = this.editor;
-		const command = editor.commands.get( 'link' );
+		const command = editor.commands.get( 'selfrequest' );
 		const manualDecorators = command.manualDecorators;
 
 		manualDecoratorDefinitions.forEach( decorator => {
@@ -180,7 +180,7 @@ export default class LinkEditing extends Plugin {
 					if ( manualDecoratorName ) {
 						const attributes = manualDecorators.get( decorator.id ).attributes;
 						const element = writer.createAttributeElement( 'a', attributes, { priority: 5 } );
-						writer.setCustomProperty( 'link', true, element );
+						writer.setCustomProperty( 'selfrequest', true, element );
 
 						return element;
 					}
@@ -347,7 +347,7 @@ export default class LinkEditing extends Plugin {
 			// but also all decorator attributes (they have dynamic names).
 			model.change( writer => {
 				[ ...model.document.selection.getAttributeKeys() ]
-					.filter( name => name.startsWith( 'link' ) )
+					.filter( name => name.startsWith( 'selfrequest' ) )
 					.forEach( name => writer.removeSelectionAttribute( name ) );
 			} );
 		}, { priority: 'low' } );
@@ -406,7 +406,7 @@ export default class LinkEditing extends Plugin {
 				editor.model.change( writer => {
 					writer.removeSelectionAttribute( 'selfRequestHref' );
 
-					for ( const manualDecorator of editor.commands.get( 'link' ).manualDecorators ) {
+					for ( const manualDecorator of editor.commands.get( 'selfrequest' ).manualDecorators ) {
 						writer.removeSelectionAttribute( manualDecorator.id );
 					}
 				} );

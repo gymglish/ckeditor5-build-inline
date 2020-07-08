@@ -40,7 +40,7 @@ describe( 'LinkUI', () => {
 				editor = newEditor;
 
 				linkUIFeature = editor.plugins.get( LinkUI );
-				linkButton = editor.ui.componentFactory.create( 'link' );
+				linkButton = editor.ui.componentFactory.create( 'selfrequest' );
 				balloon = editor.plugins.get( ContextualBalloon );
 				formView = linkUIFeature.formView;
 				actionsView = linkUIFeature.actionsView;
@@ -90,7 +90,7 @@ describe( 'LinkUI', () => {
 			} );
 
 			it( 'should be bound to the link command', () => {
-				const command = editor.commands.get( 'link' );
+				const command = editor.commands.get( 'selfrequest' );
 
 				command.isEnabled = true;
 				command.value = 'http://ckeditor.com';
@@ -210,7 +210,7 @@ describe( 'LinkUI', () => {
 
 			linkUIFeature._showUI();
 
-			editor.commands.get( 'link' ).isEnabled = true;
+			editor.commands.get( 'selfrequest' ).isEnabled = true;
 			editor.commands.get( 'unlink' ).isEnabled = true;
 
 			expect( formView.urlInputView.isReadOnly ).to.be.false;
@@ -220,7 +220,7 @@ describe( 'LinkUI', () => {
 			expect( actionsView.unlinkButtonView.isEnabled ).to.be.true;
 			expect( actionsView.editButtonView.isEnabled ).to.be.true;
 
-			editor.commands.get( 'link' ).isEnabled = false;
+			editor.commands.get( 'selfrequest' ).isEnabled = false;
 			editor.commands.get( 'unlink' ).isEnabled = false;
 
 			expect( formView.urlInputView.isReadOnly ).to.be.true;
@@ -591,7 +591,7 @@ describe( 'LinkUI', () => {
 		} );
 
 		it( 'should make stack with link visible on Ctrl+K keystroke - no link', () => {
-			const command = editor.commands.get( 'link' );
+			const command = editor.commands.get( 'selfrequest' );
 
 			command.isEnabled = true;
 
@@ -994,7 +994,7 @@ describe( 'LinkUI', () => {
 
 			it( 'should not add a protocol to the local links even when `config.link.defaultProtocol` configured', () => {
 				return createEditorWithDefaultProtocol( 'http://' ).then( ( { editor, formView } ) => {
-					const linkCommandSpy = sinon.spy( editor.commands.get( 'link' ), 'execute' );
+					const linkCommandSpy = sinon.spy( editor.commands.get( 'selfrequest' ), 'execute' );
 					formView.urlInputView.fieldView.value = '#test';
 					formView.fire( 'submit' );
 
@@ -1006,7 +1006,7 @@ describe( 'LinkUI', () => {
 
 			it( 'should not add a protocol to the relative links even when `config.link.defaultProtocol` configured', () => {
 				return createEditorWithDefaultProtocol( 'http://' ).then( ( { editor, formView } ) => {
-					const linkCommandSpy = sinon.spy( editor.commands.get( 'link' ), 'execute' );
+					const linkCommandSpy = sinon.spy( editor.commands.get( 'selfrequest' ), 'execute' );
 					formView.urlInputView.fieldView.value = '/test.html';
 					formView.fire( 'submit' );
 
@@ -1018,7 +1018,7 @@ describe( 'LinkUI', () => {
 
 			it( 'should not add a protocol when given provided within the value even when `config.link.defaultProtocol` configured', () => {
 				return createEditorWithDefaultProtocol( 'http://' ).then( ( { editor, formView } ) => {
-					const linkCommandSpy = sinon.spy( editor.commands.get( 'link' ), 'execute' );
+					const linkCommandSpy = sinon.spy( editor.commands.get( 'selfrequest' ), 'execute' );
 					formView.urlInputView.fieldView.value = 'http://example.com';
 					formView.fire( 'submit' );
 
@@ -1031,7 +1031,7 @@ describe( 'LinkUI', () => {
 
 			it( 'should use the "http://" protocol when it\'s configured', () => {
 				return createEditorWithDefaultProtocol( 'http://' ).then( ( { editor, formView } ) => {
-					const linkCommandSpy = sinon.spy( editor.commands.get( 'link' ), 'execute' );
+					const linkCommandSpy = sinon.spy( editor.commands.get( 'selfrequest' ), 'execute' );
 
 					formView.urlInputView.fieldView.value = 'ckeditor.com';
 					formView.fire( 'submit' );
@@ -1044,7 +1044,7 @@ describe( 'LinkUI', () => {
 
 			it( 'should use the "http://" protocol when it\'s configured and form input value contains "www."', () => {
 				return createEditorWithDefaultProtocol( 'http://' ).then( ( { editor, formView } ) => {
-					const linkCommandSpy = sinon.spy( editor.commands.get( 'link' ), 'execute' );
+					const linkCommandSpy = sinon.spy( editor.commands.get( 'selfrequest' ), 'execute' );
 
 					formView.urlInputView.fieldView.value = 'www.ckeditor.com';
 					formView.fire( 'submit' );
@@ -1105,7 +1105,7 @@ describe( 'LinkUI', () => {
 			} );
 
 			it( 'should bind formView.urlInputView#value to link command value', () => {
-				const command = editor.commands.get( 'link' );
+				const command = editor.commands.get( 'selfrequest' );
 
 				expect( formView.urlInputView.fieldView.value ).to.be.undefined;
 
@@ -1123,7 +1123,7 @@ describe( 'LinkUI', () => {
 				formView.fire( 'submit' );
 
 				expect( executeSpy.calledOnce ).to.be.true;
-				expect( executeSpy.calledWithExactly( 'link', 'http://cksource.com', {} ) ).to.be.true;
+				expect( executeSpy.calledWithExactly( 'selfrequest', 'http://cksource.com', {} ) ).to.be.true;
 			} );
 
 			it( 'should should clear the fake visual selection on formView#submit event', () => {
@@ -1147,7 +1147,7 @@ describe( 'LinkUI', () => {
 			it( 'should hide and reveal the #actionsView on formView#cancel event if link command has a value', () => {
 				linkUIFeature._showUI();
 
-				const command = editor.commands.get( 'link' );
+				const command = editor.commands.get( 'selfrequest' );
 				command.value = 'http://foo.com';
 
 				formView.fire( 'cancel' );
@@ -1172,7 +1172,7 @@ describe( 'LinkUI', () => {
 
 				linkUIFeature._showUI();
 
-				const command = editor.commands.get( 'link' );
+				const command = editor.commands.get( 'selfrequest' );
 				command.value = 'http://foo.com';
 
 				formView.keystrokes.press( keyEvtData );
@@ -1266,13 +1266,13 @@ describe( 'LinkUI', () => {
 					formView.fire( 'submit' );
 
 					expect( executeSpy.calledOnce ).to.be.true;
-					expect( executeSpy.calledWithExactly( 'link', 'url', { linkIsFoo: true } ) ).to.be.true;
+					expect( executeSpy.calledWithExactly( 'selfrequest', 'url', { linkIsFoo: true } ) ).to.be.true;
 				} );
 
 				it( 'should reset switch state when form view is closed', () => {
 					setModelData( model, 'f[<$text selfRequestHref="url" linkIsFoo="true">ooba</$text>]r' );
 
-					const manualDecorators = editor.commands.get( 'link' ).manualDecorators;
+					const manualDecorators = editor.commands.get( 'selfrequest' ).manualDecorators;
 					const firstDecoratorModel = manualDecorators.first;
 					const firstDecoratorSwitch = formView._manualDecoratorSwitches.first;
 

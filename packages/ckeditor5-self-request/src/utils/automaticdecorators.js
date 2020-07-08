@@ -71,7 +71,7 @@ export default class AutomaticDecorators {
 					const viewElement = viewWriter.createAttributeElement( 'a', item.attributes, {
 						priority: 5
 					} );
-					viewWriter.setCustomProperty( 'link', true, viewElement );
+					viewWriter.setCustomProperty( 'selfrequest', true, viewElement );
 					if ( item.callback( data.attributeNewValue ) ) {
 						if ( data.item.is( 'selection' ) ) {
 							viewWriter.wrap( viewSelection.getFirstRange(), viewElement );

@@ -71,7 +71,7 @@ describe( 'LinkImageUI', () => {
 			} );
 
 			it( 'should be bound to the link command', () => {
-				const command = editor.commands.get( 'link' );
+				const command = editor.commands.get( 'selfrequest' );
 
 				command.isEnabled = true;
 				command.value = 'http://ckeditor.com';

@@ -74,7 +74,7 @@ export default class LinkImageUI extends Plugin {
 		editor.ui.componentFactory.add( 'linkImage', locale => {
 			const button = new ButtonView( locale );
 			const plugin = editor.plugins.get( 'LinkUI' );
-			const linkCommand = editor.commands.get( 'link' );
+			const linkCommand = editor.commands.get( 'selfrequest' );
 
 			button.set( {
 				isEnabled: true,

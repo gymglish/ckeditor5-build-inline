@@ -21,7 +21,7 @@ window.editors = {};
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ Link, Typing, Paragraph, Clipboard, Undo, Enter ],
-		toolbar: [ 'link', 'undo', 'redo' ],
+		toolbar: [ 'selfrequest', 'undo', 'redo' ],
 		link: {
 			decorators: {
 				isExternal: {
@@ -60,7 +60,7 @@ ClassicEditor
 ClassicEditor
 	.create( document.querySelector( '#editor2' ), {
 		plugins: [ Link, Typing, Paragraph, Clipboard, Undo, Enter ],
-		toolbar: [ 'link', 'undo', 'redo' ],
+		toolbar: [ 'selfrequest', 'undo', 'redo' ],
 		link: {
 			decorators: {
 				isTelephone: {

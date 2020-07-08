@@ -103,7 +103,7 @@ export default class LinkCommand extends Command {
 	 *
 	 * Here is how to manage decorator attributes with the link command:
 	 *
-	 *		const linkCommand = editor.commands.get( 'link' );
+	 *		const linkCommand = editor.commands.get( 'selfrequest' );
 	 *
 	 *		// Adding a new decorator attribute.
 	 *		linkCommand.execute( 'http://example.com', {

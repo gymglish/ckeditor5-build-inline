@@ -251,7 +251,7 @@ describe( 'LinkEditing', () => {
 
 	describe( 'command', () => {
 		it( 'should register link command', () => {
-			const command = editor.commands.get( 'link' );
+			const command = editor.commands.get( 'selfrequest' );
 
 			expect( command ).to.be.instanceOf( LinkCommand );
 		} );
@@ -734,7 +734,7 @@ describe( 'LinkEditing', () => {
 										priority: 5
 									}
 								);
-								viewWriter.setCustomProperty( 'link', true, linkElement );
+								viewWriter.setCustomProperty( 'selfrequest', true, linkElement );
 								viewWriter.wrap( conversionApi.mapper.toViewRange( data.range ), linkElement );
 							}, { priority: 'highest' } );
 						} );

@@ -24,7 +24,7 @@ export const LINK_KEYSTROKE = 'Ctrl+K';
  * @returns {Boolean}
  */
 export function isLinkElement( node ) {
-	return node.is( 'attributeElement' ) && !!node.getCustomProperty( 'link' );
+	return node.is( 'attributeElement' ) && !!node.getCustomProperty( 'selfrequest' );
 }
 
 /**
@@ -36,7 +36,7 @@ export function isLinkElement( node ) {
 export function createLinkElement( href, writer ) {
 	// Priority 5 - https://github.com/ckeditor/ckeditor5-link/issues/121.
 	const linkElement = writer.createAttributeElement( 'a', { href }, { priority: 5 } );
-	writer.setCustomProperty( 'link', true, linkElement );
+	writer.setCustomProperty( 'selfrequest', true, linkElement );
 
 	return linkElement;
 }
