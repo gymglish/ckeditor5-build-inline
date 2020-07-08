@@ -179,7 +179,7 @@ export default class LinkEditing extends Plugin {
 				view: ( manualDecoratorName, writer ) => {
 					if ( manualDecoratorName ) {
 						const attributes = manualDecorators.get( decorator.id ).attributes;
-						const element = writer.createAttributeElement( 'a', attributes, { priority: 5 } );
+						const element = writer.createAttributeElement( 'a9-self-request', attributes, { priority: 5 } );
 						writer.setCustomProperty( 'selfrequest', true, element );
 
 						return element;
@@ -188,7 +188,7 @@ export default class LinkEditing extends Plugin {
 
 			editor.conversion.for( 'upcast' ).elementToAttribute( {
 				view: {
-					name: 'a',
+					name: 'a9-self-request',
 					attributes: manualDecorators.get( decorator.id ).attributes
 				},
 				model: {
@@ -229,7 +229,7 @@ export default class LinkEditing extends Plugin {
 				// There might be multiple `a` elements in the `viewRange`, for example, when the `a` element is
 				// broken by a UIElement.
 				for ( const item of viewRange.getItems() ) {
-					if ( item.is( 'a' ) && !item.hasClass( HIGHLIGHT_CLASS ) ) {
+					if ( item.is( 'a9-self-request' ) && !item.hasClass( HIGHLIGHT_CLASS ) ) {
 						writer.addClass( HIGHLIGHT_CLASS, item );
 						highlightedLinks.add( item );
 						changed = true;

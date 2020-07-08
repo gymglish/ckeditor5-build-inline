@@ -727,7 +727,7 @@ describe( 'LinkEditing', () => {
 								// Very simplified downcast just for test assertion.
 								const viewWriter = conversionApi.writer;
 								const linkElement = viewWriter.createAttributeElement(
-									'a',
+									'a9-self-request',
 									{
 										href: data.attributeNewValue
 									}, {

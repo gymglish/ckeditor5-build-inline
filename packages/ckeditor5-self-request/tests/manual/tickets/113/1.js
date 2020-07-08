@@ -89,7 +89,7 @@ function startExternalInsert( editor ) {
 	wait( 3000 )
 		.then( () => type( [ 0, 36 ], 'This specification defines the 5th major revision of the core language of the World Wide Web. ' ) )
 		.then( () => insertNewLine( [ 0 ] ) )
-		.then( () => type( [ 0, 0 ], 'a' ) )
+		.then( () => type( [ 0, 0 ], 'a9-self-request' ) )
 		.then( () => insertNewLine( [ 1 ] ) )
 		.then( () => type( [ 1, 0 ], 'b' ) )
 		.then( () => insertNewLine( [ 2 ] ) )

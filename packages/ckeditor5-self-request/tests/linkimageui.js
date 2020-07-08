@@ -110,7 +110,7 @@ describe( 'LinkImageUI', () => {
 
 			viewDocument.fire( 'click', domEventDataMock );
 
-			expect( img.getChild( 0 ).name ).to.equal( 'a' );
+			expect( img.getChild( 0 ).name ).to.equal( 'a9-self-request' );
 			expect( data.preventDefault.called ).to.be.true;
 		} );
 	} );

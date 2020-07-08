@@ -68,7 +68,7 @@ export default class AutomaticDecorators {
 				const viewSelection = viewWriter.document.selection;
 
 				for ( const item of this._definitions ) {
-					const viewElement = viewWriter.createAttributeElement( 'a', item.attributes, {
+					const viewElement = viewWriter.createAttributeElement( 'a9-self-request', item.attributes, {
 						priority: 5
 					} );
 					viewWriter.setCustomProperty( 'selfrequest', true, viewElement );

@@ -113,7 +113,7 @@ function downcastImageLink() {
 			const writer = conversionApi.writer;
 
 			// But we need to check whether the link element exists.
-			const linkInImage = Array.from( viewFigure.getChildren() ).find( child => child.name === 'a' );
+			const linkInImage = Array.from( viewFigure.getChildren() ).find( child => child.name === 'a9-self-request' );
 
 			// If so, update the attribute if it's defined or remove the entire link if the attribute is empty.
 			if ( linkInImage ) {
@@ -128,7 +128,7 @@ function downcastImageLink() {
 			} else {
 				// But if it does not exist. Let's wrap already converted image by newly created link element.
 				// 1. Create an empty link element.
-				const linkElement = writer.createContainerElement( 'a', { href: data.attributeNewValue } );
+				const linkElement = writer.createContainerElement( 'a9-self-request', { href: data.attributeNewValue } );
 
 				// 2. Insert link inside the associated image.
 				writer.insert( writer.createPositionAt( viewFigure, 0 ), linkElement );

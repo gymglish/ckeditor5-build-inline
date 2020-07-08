@@ -166,7 +166,7 @@ describe( 'LinkUI', () => {
 			'that link',
 		() => {
 			setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
-			const linkElement = editor.editing.view.getDomRoot().querySelector( 'a' );
+			const linkElement = editor.editing.view.getDomRoot().querySelector( 'a9-self-request' );
 
 			linkUIFeature._showUI();
 
@@ -182,7 +182,7 @@ describe( 'LinkUI', () => {
 		// #https://github.com/ckeditor/ckeditor5-link/issues/181
 		it( 'should add #formView to the balloon when collapsed selection is inside the link and #actionsView is already visible', () => {
 			setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
-			const linkElement = editor.editing.view.getDomRoot().querySelector( 'a' );
+			const linkElement = editor.editing.view.getDomRoot().querySelector( 'a9-self-request' );
 
 			linkUIFeature._showUI();
 
