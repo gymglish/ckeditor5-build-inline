@@ -65,7 +65,7 @@ export default class LinkActionsView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unlink' );
+		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unselfrequest' );
 
 		/**
 		 * The edit link button view.

@@ -26,7 +26,7 @@ const emailRegExp = /[\w-]+@[\w-]+\.+[\w-]+/i;
 const VISUAL_SELECTION_MARKER_NAME = 'link-ui';
 
 /**
- * The link UI plugin. It introduces the `'selfrequest'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
+ * The link UI plugin. It introduces the `'selfrequest'` and `'unselfrequest'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
  *
  * It uses the
  * {@link module:ui/panel/balloon/contextualballoon~ContextualBalloon contextual balloon plugin}.
@@ -122,7 +122,7 @@ export default class LinkUI extends Plugin {
 		const editor = this.editor;
 		const actionsView = new LinkActionsView( editor.locale );
 		const linkCommand = editor.commands.get( 'selfrequest' );
-		const unlinkCommand = editor.commands.get( 'unlink' );
+		const unlinkCommand = editor.commands.get( 'unselfrequest' );
 
 		actionsView.bind( 'href' ).to( linkCommand, 'value' );
 		actionsView.editButtonView.bind( 'isEnabled' ).to( linkCommand );
@@ -134,8 +134,8 @@ export default class LinkUI extends Plugin {
 		} );
 
 		// Execute unlink command after clicking on the "Unlink" button.
-		this.listenTo( actionsView, 'unlink', () => {
-			editor.execute( 'unlink' );
+		this.listenTo( actionsView, 'unselfrequest', () => {
+			editor.execute( 'unselfrequest' );
 			this._hideUI();
 		} );
 

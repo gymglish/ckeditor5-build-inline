@@ -65,7 +65,7 @@ describe( 'LinkImage integration', () => {
 				'[<image src="/assets/sample.png"><caption><$text selfRequestHref="https://cksource.com">Foo.</$text></caption></image>]'
 			);
 
-			expect( editor.commands.get( 'unlink' ).isEnabled ).to.equal( true );
+			expect( editor.commands.get( 'unselfrequest' ).isEnabled ).to.equal( true );
 		} );
 	} );
 } );

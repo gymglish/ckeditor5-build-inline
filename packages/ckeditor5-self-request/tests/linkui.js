@@ -211,7 +211,7 @@ describe( 'LinkUI', () => {
 			linkUIFeature._showUI();
 
 			editor.commands.get( 'selfrequest' ).isEnabled = true;
-			editor.commands.get( 'unlink' ).isEnabled = true;
+			editor.commands.get( 'unselfrequest' ).isEnabled = true;
 
 			expect( formView.urlInputView.isReadOnly ).to.be.false;
 			expect( formView.saveButtonView.isEnabled ).to.be.true;
@@ -221,7 +221,7 @@ describe( 'LinkUI', () => {
 			expect( actionsView.editButtonView.isEnabled ).to.be.true;
 
 			editor.commands.get( 'selfrequest' ).isEnabled = false;
-			editor.commands.get( 'unlink' ).isEnabled = false;
+			editor.commands.get( 'unselfrequest' ).isEnabled = false;
 
 			expect( formView.urlInputView.isReadOnly ).to.be.true;
 			expect( formView.saveButtonView.isEnabled ).to.be.false;
@@ -875,10 +875,10 @@ describe( 'LinkUI', () => {
 			it( 'should execute unlink command on actionsView#unlink event', () => {
 				const executeSpy = testUtils.sinon.spy( editor, 'execute' );
 
-				actionsView.fire( 'unlink' );
+				actionsView.fire( 'unselfrequest' );
 
 				expect( executeSpy.calledOnce ).to.be.true;
-				expect( executeSpy.calledWithExactly( 'unlink' ) ).to.be.true;
+				expect( executeSpy.calledWithExactly( 'unselfrequest' ) ).to.be.true;
 			} );
 
 			it( 'should hide and focus editable on actionsView#unlink event', () => {
@@ -887,7 +887,7 @@ describe( 'LinkUI', () => {
 
 				// Removing the form would call the focus spy.
 				focusEditableSpy.resetHistory();
-				actionsView.fire( 'unlink' );
+				actionsView.fire( 'unselfrequest' );
 
 				expect( balloon.visibleView ).to.be.null;
 				expect( focusEditableSpy.calledOnce ).to.be.true;

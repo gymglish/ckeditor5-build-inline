@@ -68,7 +68,7 @@ describe( 'LinkActionsView', () => {
 		it( 'should fire `unlink` event on unlinkButtonView#execute', () => {
 			const spy = sinon.spy();
 
-			view.on( 'unlink', spy );
+			view.on( 'unselfrequest', spy );
 
 			view.unlinkButtonView.fire( 'execute' );
 
