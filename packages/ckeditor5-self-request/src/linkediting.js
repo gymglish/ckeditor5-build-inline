@@ -27,7 +27,7 @@ const EXTERNAL_LINKS_REGEXP = /^(https?:)?\/\//;
 /**
  * The link engine feature.
  *
- * It introduces the `linkHref="url"` attribute in the model which renders to the view as a `<a href="url">` element
+ * It introduces the `selfRequestHref="url"` attribute in the model which renders to the view as a `<a href="url">` element
  * as well as `'link'` and `'unlink'` commands.
  *
  * @extends module:core/plugin~Plugin
@@ -59,13 +59,13 @@ export default class LinkEditing extends Plugin {
 		const locale = editor.locale;
 
 		// Allow link attribute on all inline nodes.
-		editor.model.schema.extend( '$text', { allowAttributes: 'linkHref' } );
+		editor.model.schema.extend( '$text', { allowAttributes: 'selfRequestHref' } );
 
 		editor.conversion.for( 'dataDowncast' )
-			.attributeToElement( { model: 'linkHref', view: createLinkElement } );
+			.attributeToElement( { model: 'selfRequestHref', view: createLinkElement } );
 
 		editor.conversion.for( 'editingDowncast' )
-			.attributeToElement( { model: 'linkHref', view: ( href, writer ) => {
+			.attributeToElement( { model: 'selfRequestHref', view: ( href, writer ) => {
 				return createLinkElement( ensureSafeUrl( href ), writer );
 			} } );
 
@@ -78,7 +78,7 @@ export default class LinkEditing extends Plugin {
 					}
 				},
 				model: {
-					key: 'linkHref',
+					key: 'selfRequestHref',
 					value: viewElement => viewElement.getAttribute( 'href' )
 				}
 			} );
@@ -92,12 +92,12 @@ export default class LinkEditing extends Plugin {
 		this._enableAutomaticDecorators( linkDecorators.filter( item => item.mode === DECORATOR_AUTOMATIC ) );
 		this._enableManualDecorators( linkDecorators.filter( item => item.mode === DECORATOR_MANUAL ) );
 
-		// Enable two-step caret movement for `linkHref` attribute.
+		// Enable two-step caret movement for `selfRequestHref` attribute.
 		bindTwoStepCaretToAttribute( {
 			view: editor.editing.view,
 			model: editor.model,
 			emitter: this,
-			attribute: 'linkHref',
+			attribute: 'selfRequestHref',
 			locale
 		} );
 
@@ -222,8 +222,8 @@ export default class LinkEditing extends Plugin {
 			const selection = editor.model.document.selection;
 			let changed = false;
 
-			if ( selection.hasAttribute( 'linkHref' ) ) {
-				const modelRange = findLinkRange( selection.getFirstPosition(), selection.getAttribute( 'linkHref' ), editor.model );
+			if ( selection.hasAttribute( 'selfRequestHref' ) ) {
+				const modelRange = findLinkRange( selection.getFirstPosition(), selection.getAttribute( 'selfRequestHref' ), editor.model );
 				const viewRange = editor.editing.mapper.toViewRange( modelRange );
 
 				// There might be multiple `a` elements in the `viewRange`, for example, when the `a` element is
@@ -264,7 +264,7 @@ export default class LinkEditing extends Plugin {
 	 * selection attributes if the selection is at the end of a link after inserting the content.
 	 *
 	 * The purpose of this action is to improve the overall UX because the user is no longer "trapped" by the
-	 * `linkHref` attribute of the selection and they can type a "clean" (`linkHref`–less) text right away.
+	 * `selfRequestHref` attribute of the selection and they can type a "clean" (`selfRequestHref`–less) text right away.
 	 *
 	 * See https://github.com/ckeditor/ckeditor5/issues/6053.
 	 *
@@ -284,11 +284,11 @@ export default class LinkEditing extends Plugin {
 			// The only truly valid case is:
 			//
 			//		                                 ↰
-			//		...<$text linkHref="foo">INSERTED[]</$text>
+			//		...<$text selfRequestHref="foo">INSERTED[]</$text>
 			//
-			// If the selection is not "trapped" by the `linkHref` attribute after inserting, there's nothing
+			// If the selection is not "trapped" by the `selfRequestHref` attribute after inserting, there's nothing
 			// to fix there.
-			if ( !selection.hasAttribute( 'linkHref' ) ) {
+			if ( !selection.hasAttribute( 'selfRequestHref' ) ) {
 				return;
 			}
 
@@ -297,30 +297,30 @@ export default class LinkEditing extends Plugin {
 			//
 			// Before insertion:
 			//		                       ↰
-			//		<$text linkHref="foo">l[]ink</$text>
+			//		<$text selfRequestHref="foo">l[]ink</$text>
 			//
 			// Expected after insertion:
 			//		                               ↰
-			//		<$text linkHref="foo">lINSERTED[]ink</$text>
+			//		<$text selfRequestHref="foo">lINSERTED[]ink</$text>
 			//
 			if ( !nodeBefore ) {
 				return;
 			}
 
-			// Filter out the following case where the selection has the "linkHref" attribute because the
+			// Filter out the following case where the selection has the "selfRequestHref" attribute because the
 			// gravity is overridden and some text with another attribute (e.g. <b>INSERTED</b>) is inserted:
 			//
 			// Before insertion:
 			//
 			//		                       ↱
-			//		<$text linkHref="foo">[]link</$text>
+			//		<$text selfRequestHref="foo">[]link</$text>
 			//
 			// Expected after insertion:
 			//
 			//		                                                          ↱
-			//		<$text bold="true">INSERTED</$text><$text linkHref="foo">[]link</$text>
+			//		<$text bold="true">INSERTED</$text><$text selfRequestHref="foo">[]link</$text>
 			//
-			if ( !nodeBefore.hasAttribute( 'linkHref' ) ) {
+			if ( !nodeBefore.hasAttribute( 'selfRequestHref' ) ) {
 				return;
 			}
 
@@ -331,19 +331,19 @@ export default class LinkEditing extends Plugin {
 			// Before insertion:
 			//
 			//		                       ↰
-			//		<$text linkHref="foo">l[]ink</$text>
+			//		<$text selfRequestHref="foo">l[]ink</$text>
 			//
 			// Expected after insertion:
 			//
 			//		                                                             ↰
-			//		<$text linkHref="foo">l</$text><$text linkHref="bar">INSERTED[]</$text><$text linkHref="foo">ink</$text>
+			//		<$text selfRequestHref="foo">l</$text><$text selfRequestHref="bar">INSERTED[]</$text><$text selfRequestHref="foo">ink</$text>
 			//
-			if ( nodeAfter && nodeAfter.hasAttribute( 'linkHref' ) ) {
+			if ( nodeAfter && nodeAfter.hasAttribute( 'selfRequestHref' ) ) {
 				return;
 			}
 
 			// Make the selection free of link-related model attributes.
-			// All link-related model attributes start with "link". That includes not only "linkHref"
+			// All link-related model attributes start with "link". That includes not only "selfRequestHref"
 			// but also all decorator attributes (they have dynamic names).
 			model.change( writer => {
 				[ ...model.document.selection.getAttributeKeys() ]
@@ -393,18 +393,18 @@ export default class LinkEditing extends Plugin {
 			}
 
 			// ...and clicked text is the link...
-			if ( !selection.hasAttribute( 'linkHref' ) ) {
+			if ( !selection.hasAttribute( 'selfRequestHref' ) ) {
 				return;
 			}
 
 			const position = selection.getFirstPosition();
-			const linkRange = findLinkRange( position, selection.getAttribute( 'linkHref' ), editor.model );
+			const linkRange = findLinkRange( position, selection.getAttribute( 'selfRequestHref' ), editor.model );
 
 			// ...check whether clicked start/end boundary of the link.
-			// If so, remove the `linkHref` attribute.
+			// If so, remove the `selfRequestHref` attribute.
 			if ( position.isTouching( linkRange.start ) || position.isTouching( linkRange.end ) ) {
 				editor.model.change( writer => {
-					writer.removeSelectionAttribute( 'linkHref' );
+					writer.removeSelectionAttribute( 'selfRequestHref' );
 
 					for ( const manualDecorator of editor.commands.get( 'link' ).manualDecorators ) {
 						writer.removeSelectionAttribute( manualDecorator.id );

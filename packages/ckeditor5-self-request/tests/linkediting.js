@@ -69,18 +69,18 @@ describe( 'LinkEditing', () => {
 	} );
 
 	it( 'should set proper schema rules', () => {
-		expect( model.schema.checkAttribute( [ '$block', '$text' ], 'linkHref' ) ).to.be.true;
-		expect( model.schema.checkAttribute( [ '$clipboardHolder', '$text' ], 'linkHref' ) ).to.be.true;
+		expect( model.schema.checkAttribute( [ '$block', '$text' ], 'selfRequestHref' ) ).to.be.true;
+		expect( model.schema.checkAttribute( [ '$clipboardHolder', '$text' ], 'selfRequestHref' ) ).to.be.true;
 
-		expect( model.schema.checkAttribute( [ '$block' ], 'linkHref' ) ).to.be.false;
+		expect( model.schema.checkAttribute( [ '$block' ], 'selfRequestHref' ) ).to.be.false;
 	} );
 
 	// Let's check only the minimum to not duplicate `bindTwoStepCaretToAttribute()` tests.
 	// Testing minimum is better than testing using spies that might give false positive results.
 	describe( 'two-step caret movement', () => {
-		it( 'should be bound to th `linkHref` attribute (LTR)', () => {
+		it( 'should be bound to th `selfRequestHref` attribute (LTR)', () => {
 			// Put selection before the link element.
-			setModelData( editor.model, '<paragraph>foo[]<$text linkHref="url">b</$text>ar</paragraph>' );
+			setModelData( editor.model, '<paragraph>foo[]<$text selfRequestHref="url">b</$text>ar</paragraph>' );
 
 			// The selection's gravity is not overridden because selection landed here not because of `keydown`.
 			expect( editor.model.document.selection.isGravityOverridden ).to.false;
@@ -95,7 +95,7 @@ describe( 'LinkEditing', () => {
 			expect( editor.model.document.selection.isGravityOverridden ).to.true;
 		} );
 
-		it( 'should be bound to th `linkHref` attribute (RTL)', async () => {
+		it( 'should be bound to th `selfRequestHref` attribute (RTL)', async () => {
 			const editor = await ClassicTestEditor.create( element, {
 				plugins: [ Paragraph, LinkEditing, Enter ],
 				language: {
@@ -107,7 +107,7 @@ describe( 'LinkEditing', () => {
 			view = editor.editing.view;
 
 			// Put selection before the link element.
-			setModelData( editor.model, '<paragraph>foo[]<$text linkHref="url">b</$text>ar</paragraph>' );
+			setModelData( editor.model, '<paragraph>foo[]<$text selfRequestHref="url">b</$text>ar</paragraph>' );
 
 			// The selection's gravity is not overridden because selection landed here not because of `keydown`.
 			expect( editor.model.document.selection.isGravityOverridden ).to.false;
@@ -131,10 +131,10 @@ describe( 'LinkEditing', () => {
 			setModelData( model, '<paragraph>foo[]</paragraph>' );
 
 			model.change( writer => {
-				model.insertContent( writer.createText( 'INSERTED', { linkHref: 'ckeditor.com' } ) );
+				model.insertContent( writer.createText( 'INSERTED', { selfRequestHref: 'ckeditor.com' } ) );
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph>foo<$text linkHref="ckeditor.com">INSERTED</$text>[]</paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph>foo<$text selfRequestHref="ckeditor.com">INSERTED</$text>[]</paragraph>' );
 
 			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.be.empty;
 		} );
@@ -143,12 +143,12 @@ describe( 'LinkEditing', () => {
 			setModelData( model, '<paragraph>foo[]</paragraph>' );
 
 			model.change( writer => {
-				model.insertContent( writer.createText( 'INSERTED', { linkHref: 'ckeditor.com', linkIsExternal: true } ) );
+				model.insertContent( writer.createText( 'INSERTED', { selfRequestHref: 'ckeditor.com', linkIsExternal: true } ) );
 			} );
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>' +
-					'foo<$text linkHref="ckeditor.com" linkIsExternal="true">INSERTED</$text>[]' +
+					'foo<$text selfRequestHref="ckeditor.com" linkIsExternal="true">INSERTED</$text>[]' +
 				'</paragraph>'
 			);
 
@@ -156,7 +156,7 @@ describe( 'LinkEditing', () => {
 		} );
 
 		it( 'should not remove link atttributes when pasting a non-link content', () => {
-			setModelData( model, '<paragraph><$text linkHref="ckeditor.com">foo[]</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="ckeditor.com">foo[]</$text></paragraph>' );
 
 			model.change( writer => {
 				model.insertContent( writer.createText( 'INSERTED', { bold: 'true' } ) );
@@ -164,7 +164,7 @@ describe( 'LinkEditing', () => {
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>' +
-					'<$text linkHref="ckeditor.com">foo</$text>' +
+					'<$text selfRequestHref="ckeditor.com">foo</$text>' +
 					'<$text bold="true">INSERTED[]</$text>' +
 				'</paragraph>'
 			);
@@ -173,18 +173,18 @@ describe( 'LinkEditing', () => {
 		} );
 
 		it( 'should not remove link atttributes when pasting in the middle of a link with the same URL', () => {
-			setModelData( model, '<paragraph><$text linkHref="ckeditor.com">fo[]o</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="ckeditor.com">fo[]o</$text></paragraph>' );
 
 			model.change( writer => {
-				model.insertContent( writer.createText( 'INSERTED', { linkHref: 'ckeditor.com' } ) );
+				model.insertContent( writer.createText( 'INSERTED', { selfRequestHref: 'ckeditor.com' } ) );
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph><$text linkHref="ckeditor.com">foINSERTED[]o</$text></paragraph>' );
-			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'linkHref' ] );
+			expect( getModelData( model ) ).to.equal( '<paragraph><$text selfRequestHref="ckeditor.com">foINSERTED[]o</$text></paragraph>' );
+			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'selfRequestHref' ] );
 		} );
 
 		it( 'should not remove link atttributes from the selection when pasting before a link when the gravity is overridden', () => {
-			setModelData( model, '<paragraph>foo[]<$text linkHref="ckeditor.com">bar</$text></paragraph>' );
+			setModelData( model, '<paragraph>foo[]<$text selfRequestHref="ckeditor.com">bar</$text></paragraph>' );
 
 			view.document.fire( 'keydown', {
 				keyCode: keyCodes.arrowright,
@@ -202,50 +202,50 @@ describe( 'LinkEditing', () => {
 				'<paragraph>' +
 					'foo' +
 					'<$text bold="true">INSERTED</$text>' +
-					'<$text linkHref="ckeditor.com">[]bar</$text>' +
+					'<$text selfRequestHref="ckeditor.com">[]bar</$text>' +
 				'</paragraph>'
 			);
 
 			expect( model.document.selection.isGravityOverridden ).to.be.true;
-			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'linkHref' ] );
+			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'selfRequestHref' ] );
 		} );
 
 		it( 'should not remove link atttributes when pasting a link into another link (different URLs, no merge)', () => {
-			setModelData( model, '<paragraph><$text linkHref="ckeditor.com">f[]oo</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="ckeditor.com">f[]oo</$text></paragraph>' );
 
 			model.change( writer => {
-				model.insertContent( writer.createText( 'INSERTED', { linkHref: 'http://INSERTED' } ) );
+				model.insertContent( writer.createText( 'INSERTED', { selfRequestHref: 'http://INSERTED' } ) );
 			} );
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>' +
-					'<$text linkHref="ckeditor.com">f</$text>' +
-					'<$text linkHref="http://INSERTED">INSERTED[]</$text>' +
-					'<$text linkHref="ckeditor.com">oo</$text>' +
+					'<$text selfRequestHref="ckeditor.com">f</$text>' +
+					'<$text selfRequestHref="http://INSERTED">INSERTED[]</$text>' +
+					'<$text selfRequestHref="ckeditor.com">oo</$text>' +
 				'</paragraph>'
 			);
 
-			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'linkHref' ] );
+			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'selfRequestHref' ] );
 		} );
 
 		it( 'should not remove link atttributes when pasting before another link (different URLs, no merge)', () => {
-			setModelData( model, '<paragraph>[]<$text linkHref="ckeditor.com">foo</$text></paragraph>' );
+			setModelData( model, '<paragraph>[]<$text selfRequestHref="ckeditor.com">foo</$text></paragraph>' );
 
 			expect( model.document.selection.isGravityOverridden ).to.be.false;
 
 			model.change( writer => {
-				model.insertContent( writer.createText( 'INSERTED', { linkHref: 'http://INSERTED' } ) );
+				model.insertContent( writer.createText( 'INSERTED', { selfRequestHref: 'http://INSERTED' } ) );
 			} );
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>' +
-					'<$text linkHref="http://INSERTED">INSERTED[]</$text>' +
-					'<$text linkHref="ckeditor.com">foo</$text>' +
+					'<$text selfRequestHref="http://INSERTED">INSERTED[]</$text>' +
+					'<$text selfRequestHref="ckeditor.com">foo</$text>' +
 				'</paragraph>'
 			);
 
-			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'linkHref' ] );
-			expect( model.document.selection.getAttribute( 'linkHref' ) ).to.equal( 'http://INSERTED' );
+			expect( [ ...model.document.selection.getAttributeKeys() ] ).to.have.members( [ 'selfRequestHref' ] );
+			expect( model.document.selection.getAttribute( 'selfRequestHref' ) ).to.equal( 'http://INSERTED' );
 		} );
 	} );
 
@@ -264,11 +264,11 @@ describe( 'LinkEditing', () => {
 	} );
 
 	describe( 'data pipeline conversions', () => {
-		it( 'should convert `<a href="url">` to `linkHref="url"` attribute', () => {
+		it( 'should convert `<a href="url">` to `selfRequestHref="url"` attribute', () => {
 			editor.setData( '<p><a href="url">foo</a>bar</p>' );
 
 			expect( getModelData( model, { withoutSelection: true } ) )
-				.to.equal( '<paragraph><$text linkHref="url">foo</$text>bar</paragraph>' );
+				.to.equal( '<paragraph><$text selfRequestHref="url">foo</$text>bar</paragraph>' );
 
 			expect( editor.getData() ).to.equal( '<p><a href="url">foo</a>bar</p>' );
 		} );
@@ -277,7 +277,7 @@ describe( 'LinkEditing', () => {
 			editor.setData( '<a href="url">foo</a>bar' );
 
 			expect( getModelData( model, { withoutSelection: true } ) )
-				.to.equal( '<paragraph><$text linkHref="url">foo</$text>bar</paragraph>' );
+				.to.equal( '<paragraph><$text selfRequestHref="url">foo</$text>bar</paragraph>' );
 
 			expect( editor.getData() ).to.equal( '<p><a href="url">foo</a>bar</p>' );
 		} );
@@ -295,7 +295,7 @@ describe( 'LinkEditing', () => {
 			editor.setData( '<p><a href="">foo</a>bar</p>' );
 
 			expect( getModelData( model, { withoutSelection: true } ) )
-				.to.equal( '<paragraph><$text linkHref="">foo</$text>bar</paragraph>' );
+				.to.equal( '<paragraph><$text selfRequestHref="">foo</$text>bar</paragraph>' );
 
 			expect( editor.getData() ).to.equal( '<p><a href="">foo</a>bar</p>' );
 		} );
@@ -306,7 +306,7 @@ describe( 'LinkEditing', () => {
 			setModelData( model, '<paragraph>[]</paragraph>' );
 
 			model.change( writer => {
-				writer.insertText( 'foo', { linkHref: 'javascript:alert(1)' }, model.document.selection.getFirstPosition() );
+				writer.insertText( 'foo', { selfRequestHref: 'javascript:alert(1)' }, model.document.selection.getFirstPosition() );
 			} );
 
 			expect( editor.getData() ).to.equal( '<p><a href="javascript:alert(1)">foo</a></p>' );
@@ -316,40 +316,40 @@ describe( 'LinkEditing', () => {
 			editor.setData( '<p><a href="javascript:alert(1)">foo</a></p>' );
 
 			expect( getModelData( model, { withoutSelection: true } ) )
-				.to.equal( '<paragraph><$text linkHref="javascript:alert(1)">foo</$text></paragraph>' );
+				.to.equal( '<paragraph><$text selfRequestHref="javascript:alert(1)">foo</$text></paragraph>' );
 		} );
 	} );
 
 	describe( 'editing pipeline conversion', () => {
 		it( 'should convert attribute', () => {
-			setModelData( model, '<paragraph><$text linkHref="url">foo</$text>bar</paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="url">foo</$text>bar</paragraph>' );
 
 			expect( getViewData( editor.editing.view, { withoutSelection: true } ) ).to.equal( '<p><a href="url">foo</a>bar</p>' );
 		} );
 
 		it( 'should convert to link element instance', () => {
-			setModelData( model, '<paragraph><$text linkHref="url">foo</$text>bar</paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="url">foo</$text>bar</paragraph>' );
 
 			const element = editor.editing.view.document.getRoot().getChild( 0 ).getChild( 0 );
 			expect( isLinkElement( element ) ).to.be.true;
 		} );
 
 		// https://github.com/ckeditor/ckeditor5-link/issues/121
-		it( 'should should set priority for `linkHref` higher than all other attribute elements', () => {
+		it( 'should should set priority for `selfRequestHref` higher than all other attribute elements', () => {
 			model.schema.extend( '$text', { allowAttributes: 'foo' } );
 
 			editor.conversion.for( 'downcast' ).attributeToElement( { model: 'foo', view: 'f' } );
 
 			setModelData( model,
 				'<paragraph>' +
-					'<$text linkHref="url">a</$text><$text foo="true" linkHref="url">b</$text><$text linkHref="url">c</$text>' +
+					'<$text selfRequestHref="url">a</$text><$text foo="true" selfRequestHref="url">b</$text><$text selfRequestHref="url">c</$text>' +
 				'</paragraph>' );
 
 			expect( editor.getData() ).to.equal( '<p><a href="url">a<f>b</f>c</a></p>' );
 		} );
 
 		it( 'must not render a link with a potential XSS code', () => {
-			setModelData( model, '<paragraph><$text linkHref="javascript:alert(1)">[]foo</$text>bar[]</paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="javascript:alert(1)">[]foo</$text>bar[]</paragraph>' );
 
 			expect( getViewData( editor.editing.view, { withoutSelection: true } ) )
 				.to.equal( '<p><a href="#">foo</a>bar</p>' );
@@ -359,38 +359,38 @@ describe( 'LinkEditing', () => {
 	describe( 'link highlighting', () => {
 		it( 'should convert the highlight to a proper view classes', () => {
 			setModelData( model,
-				'<paragraph>foo <$text linkHref="url">b{}ar</$text> baz</paragraph>'
+				'<paragraph>foo <$text selfRequestHref="url">b{}ar</$text> baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'selfRequestHref' ) ).to.be.true;
 			expect( getViewData( view ) ).to.equal(
 				'<p>foo <a class="ck-link_selected" href="url">b{}ar</a> baz</p>'
 			);
 		} );
 
-		it( 'should work whenever selection has linkHref attribute - link start', () => {
+		it( 'should work whenever selection has selfRequestHref attribute - link start', () => {
 			setModelData( model,
-				'<paragraph>foo {}<$text linkHref="url">bar</$text> baz</paragraph>'
+				'<paragraph>foo {}<$text selfRequestHref="url">bar</$text> baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.false;
+			expect( model.document.selection.hasAttribute( 'selfRequestHref' ) ).to.be.false;
 
 			model.change( writer => {
-				writer.setSelectionAttribute( 'linkHref', 'url' );
+				writer.setSelectionAttribute( 'selfRequestHref', 'url' );
 			} );
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'selfRequestHref' ) ).to.be.true;
 			expect( getViewData( view ) ).to.equal(
 				'<p>foo <a class="ck-link_selected" href="url">{}bar</a> baz</p>'
 			);
 		} );
 
-		it( 'should work whenever selection has linkHref attribute - link end', () => {
+		it( 'should work whenever selection has selfRequestHref attribute - link end', () => {
 			setModelData( model,
-				'<paragraph>foo <$text linkHref="url">bar</$text>{} baz</paragraph>'
+				'<paragraph>foo <$text selfRequestHref="url">bar</$text>{} baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'selfRequestHref' ) ).to.be.true;
 			expect( getViewData( view ) ).to.equal(
 				'<p>foo <a class="ck-link_selected" href="url">bar{}</a> baz</p>'
 			);
@@ -398,22 +398,22 @@ describe( 'LinkEditing', () => {
 
 		it( 'should render highlight correctly after splitting the link', () => {
 			setModelData( model,
-				'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+				'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 			);
 
 			editor.execute( 'enter' );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph>foo <$text linkHref="url">li</$text></paragraph>' +
-				'<paragraph><$text linkHref="url">[]nk</$text> baz</paragraph>'
+				'<paragraph>foo <$text selfRequestHref="url">li</$text></paragraph>' +
+				'<paragraph><$text selfRequestHref="url">[]nk</$text> baz</paragraph>'
 			);
 
-			expect( model.document.selection.hasAttribute( 'linkHref' ) ).to.be.true;
+			expect( model.document.selection.hasAttribute( 'selfRequestHref' ) ).to.be.true;
 		} );
 
 		it( 'should remove classes when selection is moved out from the link', () => {
 			setModelData( model,
-				'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+				'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 			);
 
 			expect( getViewData( view ) ).to.equal(
@@ -429,7 +429,7 @@ describe( 'LinkEditing', () => {
 
 		it( 'should work correctly when selection is moved inside link', () => {
 			setModelData( model,
-				'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+				'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 			);
 
 			expect( getViewData( view ) ).to.equal(
@@ -446,11 +446,11 @@ describe( 'LinkEditing', () => {
 		describe( 'downcast conversion integration', () => {
 			it( 'works for the #insert event', () => {
 				setModelData( model,
-					'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+					'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 				);
 
 				model.change( writer => {
-					writer.insertText( 'FOO', { linkHref: 'url' }, model.document.selection.getFirstPosition() );
+					writer.insertText( 'FOO', { selfRequestHref: 'url' }, model.document.selection.getFirstPosition() );
 				} );
 
 				expect( getViewData( view ) ).to.equal(
@@ -460,7 +460,7 @@ describe( 'LinkEditing', () => {
 
 			it( 'works for the #remove event', () => {
 				setModelData( model,
-					'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+					'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 				);
 
 				model.change( writer => {
@@ -477,11 +477,11 @@ describe( 'LinkEditing', () => {
 
 			it( 'works for the #attribute event', () => {
 				setModelData( model,
-					'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+					'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 				);
 
 				model.change( writer => {
-					writer.setAttribute( 'linkHref', 'new-url', writer.createRange(
+					writer.setAttribute( 'selfRequestHref', 'new-url', writer.createRange(
 						model.document.selection.getFirstPosition().getShiftedBy( -1 ),
 						model.document.selection.getFirstPosition().getShiftedBy( 1 ) )
 					);
@@ -494,7 +494,7 @@ describe( 'LinkEditing', () => {
 
 			it( 'works for the #selection event', () => {
 				setModelData( model,
-					'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+					'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 				);
 
 				model.change( writer => {
@@ -513,7 +513,7 @@ describe( 'LinkEditing', () => {
 				editor.conversion.for( 'editingDowncast' ).markerToHighlight( { model: 'fooMarker', view: {} } );
 
 				setModelData( model,
-					'<paragraph>foo <$text linkHref="url">li{}nk</$text> baz</paragraph>'
+					'<paragraph>foo <$text selfRequestHref="url">li{}nk</$text> baz</paragraph>'
 				);
 
 				model.change( writer => {
@@ -605,7 +605,7 @@ describe( 'LinkEditing', () => {
 						editor.setData( `<p><a href="${ link.url }">foo</a>bar</p>` );
 
 						expect( getModelData( model, { withoutSelection: true } ) )
-							.to.equal( `<paragraph><$text linkHref="${ link.url }">foo</$text>bar</paragraph>` );
+							.to.equal( `<paragraph><$text selfRequestHref="${ link.url }">foo</$text>bar</paragraph>` );
 
 						if ( link.external ) {
 							expect( editor.getData() )
@@ -621,7 +621,7 @@ describe( 'LinkEditing', () => {
 					editor.setData( `<p><a href="${ link.url }">foo</a>bar</p>` );
 
 					expect( getModelData( model, { withoutSelection: true } ) )
-						.to.equal( `<paragraph><$text linkHref="${ link.url }">foo</$text>bar</paragraph>` );
+						.to.equal( `<paragraph><$text selfRequestHref="${ link.url }">foo</$text>bar</paragraph>` );
 
 					expect( editor.getData() ).to.equal( `<p><a href="${ link.url }">foo</a>bar</p>` );
 				} );
@@ -705,7 +705,7 @@ describe( 'LinkEditing', () => {
 						editor.setData( `<p><a href="${ link.url }">foo</a>bar</p>` );
 
 						expect( getModelData( model, { withoutSelection: true } ) )
-							.to.equal( `<paragraph><$text linkHref="${ link.url }">foo</$text>bar</paragraph>` );
+							.to.equal( `<paragraph><$text selfRequestHref="${ link.url }">foo</$text>bar</paragraph>` );
 
 						// Order of attributes is important, that's why this is assert is construct in such way.
 						expect( editor.getData() ).to.equal( `<p><a ${ reducedAttr }href="${ link.url }">foo</a>bar</p>` );
@@ -714,15 +714,15 @@ describe( 'LinkEditing', () => {
 			} );
 		} );
 
-		describe( 'custom linkHref converter', () => {
+		describe( 'custom selfRequestHref converter', () => {
 			beforeEach( async () => {
 				class CustomLinks extends Plugin {
 					init() {
 						const editor = this.editor;
 
 						editor.conversion.for( 'downcast' ).add( dispatcher => {
-							dispatcher.on( 'attribute:linkHref', ( evt, data, conversionApi ) => {
-								conversionApi.consumable.consume( data.item, 'attribute:linkHref' );
+							dispatcher.on( 'attribute:selfRequestHref', ( evt, data, conversionApi ) => {
+								conversionApi.consumable.consume( data.item, 'attribute:selfRequestHref' );
 
 								// Very simplified downcast just for test assertion.
 								const viewWriter = conversionApi.writer;
@@ -758,7 +758,7 @@ describe( 'LinkEditing', () => {
 				editor.setData( '<p><a href="http://example.com">foo</a>bar</p>' );
 
 				expect( getModelData( model, { withoutSelection: true } ) )
-					.to.equal( '<paragraph><$text linkHref="http://example.com">foo</$text>bar</paragraph>' );
+					.to.equal( '<paragraph><$text selfRequestHref="http://example.com">foo</$text>bar</paragraph>' );
 
 				expect( editor.getData() ).to.equal( '<p><a href="http://example.com">foo</a>bar</p>' );
 			} );
@@ -806,8 +806,8 @@ describe( 'LinkEditing', () => {
 
 				expect( getModelData( model, { withoutSelection: true } ) ).to.equal(
 					'<paragraph>' +
-						'<$text linkHref="url" linkIsDownloadable="true" linkIsExternal="true">Foo</$text>' +
-						'<$text linkHref="example.com" linkIsDownloadable="true">Bar</$text>' +
+						'<$text selfRequestHref="url" linkIsDownloadable="true" linkIsExternal="true">Foo</$text>' +
+						'<$text selfRequestHref="example.com" linkIsDownloadable="true">Bar</$text>' +
 					'</paragraph>'
 				);
 
@@ -844,8 +844,8 @@ describe( 'LinkEditing', () => {
 
 				expect( getModelData( model, { withoutSelection: true } ) ).to.equal(
 					'<paragraph>' +
-						'<$text linkHref="url">Foo</$text>' +
-						'<$text linkHref="example.com">Bar</$text>' +
+						'<$text selfRequestHref="url">Foo</$text>' +
+						'<$text selfRequestHref="example.com">Bar</$text>' +
 					'</paragraph>'
 				);
 
@@ -890,52 +890,52 @@ describe( 'LinkEditing', () => {
 		} );
 
 		it( 'should insert content after the link', () => {
-			setModelData( model, '<paragraph><$text linkHref="url">Bar[]</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="url">Bar[]</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
 				newSelection: view.document.selection
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph><$text linkHref="url">Bar</$text>[]</paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph><$text selfRequestHref="url">Bar</$text>[]</paragraph>' );
 
 			editor.execute( 'input', { text: 'Foo' } );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph><$text linkHref="url">Bar</$text>Foo[]</paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph><$text selfRequestHref="url">Bar</$text>Foo[]</paragraph>' );
 		} );
 
 		it( 'should insert content before the link', () => {
-			setModelData( model, '<paragraph><$text linkHref="url">[]Bar</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="url">[]Bar</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
 				newSelection: view.document.selection
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph>[]<$text linkHref="url">Bar</$text></paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph>[]<$text selfRequestHref="url">Bar</$text></paragraph>' );
 
 			editor.execute( 'input', { text: 'Foo' } );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph>Foo[]<$text linkHref="url">Bar</$text></paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph>Foo[]<$text selfRequestHref="url">Bar</$text></paragraph>' );
 		} );
 
 		it( 'should insert content to the link if clicked inside it', () => {
-			setModelData( model, '<paragraph><$text linkHref="url">B[]ar</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="url">B[]ar</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
 				newSelection: view.document.selection
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph><$text linkHref="url">B[]ar</$text></paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph><$text selfRequestHref="url">B[]ar</$text></paragraph>' );
 
 			editor.execute( 'input', { text: 'ar. B' } );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph><$text linkHref="url">Bar. B[]ar</$text></paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph><$text selfRequestHref="url">Bar. B[]ar</$text></paragraph>' );
 		} );
 
 		it( 'should insert content between two links (selection at the end of the first link)', () => {
-			setModelData( model, '<paragraph><$text linkHref="foo">Foo[]</$text><$text linkHref="bar">Bar</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="foo">Foo[]</$text><$text selfRequestHref="bar">Bar</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
@@ -943,18 +943,18 @@ describe( 'LinkEditing', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="foo">Foo</$text>[]<$text linkHref="bar">Bar</$text></paragraph>'
+				'<paragraph><$text selfRequestHref="foo">Foo</$text>[]<$text selfRequestHref="bar">Bar</$text></paragraph>'
 			);
 
 			editor.execute( 'input', { text: 'Foo' } );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="foo">Foo</$text>Foo[]<$text linkHref="bar">Bar</$text></paragraph>'
+				'<paragraph><$text selfRequestHref="foo">Foo</$text>Foo[]<$text selfRequestHref="bar">Bar</$text></paragraph>'
 			);
 		} );
 
 		it( 'should insert content between two links (selection at the beginning of the second link)', () => {
-			setModelData( model, '<paragraph><$text linkHref="foo">Foo</$text><$text linkHref="bar">[]Bar</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="foo">Foo</$text><$text selfRequestHref="bar">[]Bar</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
@@ -962,18 +962,18 @@ describe( 'LinkEditing', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="foo">Foo</$text>[]<$text linkHref="bar">Bar</$text></paragraph>'
+				'<paragraph><$text selfRequestHref="foo">Foo</$text>[]<$text selfRequestHref="bar">Bar</$text></paragraph>'
 			);
 
 			editor.execute( 'input', { text: 'Foo' } );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="foo">Foo</$text>Foo[]<$text linkHref="bar">Bar</$text></paragraph>'
+				'<paragraph><$text selfRequestHref="foo">Foo</$text>Foo[]<$text selfRequestHref="bar">Bar</$text></paragraph>'
 			);
 		} );
 
-		it( 'should not touch other attributes than `linkHref`', () => {
-			setModelData( model, '<paragraph><$text bold="true" linkHref="url">Bar[]</$text></paragraph>' );
+		it( 'should not touch other attributes than `selfRequestHref`', () => {
+			setModelData( model, '<paragraph><$text bold="true" selfRequestHref="url">Bar[]</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
@@ -981,35 +981,35 @@ describe( 'LinkEditing', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text bold="true" linkHref="url">Bar</$text><$text bold="true">[]</$text></paragraph>'
+				'<paragraph><$text bold="true" selfRequestHref="url">Bar</$text><$text bold="true">[]</$text></paragraph>'
 			);
 
 			editor.execute( 'input', { text: 'Foo' } );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text bold="true" linkHref="url">Bar</$text><$text bold="true">Foo[]</$text></paragraph>'
+				'<paragraph><$text bold="true" selfRequestHref="url">Bar</$text><$text bold="true">Foo[]</$text></paragraph>'
 			);
 		} );
 
 		it( 'should do nothing if the text was not clicked', () => {
-			setModelData( model, '<paragraph><$text linkHref="url">Bar[]</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text selfRequestHref="url">Bar[]</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'selectionChange', {
 				newSelection: view.document.selection
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph><$text linkHref="url">Bar[]</$text></paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph><$text selfRequestHref="url">Bar[]</$text></paragraph>' );
 		} );
 
 		it( 'should do nothing if the selection is not collapsed after the click', () => {
-			setModelData( model, '<paragraph>[<$text linkHref="url">Bar</$text>]</paragraph>' );
+			setModelData( model, '<paragraph>[<$text selfRequestHref="url">Bar</$text>]</paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
 				newSelection: view.document.selection
 			} );
 
-			expect( getModelData( model ) ).to.equal( '<paragraph>[<$text linkHref="url">Bar</$text>]</paragraph>' );
+			expect( getModelData( model ) ).to.equal( '<paragraph>[<$text selfRequestHref="url">Bar</$text>]</paragraph>' );
 		} );
 
 		it( 'should do nothing if the text is not a link', () => {
@@ -1029,7 +1029,7 @@ describe( 'LinkEditing', () => {
 				allowAttributes: [ 'linkIsFoo', 'linkIsBar' ]
 			} );
 
-			setModelData( model, '<paragraph><$text linkIsFoo="true" linkIsBar="true" linkHref="url">Bar[]</$text></paragraph>' );
+			setModelData( model, '<paragraph><$text linkIsFoo="true" linkIsBar="true" selfRequestHref="url">Bar[]</$text></paragraph>' );
 
 			editor.editing.view.document.fire( 'mousedown' );
 			editor.editing.view.document.fire( 'selectionChange', {
@@ -1037,13 +1037,13 @@ describe( 'LinkEditing', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="url" linkIsBar="true" linkIsFoo="true">Bar</$text>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true">Bar</$text>[]</paragraph>'
 			);
 
 			editor.execute( 'input', { text: 'Foo' } );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="url" linkIsBar="true" linkIsFoo="true">Bar</$text>Foo[]</paragraph>'
+				'<paragraph><$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true">Bar</$text>Foo[]</paragraph>'
 			);
 		} );
 	} );

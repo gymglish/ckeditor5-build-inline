@@ -14,7 +14,7 @@ import LinkEditing from './linkediting';
 /**
  * The link image engine feature.
  *
- * It accepts the `linkHref="url"` attribute in the model for the {@link module:image/image~Image `<image>`} element
+ * It accepts the `selfRequestHref="url"` attribute in the model for the {@link module:image/image~Image `<image>`} element
  * which allows linking images.
  *
  * @extends module:core/plugin~Plugin
@@ -37,7 +37,7 @@ export default class LinkImageEditing extends Plugin {
 	init() {
 		const editor = this.editor;
 
-		editor.model.schema.extend( 'image', { allowAttributes: [ 'linkHref' ] } );
+		editor.model.schema.extend( 'image', { allowAttributes: [ 'selfRequestHref' ] } );
 
 		editor.conversion.for( 'upcast' ).add( upcastLink() );
 		editor.conversion.for( 'downcast' ).add( downcastImageLink() );
@@ -68,10 +68,10 @@ function upcastLink() {
 				return;
 			}
 
-			const linkHref = viewLink.getAttribute( 'href' );
+			const selfRequestHref = viewLink.getAttribute( 'href' );
 
 			// Missing the 'href' attribute.
-			if ( !linkHref ) {
+			if ( !selfRequestHref ) {
 				return;
 			}
 
@@ -93,8 +93,8 @@ function upcastLink() {
 			}
 
 			if ( modelElement && modelElement.is( 'image' ) ) {
-				// Set the linkHref attribute from link element on model image element.
-				conversionApi.writer.setAttribute( 'linkHref', linkHref, modelElement );
+				// Set the selfRequestHref attribute from link element on model image element.
+				conversionApi.writer.setAttribute( 'selfRequestHref', selfRequestHref, modelElement );
 			}
 		}, { priority: 'high' } );
 	};
@@ -107,7 +107,7 @@ function upcastLink() {
 //
 function downcastImageLink() {
 	return dispatcher => {
-		dispatcher.on( 'attribute:linkHref:image', ( evt, data, conversionApi ) => {
+		dispatcher.on( 'attribute:selfRequestHref:image', ( evt, data, conversionApi ) => {
 			// The image will be already converted - so it will be present in the view.
 			const viewFigure = conversionApi.mapper.toViewElement( data.item );
 			const writer = conversionApi.writer;

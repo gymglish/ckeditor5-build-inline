@@ -10,22 +10,22 @@
 /**
  * Returns a range containing the entire link in which the given `position` is placed.
  *
- * It can be used e.g. to get the entire range on which the `linkHref` attribute needs to be changed when having a
+ * It can be used e.g. to get the entire range on which the `selfRequestHref` attribute needs to be changed when having a
  * selection inside a link.
  *
  * @param {module:engine/model/position~Position} position The start position.
- * @param {String} value The `linkHref` attribute value.
+ * @param {String} value The `selfRequestHref` attribute value.
  * @returns {module:engine/model/range~Range} The link range.
  */
 export default function findLinkRange( position, value, model ) {
 	return model.createRange( _findBound( position, value, true, model ), _findBound( position, value, false, model ) );
 }
 
-// Walks forward or backward (depends on the `lookBack` flag), node by node, as long as they have the same `linkHref` attribute value
+// Walks forward or backward (depends on the `lookBack` flag), node by node, as long as they have the same `selfRequestHref` attribute value
 // and returns a position just before or after (depends on the `lookBack` flag) the last matched node.
 //
 // @param {module:engine/model/position~Position} position The start position.
-// @param {String} value The `linkHref` attribute value.
+// @param {String} value The `selfRequestHref` attribute value.
 // @param {Boolean} lookBack Whether the walk direction is forward (`false`) or backward (`true`).
 // @returns {module:engine/model/position~Position} The position just before the last matched node.
 function _findBound( position, value, lookBack, model ) {
@@ -35,7 +35,7 @@ function _findBound( position, value, lookBack, model ) {
 
 	let lastNode = null;
 
-	while ( node && node.getAttribute( 'linkHref' ) == value ) {
+	while ( node && node.getAttribute( 'selfRequestHref' ) == value ) {
 		lastNode = node;
 		node = lookBack ? node.previousSibling : node.nextSibling;
 	}

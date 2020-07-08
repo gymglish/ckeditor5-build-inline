@@ -20,7 +20,7 @@ import first from '@ckeditor/ckeditor5-utils/src/first';
  */
 export default class LinkCommand extends Command {
 	/**
-	 * The value of the `'linkHref'` attribute if the start of the selection is located in a node with this attribute.
+	 * The value of the `'selfRequestHref'` attribute if the start of the selection is located in a node with this attribute.
 	 *
 	 * @observable
 	 * @readonly
@@ -62,12 +62,12 @@ export default class LinkCommand extends Command {
 
 		// A check for the `LinkImage` plugin. If the selection contains an element, get values from the element.
 		// Currently the selection reads attributes from text nodes only. See #7429 and #7465.
-		if ( selectedElement && selectedElement.is( 'image' ) && model.schema.checkAttribute( 'image', 'linkHref' ) ) {
-			this.value = selectedElement.getAttribute( 'linkHref' );
-			this.isEnabled = model.schema.checkAttribute( selectedElement, 'linkHref' );
+		if ( selectedElement && selectedElement.is( 'image' ) && model.schema.checkAttribute( 'image', 'selfRequestHref' ) ) {
+			this.value = selectedElement.getAttribute( 'selfRequestHref' );
+			this.isEnabled = model.schema.checkAttribute( selectedElement, 'selfRequestHref' );
 		} else {
-			this.value = doc.selection.getAttribute( 'linkHref' );
-			this.isEnabled = model.schema.checkAttributeInSelection( doc.selection, 'linkHref' );
+			this.value = doc.selection.getAttribute( 'selfRequestHref' );
+			this.isEnabled = model.schema.checkAttributeInSelection( doc.selection, 'selfRequestHref' );
 		}
 
 		for ( const manualDecorator of this.manualDecorators ) {
@@ -78,15 +78,15 @@ export default class LinkCommand extends Command {
 	/**
 	 * Executes the command.
 	 *
-	 * When the selection is non-collapsed, the `linkHref` attribute will be applied to nodes inside the selection, but only to
-	 * those nodes where the `linkHref` attribute is allowed (disallowed nodes will be omitted).
+	 * When the selection is non-collapsed, the `selfRequestHref` attribute will be applied to nodes inside the selection, but only to
+	 * those nodes where the `selfRequestHref` attribute is allowed (disallowed nodes will be omitted).
 	 *
-	 * When the selection is collapsed and is not inside the text with the `linkHref` attribute, a
-	 * new {@link module:engine/model/text~Text text node} with the `linkHref` attribute will be inserted in place of the caret, but
+	 * When the selection is collapsed and is not inside the text with the `selfRequestHref` attribute, a
+	 * new {@link module:engine/model/text~Text text node} with the `selfRequestHref` attribute will be inserted in place of the caret, but
 	 * only if such element is allowed in this place. The `_data` of the inserted text will equal the `href` parameter.
 	 * The selection will be updated to wrap the just inserted text node.
 	 *
-	 * When the selection is collapsed and inside the text with the `linkHref` attribute, the attribute value will be updated.
+	 * When the selection is collapsed and inside the text with the `selfRequestHref` attribute, the attribute value will be updated.
 	 *
 	 * # Decorators and model attribute management
 	 *
@@ -157,12 +157,12 @@ export default class LinkCommand extends Command {
 			if ( selection.isCollapsed ) {
 				const position = selection.getFirstPosition();
 
-				// When selection is inside text with `linkHref` attribute.
-				if ( selection.hasAttribute( 'linkHref' ) ) {
-					// Then update `linkHref` value.
-					const linkRange = findLinkRange( position, selection.getAttribute( 'linkHref' ), model );
+				// When selection is inside text with `selfRequestHref` attribute.
+				if ( selection.hasAttribute( 'selfRequestHref' ) ) {
+					// Then update `selfRequestHref` value.
+					const linkRange = findLinkRange( position, selection.getAttribute( 'selfRequestHref' ), model );
 
-					writer.setAttribute( 'linkHref', href, linkRange );
+					writer.setAttribute( 'selfRequestHref', href, linkRange );
 
 					truthyManualDecorators.forEach( item => {
 						writer.setAttribute( item, true, linkRange );
@@ -175,13 +175,13 @@ export default class LinkCommand extends Command {
 					// Put the selection at the end of the updated link.
 					writer.setSelection( writer.createPositionAfter( linkRange.end.nodeBefore ) );
 				}
-				// If not then insert text node with `linkHref` attribute in place of caret.
+				// If not then insert text node with `selfRequestHref` attribute in place of caret.
 				// However, since selection in collapsed, attribute value will be used as data for text node.
 				// So, if `href` is empty, do not create text node.
 				else if ( href !== '' ) {
 					const attributes = toMap( selection.getAttributes() );
 
-					attributes.set( 'linkHref', href );
+					attributes.set( 'selfRequestHref', href );
 
 					truthyManualDecorators.forEach( item => {
 						attributes.set( item, true );
@@ -195,29 +195,29 @@ export default class LinkCommand extends Command {
 					writer.setSelection( writer.createPositionAfter( node ) );
 				}
 
-				// Remove the `linkHref` attribute and all link decorators from the selection.
+				// Remove the `selfRequestHref` attribute and all link decorators from the selection.
 				// It stops adding a new content into the link element.
-				[ 'linkHref', ...truthyManualDecorators, ...falsyManualDecorators ].forEach( item => {
+				[ 'selfRequestHref', ...truthyManualDecorators, ...falsyManualDecorators ].forEach( item => {
 					writer.removeSelectionAttribute( item );
 				} );
 			} else {
 				// If selection has non-collapsed ranges, we change attribute on nodes inside those ranges
-				// omitting nodes where the `linkHref` attribute is disallowed.
-				const ranges = model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
+				// omitting nodes where the `selfRequestHref` attribute is disallowed.
+				const ranges = model.schema.getValidRanges( selection.getRanges(), 'selfRequestHref' );
 
-				// But for the first, check whether the `linkHref` attribute is allowed on selected blocks (e.g. the "image" element).
+				// But for the first, check whether the `selfRequestHref` attribute is allowed on selected blocks (e.g. the "image" element).
 				const allowedRanges = [];
 
 				for ( const element of selection.getSelectedBlocks() ) {
-					if ( model.schema.checkAttribute( element, 'linkHref' ) ) {
+					if ( model.schema.checkAttribute( element, 'selfRequestHref' ) ) {
 						allowedRanges.push( writer.createRangeOn( element ) );
 					}
 				}
 
-				// Ranges that accept the `linkHref` attribute. Since we will iterate over `allowedRanges`, let's clone it.
+				// Ranges that accept the `selfRequestHref` attribute. Since we will iterate over `allowedRanges`, let's clone it.
 				const rangesToUpdate = allowedRanges.slice();
 
-				// For all selection ranges we want to check whether given range is inside an element that accepts the `linkHref` attribute.
+				// For all selection ranges we want to check whether given range is inside an element that accepts the `selfRequestHref` attribute.
 				// If so, we don't want to propagate applying the attribute to its children.
 				for ( const range of ranges ) {
 					if ( this._isRangeToUpdate( range, allowedRanges ) ) {
@@ -226,7 +226,7 @@ export default class LinkCommand extends Command {
 				}
 
 				for ( const range of rangesToUpdate ) {
-					writer.setAttribute( 'linkHref', href, range );
+					writer.setAttribute( 'selfRequestHref', href, range );
 
 					truthyManualDecorators.forEach( item => {
 						writer.setAttribute( item, true, range );
@@ -253,7 +253,7 @@ export default class LinkCommand extends Command {
 	}
 
 	/**
-	 * Checks whether specified `range` is inside an element that accepts the `linkHref` attribute.
+	 * Checks whether specified `range` is inside an element that accepts the `selfRequestHref` attribute.
 	 *
 	 * @private
 	 * @param {module:engine/view/range~Range} range A range to check.
@@ -262,7 +262,7 @@ export default class LinkCommand extends Command {
 	 */
 	_isRangeToUpdate( range, allowedRanges ) {
 		for ( const allowedRange of allowedRanges ) {
-			// A range is inside an element that will have the `linkHref` attribute. Do not modify its nodes.
+			// A range is inside an element that will have the `selfRequestHref` attribute. Do not modify its nodes.
 			if ( allowedRange.containsRange( range ) ) {
 				return false;
 			}

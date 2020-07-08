@@ -39,13 +39,13 @@ describe( 'LinkImageEditing', () => {
 	} );
 
 	it( 'should set proper schema rules', () => {
-		expect( model.schema.checkAttribute( [ '$root', 'image' ], 'linkHref' ) ).to.be.true;
+		expect( model.schema.checkAttribute( [ '$root', 'image' ], 'selfRequestHref' ) ).to.be.true;
 	} );
 
 	describe( 'conversion in data pipeline', () => {
 		describe( 'model to view', () => {
 			it( 'should convert an image with a link', () => {
-				setModelData( model, '<image src="/assets/sample.png" alt="alt text" linkHref="http://ckeditor.com"></image>' );
+				setModelData( model, '<image src="/assets/sample.png" alt="alt text" selfRequestHref="http://ckeditor.com"></image>' );
 
 				expect( editor.getData() ).to.equal(
 					'<figure class="image"><a href="http://ckeditor.com"><img alt="alt text" src="/assets/sample.png"></a></figure>'
@@ -53,7 +53,7 @@ describe( 'LinkImageEditing', () => {
 			} );
 
 			it( 'should convert an image with a link and without alt attribute', () => {
-				setModelData( model, '<image src="/assets/sample.png" linkHref="http://ckeditor.com"></image>' );
+				setModelData( model, '<image src="/assets/sample.png" selfRequestHref="http://ckeditor.com"></image>' );
 
 				expect( editor.getData() ).to.equal(
 					'<figure class="image"><a href="http://ckeditor.com"><img src="/assets/sample.png"></a></figure>'
@@ -63,7 +63,7 @@ describe( 'LinkImageEditing', () => {
 			it( 'should convert srcset attribute to srcset and sizes attribute wrapped into a link', () => {
 				setModelData( model,
 					'<image src="/assets/sample.png" ' +
-						'linkHref="http://ckeditor.com" ' +
+						'selfRequestHref="http://ckeditor.com" ' +
 						'srcset=\'{ "data": "small.png 148w, big.png 1024w" }\'>' +
 					'</image>'
 				);
@@ -86,14 +86,14 @@ describe( 'LinkImageEditing', () => {
 					);
 
 					expect( getModelData( model, { withoutSelection: true } ) )
-						.to.equal( '<image alt="alt text" linkHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
+						.to.equal( '<image alt="alt text" selfRequestHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
 				} );
 
 				it( 'should convert an image with a link and without alt attribute', () => {
 					editor.setData( '<figure class="image"><a href="http://ckeditor.com"><img src="/assets/sample.png" /></a></figure>' );
 
 					expect( getModelData( model, { withoutSelection: true } ) )
-						.to.equal( '<image linkHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
+						.to.equal( '<image selfRequestHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
 				} );
 
 				it( 'should not convert without src attribute', () => {
@@ -153,7 +153,7 @@ describe( 'LinkImageEditing', () => {
 					);
 
 					expect( getModelData( model, { withoutSelection: true } ) )
-						.to.equal( '<paragraph><$text linkHref="http://ckeditor.com">Foo</$text></paragraph>' );
+						.to.equal( '<paragraph><$text selfRequestHref="http://ckeditor.com">Foo</$text></paragraph>' );
 				} );
 			} );
 
@@ -164,14 +164,14 @@ describe( 'LinkImageEditing', () => {
 					);
 
 					expect( getModelData( model, { withoutSelection: true } ) )
-						.to.equal( '<image alt="alt text" linkHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
+						.to.equal( '<image alt="alt text" selfRequestHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
 				} );
 
 				it( 'should convert an image with a link and without alt attribute', () => {
 					editor.setData( '<a href="http://ckeditor.com"><img src="/assets/sample.png" /></a>' );
 
 					expect( getModelData( model, { withoutSelection: true } ) )
-						.to.equal( '<image linkHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
+						.to.equal( '<image selfRequestHref="http://ckeditor.com" src="/assets/sample.png"></image>' );
 				} );
 
 				it( 'should not convert without src attribute', () => {
@@ -243,7 +243,7 @@ describe( 'LinkImageEditing', () => {
 							);
 
 							expect( getModelData( editor.model, { withoutSelection: true } ) ).to.equal(
-								'<image alt="alt text" linkHref="http://ckeditor.com" src="/assets/sample.png">' +
+								'<image alt="alt text" selfRequestHref="http://ckeditor.com" src="/assets/sample.png">' +
 									'<caption>Foo Bar.</caption>' +
 								'</image>'
 							);
@@ -258,7 +258,7 @@ describe( 'LinkImageEditing', () => {
 	describe( 'conversion in editing pipeline', () => {
 		describe( 'model to view', () => {
 			it( 'should convert the image element', () => {
-				setModelData( model, '<image linkHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text"></image>' );
+				setModelData( model, '<image selfRequestHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text"></image>' );
 
 				expect( getViewData( view, { withoutSelection: true } ) ).to.equal(
 					'<figure class="ck-widget image" contenteditable="false">' +
@@ -270,11 +270,11 @@ describe( 'LinkImageEditing', () => {
 			} );
 
 			it( 'should convert attribute change', () => {
-				setModelData( model, '<image linkHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text"></image>' );
+				setModelData( model, '<image selfRequestHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text"></image>' );
 				const image = model.document.getRoot().getChild( 0 );
 
 				model.change( writer => {
-					writer.setAttribute( 'linkHref', 'https://ckeditor.com/why-ckeditor/', image );
+					writer.setAttribute( 'selfRequestHref', 'https://ckeditor.com/why-ckeditor/', image );
 				} );
 
 				expect( getViewData( view, { withoutSelection: true } ) ).to.equal(
@@ -287,11 +287,11 @@ describe( 'LinkImageEditing', () => {
 			} );
 
 			it( 'should convert attribute removal', () => {
-				setModelData( model, '<image linkHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text"></image>' );
+				setModelData( model, '<image selfRequestHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text"></image>' );
 				const image = model.document.getRoot().getChild( 0 );
 
 				model.change( writer => {
-					writer.removeAttribute( 'linkHref', image );
+					writer.removeAttribute( 'selfRequestHref', image );
 				} );
 
 				expect( getViewData( view, { withoutSelection: true } ) ).to.equal(
@@ -310,7 +310,7 @@ describe( 'LinkImageEditing', () => {
 					} )
 					.then( editor => {
 						setModelData( editor.model,
-							'<image linkHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text">' +
+							'<image selfRequestHref="http://ckeditor.com" src="/assets/sample.png" alt="alt text">' +
 								'<caption>Foo Bar.</caption>' +
 							'</image>'
 						);
