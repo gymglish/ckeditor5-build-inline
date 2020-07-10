@@ -13,10 +13,12 @@ import ViewCollection from '@ckeditor/ckeditor5-ui/src/viewcollection';
 import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
 import SwitchButtonView from '@ckeditor/ckeditor5-ui/src/button/switchbuttonview';
 
+
 import LabeledFieldView from '@ckeditor/ckeditor5-ui/src/labeledfield/labeledfieldview';
 import { createLabeledInputText } from '@ckeditor/ckeditor5-ui/src/labeledfield/utils';
 
 import submitHandler from '@ckeditor/ckeditor5-ui/src/bindings/submithandler';
+import Collection from '@ckeditor/ckeditor5-utils/src/collection';
 import FocusTracker from '@ckeditor/ckeditor5-utils/src/focustracker';
 import FocusCycler from '@ckeditor/ckeditor5-ui/src/focuscycler';
 import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
@@ -24,6 +26,29 @@ import KeystrokeHandler from '@ckeditor/ckeditor5-utils/src/keystrokehandler';
 import checkIcon from '@ckeditor/ckeditor5-core/theme/icons/check.svg';
 import cancelIcon from '@ckeditor/ckeditor5-core/theme/icons/cancel.svg';
 import '../../theme/linkform.css';
+
+import { debounce } from 'lodash-es';
+import { keyCodes } from '@ckeditor/ckeditor5-utils/src/keyboard';
+
+import CoverListView from './coverlistview';
+import CoverListItemView from './coverlistitemview';
+
+import { first } from 'rxjs/operators';
+
+
+const handledKeyCodes = [
+	keyCodes.arrowup,
+	keyCodes.arrowdown,
+	keyCodes.enter,
+	keyCodes.tab,
+	keyCodes.space,
+];
+
+
+function isHandledKey( keyCode ) {
+	return handledKeyCodes.includes( keyCode );
+}
+
 
 /**
  * The link form view controller class.
@@ -40,10 +65,12 @@ export default class LinkFormView extends View {
 	 *
 	 * @param {module:utils/locale~Locale} [locale] The localization services instance.
 	 * @param {module:link/linkcommand~LinkCommand} linkCommand Reference to {@link module:link/linkcommand~LinkCommand}.
-	 * @param {String} [protocol] A value of a protocol to be displayed in the input's placeholder.
 	 */
-	constructor( locale, linkCommand, protocol ) {
+	constructor( editor, linkCommand ) {
+		const locale = editor.locale;
 		super( locale );
+
+		this.editor = editor;
 
 		const t = locale.t;
 
@@ -63,20 +90,11 @@ export default class LinkFormView extends View {
 		 */
 		this.keystrokes = new KeystrokeHandler();
 
-		/**
-		 * The URL input view.
-		 *
-		 * @member {module:ui/labeledfield/labeledfieldview~LabeledFieldView}
-		 */
-		this.urlInputView = this._createUrlInput( protocol );
+		this.filterCoversDebounced = debounce(this.filterCovers, 100);
 
-		/**
-		 * The Save button view.
-		 *
-		 * @member {module:ui/button/buttonview~ButtonView}
-		 */
-		this.saveButtonView = this._createButton( t( 'Save' ), checkIcon, 'ck-button-save' );
-		this.saveButtonView.type = 'submit';
+		this.coverListView = this._createCoverListView();
+
+		this.urlInputView = this._createCoverInput();
 
 		/**
 		 * The Cancel button view.
@@ -181,7 +199,6 @@ export default class LinkFormView extends View {
 		const childViews = [
 			this.urlInputView,
 			...this._manualDecoratorSwitches,
-			this.saveButtonView,
 			this.cancelButtonView
 		];
 
@@ -204,19 +221,44 @@ export default class LinkFormView extends View {
 		this._focusCycler.focusFirst();
 	}
 
-	/**
-	 * Creates a labeled input view.
-	 *
-	 * @private
-	 * @param {String} [protocol=http://] A value of a protocol to be displayed in the input's placeholder.
-	 * @returns {module:ui/labeledfield/labeledfieldview~LabeledFieldView} Labeled field view instance.
-	 */
-	_createUrlInput( protocol = 'https://' ) {
+	_createCoverInput() {
 		const t = this.locale.t;
 		const labeledInput = new LabeledFieldView( this.locale, createLabeledInputText );
 
 		labeledInput.label = t( 'Link URL' );
-		labeledInput.fieldView.placeholder = protocol + 'example.com';
+
+		const fieldView = labeledInput.fieldView;
+
+		fieldView.placeholder = 'Grain';
+
+		fieldView.extendTemplate( {
+			on: {
+				keydown: fieldView.bindTemplate.to( 'keydown' )
+			}
+		} );
+
+		fieldView.on( 'keydown', (evt, data  ) => {
+			if ( isHandledKey( data.keyCode )) {
+				data.preventDefault();
+				evt.stop(); // Required for Enter key overriding.
+
+				if ( data.keyCode == keyCodes.arrowdown ) {
+					this.coverListView.selectNext();
+				}
+
+				if ( data.keyCode == keyCodes.arrowup ) {
+					this.coverListView.selectPrevious();
+				}
+
+				if ( data.keyCode == keyCodes.enter || data.keyCode == keyCodes.tab || data.keyCode == keyCodes.space ) {
+					this.coverListView.executeSelected();
+				}
+			}
+		}, { priority: 'highest' } ); // Required to override the Enter key.
+
+		fieldView.on( 'input', () => {
+			this.filterCoversDebounced(this.editor, fieldView.element.value)
+		});
 
 		return labeledInput;
 	}
@@ -287,6 +329,21 @@ export default class LinkFormView extends View {
 		return switches;
 	}
 
+	_createCoverListView() {
+		this._items = new Collection();
+		const locale = this.editor.locale;
+		const coverListView = new CoverListView(locale);
+		coverListView.items.bindTo( this._items ).using( result => {
+			const resultView = new CoverListItemView(locale);
+			resultView.label = result.label;
+			resultView.value = result.value;
+			resultView.isNew = result.isNew;
+			resultView.delegate( 'execute' ).to( this, 'selected' );
+			return resultView;
+		} );
+		return coverListView;
+	}
+
 	/**
 	 * Populates the {@link #children} collection of the form.
 	 *
@@ -302,7 +359,29 @@ export default class LinkFormView extends View {
 	_createFormChildren( manualDecorators ) {
 		const children = this.createCollection();
 
-		children.add( this.urlInputView );
+		const coverView = new View();
+
+		coverView.setTemplate( {
+			tag: 'ul',
+			children: [{
+				tag: 'li',
+				children: [ this.urlInputView, this.coverListView ],
+				attributes: {
+					class: [
+						'ck',
+						'ck-list__item'
+					]
+				}
+			}],
+			attributes: {
+				class: [
+					'ck',
+					'ck-reset',
+					'ck-list'
+				]
+			}
+		} );
+		children.add( coverView );
 
 		if ( manualDecorators.length ) {
 			const additionalButtonsView = new View();
@@ -330,22 +409,24 @@ export default class LinkFormView extends View {
 			children.add( additionalButtonsView );
 		}
 
-		children.add( this.saveButtonView );
 		children.add( this.cancelButtonView );
 
 		return children;
 	}
+
+	filterCovers(editor, value) {
+		this.editor.config.get('selfrequest.getCovers').pipe(first()).subscribe((covers) => {
+			this._items.clear();
+			if (value) {
+				covers = covers.filter(c => c.cover_name.toLowerCase().includes(value.toLowerCase()))
+			}
+			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase())) {
+				this._items.add({label: `Create grain ${value}`, value: value, isNew: true});
+			}
+			covers.map(c => this._items.add({label: `${c.cover_name} (${c.cover_type})`, value: c.cover_name}));
+			if (this._items.length) {
+				this.coverListView.selectFirst();
+			}
+		});
+	}
 }
-
-/**
- * Fired when the form view is submitted (when one of the children triggered the submit event),
- * for example with a click on {@link #saveButtonView}.
- *
- * @event submit
- */
-
-/**
- * Fired when the form view is canceled, for example with a click on {@link #cancelButtonView}.
- *
- * @event cancel
- */

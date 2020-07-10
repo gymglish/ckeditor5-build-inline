@@ -32,10 +32,13 @@ export default class LinkActionsView extends View {
 	/**
 	 * @inheritDoc
 	 */
-	constructor( locale ) {
+	constructor( editor ) {
+		const locale = editor.locale;
 		super( locale );
 
 		const t = locale.t;
+
+		this.editor = editor;
 
 		/**
 		 * Tracks information about DOM focus in the actions.
@@ -130,6 +133,7 @@ export default class LinkActionsView extends View {
 				this.unlinkButtonView
 			]
 		} );
+
 	}
 
 	/**
@@ -186,6 +190,15 @@ export default class LinkActionsView extends View {
 		return button;
 	}
 
+
+	getUrl(href) {
+		const matchingCover = this.covers.find(c => c.cover_name === href);
+		if (matchingCover) {
+			return this.editor.config._config.selfrequest.getCoverUrl(matchingCover);
+		}
+		return null;
+	}
+
 	/**
 	 * Creates a link href preview button.
 	 *
@@ -193,6 +206,13 @@ export default class LinkActionsView extends View {
 	 * @returns {module:ui/button/buttonview~ButtonView} The button view instance.
 	 */
 	_createPreviewButton() {
+
+		const obs = this.editor.config._config.selfrequest.getCovers;
+		if (obs) {
+			this.coverSub = obs.subscribe((covers) => {
+				this.covers = covers;
+			});
+		}
 		const button = new ButtonView( this.locale );
 		const bind = this.bindTemplate;
 		const t = this.t;
@@ -208,7 +228,7 @@ export default class LinkActionsView extends View {
 					'ck',
 					'ck-link-actions__preview'
 				],
-				href: bind.to( 'href', href => href && ensureSafeUrl( href ) ),
+				href: bind.to( 'href', href => href && this.getUrl( href ) ),
 				target: '_blank',
 				rel: 'noopener noreferrer'
 			}
@@ -224,6 +244,13 @@ export default class LinkActionsView extends View {
 		button.template.eventListeners = {};
 
 		return button;
+	}
+
+	destroy() {
+		if (this.coverSub) {
+			this.coverSub.unsubscribe();
+		}
+		super.destroy();
 	}
 }
 
