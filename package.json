@@ -96,5 +96,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "dependencies": {
+    "rxjs": "^6.6.0"
   }
 }
