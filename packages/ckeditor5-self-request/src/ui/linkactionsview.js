@@ -68,14 +68,14 @@ export default class LinkActionsView extends View {
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unselfrequest' );
+		this.unlinkButtonView = this._createButton( t( 'Unlink self request' ), unlinkIcon, 'unselfrequest' );
 
 		/**
 		 * The edit link button view.
 		 *
 		 * @member {module:ui/button/buttonview~ButtonView}
 		 */
-		this.editButtonView = this._createButton( t( 'Edit link' ), pencilIcon, 'edit' );
+		this.editButtonView = this._createButton( t( 'Edit self request' ), pencilIcon, 'edit' );
 
 		/**
 		 * The value of the "href" attribute of the link to use in the {@link #previewButtonView}.
@@ -219,7 +219,7 @@ export default class LinkActionsView extends View {
 
 		button.set( {
 			withText: true,
-			tooltip: t( 'Open link in new tab' )
+			tooltip: t( 'Open grain in new tab' )
 		} );
 
 		button.extendTemplate( {
@@ -235,7 +235,7 @@ export default class LinkActionsView extends View {
 		} );
 
 		button.bind( 'label' ).to( this, 'href', href => {
-			return href || t( 'This link has no URL' );
+			return href || t( 'This grain does not exist.' );
 		} );
 
 		button.bind( 'isEnabled' ).to( this, 'href', href => !!href );

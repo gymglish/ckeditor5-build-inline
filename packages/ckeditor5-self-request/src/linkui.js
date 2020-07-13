@@ -227,8 +227,9 @@ export default class LinkUI extends Plugin {
 			const button = new ButtonView( locale );
 
 			button.isEnabled = true;
-			button.label = t( 'Link' );
-			button.icon = linkIcon;
+			button.label = t( 'Self request' );
+			button.withText = true;
+			// button.icon = linkIcon;
 			button.keystroke = LINK_KEYSTROKE;
 			button.tooltip = true;
 			button.isToggleable = true;
