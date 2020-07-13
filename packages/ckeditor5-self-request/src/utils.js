@@ -15,7 +15,7 @@ const SAFE_URL = /^(?:(?:https?|ftps?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))
 /**
  * A keystroke used by the {@link module:link/linkui~LinkUI link UI feature}.
  */
-export const LINK_KEYSTROKE = 'Ctrl+K';
+export const LINK_KEYSTROKE = 'Ctrl+G';
 
 /**
  * Returns `true` if a given view node is the link element.
