@@ -30,6 +30,7 @@ import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
 import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
+import Mention from '@ckeditor/ckeditor5-mention/src/mention';
 
 import SelfRequest from '../packages/ckeditor5-self-request/src/link';
 
@@ -56,6 +57,7 @@ InlineEditor.builtinPlugins = [
 	Link,
 	List,
 	MediaEmbed,
+	Mention,
 	Paragraph,
 	PasteFromOffice,
 	Table,
