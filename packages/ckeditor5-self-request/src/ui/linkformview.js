@@ -423,7 +423,7 @@ export default class LinkFormView extends View {
 			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase())) {
 				this._items.add({label: `Create grain ${value}`, value: value, isNew: true});
 			}
-			covers.map(c => this._items.add({label: `${c.cover_name} (${c.cover_type})`, value: c.cover_name}));
+			covers.map(c => this._items.add({label: c.cover_name, value: c.cover_name}));
 			if (this._items.length) {
 				this.coverListView.selectFirst();
 			}
