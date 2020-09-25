@@ -41,7 +41,6 @@ const handledKeyCodes = [
 	keyCodes.arrowdown,
 	keyCodes.enter,
 	keyCodes.tab,
-	keyCodes.space,
 ];
 
 
@@ -229,7 +228,7 @@ export default class LinkFormView extends View {
 
 		const fieldView = labeledInput.fieldView;
 
-		fieldView.placeholder = 'Grain';
+		fieldView.placeholder = 'Type to search a grain';
 
 		fieldView.extendTemplate( {
 			on: {
@@ -250,7 +249,7 @@ export default class LinkFormView extends View {
 					this.coverListView.selectPrevious();
 				}
 
-				if ( data.keyCode == keyCodes.enter || data.keyCode == keyCodes.tab || data.keyCode == keyCodes.space ) {
+				if ( data.keyCode == keyCodes.enter || data.keyCode == keyCodes.tab ) {
 					this.coverListView.executeSelected();
 				}
 			}
@@ -415,14 +414,23 @@ export default class LinkFormView extends View {
 	}
 
 	filterCovers(editor, value) {
-		this.editor.config.get('selfrequest.getCovers').pipe(first()).subscribe((covers) => {
-			this._items.clear();
+		this._items.clear();
+		if (!value) {
+			return;
+		}
+		this.editor.config._config.selfrequest.getCovers.pipe(first()).subscribe((covers) => {
 			if (value) {
-				covers = covers.filter(c => c.cover_name.toLowerCase().includes(value.toLowerCase()))
+				covers = covers.filter(this.editor.config._config.selfrequest.isTermMatchsCover(value));
 			}
-			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase())) {
-				this._items.add({label: `Create grain ${value}`, value: value, isNew: true});
+			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase().split(' ').filter(value => value).join('-'))) {
+				const valueToCoverName = value.toUpperCase().replace(' ', '-');
+				this._items.add({label: `Create grain ${valueToCoverName}`, value: valueToCoverName, isNew: true});
 			}
+
+			if (covers.length > 30) {
+				covers = covers.slice(0, 30);
+			}
+
 			covers.map(c => this._items.add({label: c.cover_name, value: c.cover_name}));
 			if (this._items.length) {
 				this.coverListView.selectFirst();
