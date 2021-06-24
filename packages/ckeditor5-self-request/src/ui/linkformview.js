@@ -418,7 +418,7 @@ export default class LinkFormView extends View {
 		if (!value) {
 			return;
 		}
-		this.editor.config._config.selfrequest.getCovers.pipe(first()).subscribe((covers) => {
+		this.editor.config._config.selfrequest.getCovers().pipe(first()).subscribe((covers) => {
 			if (value) {
 				covers = covers.filter(this.editor.config._config.selfrequest.isTermMatchsCover(value));
 			}

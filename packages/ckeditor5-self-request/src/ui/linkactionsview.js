@@ -209,7 +209,7 @@ export default class LinkActionsView extends View {
 
 		const obs = this.editor.config._config.selfrequest.getCovers;
 		if (obs) {
-			this.coverSub = obs.subscribe((covers) => {
+			this.coverSub = obs().subscribe((covers) => {
 				this.covers = covers;
 			});
 		}
