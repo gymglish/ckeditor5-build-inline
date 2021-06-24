@@ -420,7 +420,7 @@ export default class LinkFormView extends View {
 		}
 		this.editor.config._config.selfrequest.getCovers().pipe(first()).subscribe((covers) => {
 			if (value) {
-				covers = covers.filter(this.editor.config._config.selfrequest.isTermMatchsCover(value));
+				covers = this.editor.config._config.selfrequest.getMatchingCovers(value, covers);
 			}
 			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase().split(' ').filter(value => value).join('-'))) {
 				const valueToCoverName = value.toUpperCase().replace(' ', '-');
