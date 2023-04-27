@@ -7,7 +7,7 @@
  * @module link/linkui
  */
 
-import { Plugin } from 'ckeditor5/src/core';
+import { Editor, Plugin } from 'ckeditor5/src/core';
 import {
 	ClickObserver,
 	type ViewAttributeElement,
@@ -32,8 +32,17 @@ import type UnlinkCommand from './unlinkcommand';
 import { addLinkProtocolIfApplicable, isLinkElement, LINK_KEYSTROKE } from './utils';
 
 import linkIcon from '../theme/icons/link.svg';
+import { Observable } from 'rxjs';
 
 const VISUAL_SELECTION_MARKER_NAME = 'link-ui';
+
+
+type selfRequestFunc = {
+	createCover: (coverName: string) => Observable<any>,
+	getCovers: () => Observable<any>,
+	getCoverUrl: (cover: any) => string,
+	getMatchingCovers: (term: string, covers: any) => any[],
+};
 
 /**
  * The link UI plugin. It introduces the `'selfrequest'` and `'unselfrequest'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
@@ -75,7 +84,7 @@ export default class LinkUI extends Plugin {
 	 * @inheritDoc
 	 */
 	public init(): void {
-		const editor = this.editor;
+		const editor: Editor = this.editor;
 
 		editor.editing.view.addObserver( ClickObserver );
 
@@ -135,7 +144,7 @@ export default class LinkUI extends Plugin {
 	 */
 	private _createActionsView(): LinkActionsView {
 		const editor = this.editor;
-		const actionsView = new LinkActionsView( editor.locale );
+		const actionsView = new LinkActionsView( editor );
 		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const unlinkCommand: UnlinkCommand = editor.commands.get( 'unselfrequest' )!;
 
@@ -177,7 +186,7 @@ export default class LinkUI extends Plugin {
 		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const defaultProtocol = editor.config.get( 'link.defaultProtocol' );
 
-		const formView = new ( CssTransitionDisablerMixin( LinkFormView ) )( editor.locale, linkCommand );
+		const formView = new ( CssTransitionDisablerMixin( LinkFormView ) )( editor, linkCommand );
 
 		formView.urlInputView.fieldView.bind( 'value' ).to( linkCommand, 'value' );
 
@@ -185,9 +194,10 @@ export default class LinkUI extends Plugin {
 		formView.urlInputView.bind( 'isEnabled' ).to( linkCommand, 'isEnabled' );
 
 		// Execute link command after clicking the "Save" button.
-		this.listenTo( formView, 'selected', (evt) => {
+		this.listenTo( formView, 'selected', (evt: any) => {
 			if (evt.source.isNew) {
-				const func = editor.config._config.selfrequest.createCover;
+				const selfrequest: selfRequestFunc = this.editor.config.get('selfrequest') as selfRequestFunc;
+				const func = selfrequest.createCover;
 				func(evt.source.value).subscribe(() => {
 					// Close the form first to be sure we don't get the change event in angular before the fake selection is removed.
 					this._closeFormView();
@@ -369,7 +379,7 @@ export default class LinkUI extends Plugin {
 		this.formView!.urlInputView.fieldView.element!.value = linkCommand.value || '';
 
 		// Init the covers
-		this.formView.filterCovers(editor, linkCommand.value);
+		this.formView?.filterCovers(editor, linkCommand.value);
 	}
 
 	/**

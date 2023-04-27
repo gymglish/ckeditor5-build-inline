@@ -1,3 +1,4 @@
+// @ts-nocheck
 import MentionsView from '@ckeditor/ckeditor5-mention/src/ui/mentionsview';
 
 

@@ -9,7 +9,7 @@
 
 import { ButtonView, View, ViewCollection, FocusCycler } from 'ckeditor5/src/ui';
 import { FocusTracker, KeystrokeHandler, type LocaleTranslate, type Locale } from 'ckeditor5/src/utils';
-import { icons } from 'ckeditor5/src/core';
+import { Editor, icons } from 'ckeditor5/src/core';
 
 import { ensureSafeUrl } from '../utils';
 
@@ -19,6 +19,15 @@ import '@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.c
 import '../../theme/linkactions.css';
 
 import unlinkIcon from '../../theme/icons/unlink.svg';
+import { Observable, Subscription } from 'rxjs';
+
+
+type selfRequestFunc = {
+	createCover: (coverName: string) => Observable<any>,
+	getCovers: () => Observable<any>,
+	getCoverUrl: (cover: any) => string,
+	getMatchingCovers: (term: string, covers: any) => any[],
+};
 
 /**
  * The link actions view class. This view displays the link preview, allows
@@ -67,18 +76,26 @@ export default class LinkActionsView extends View {
 	 */
 	private readonly _focusCycler: FocusCycler;
 
+	private readonly editor: Editor;
+
+	private coverSub: Subscription;
+
+	private covers: any[] = [];
+
 	declare public t: LocaleTranslate;
 
 	/**
 	 * @inheritDoc
 	 */
-	constructor( editor: { locale: Locale } ) {
+	constructor( editor: Editor ) {
 		const locale = editor.locale;
 		super( locale );
 
 		const t = locale.t;
 
 		this.editor = editor;
+
+		this.coverSub = Subscription.EMPTY;
 
 		this.previewButtonView = this._createPreviewButton();
 		this.unlinkButtonView = this._createButton( t( 'Unlink self request' ), unlinkIcon, 'unselfrequest' );
@@ -149,6 +166,9 @@ export default class LinkActionsView extends View {
 	 * @inheritDoc
 	 */
 	public override destroy(): void {
+		if (this.coverSub) {
+			this.coverSub.unsubscribe();
+		}
 		super.destroy();
 
 		this.focusTracker.destroy();
@@ -192,10 +212,11 @@ export default class LinkActionsView extends View {
 	 * @returns {string}
 	 * @memberof LinkActionsView
 	 */
-	private getUrl(href) {
+	private getUrl(href: string) {
 		const matchingCover = this.covers.find(c => c.cover_name === href);
+		const selfrequest: selfRequestFunc = this.editor.config.get('selfrequest') as selfRequestFunc;
 		if (matchingCover) {
-			return this.editor.config._config.selfrequest.getCoverUrl(matchingCover);
+			return selfrequest.getCoverUrl(matchingCover);
 		}
 		return null;
 	}
@@ -207,9 +228,10 @@ export default class LinkActionsView extends View {
 	 */
 	private _createPreviewButton(): ButtonView {
 
-		const obs = this.editor.config._config.selfrequest.getCovers;
+		const selfrequest: selfRequestFunc = this.editor.config.get('selfrequest') as selfRequestFunc;
+		const obs = selfrequest.getCovers;
 		if (obs) {
-			this.coverSub = obs().subscribe((covers) => {
+			this.coverSub = obs().subscribe((covers: any) => {
 				this.covers = covers;
 			});
 		}
@@ -244,13 +266,6 @@ export default class LinkActionsView extends View {
 		button.template!.eventListeners = {};
 
 		return button;
-	}
-
-	destroy() {
-		if (this.coverSub) {
-			this.coverSub.unsubscribe();
-		}
-		super.destroy();
 	}
 }
 

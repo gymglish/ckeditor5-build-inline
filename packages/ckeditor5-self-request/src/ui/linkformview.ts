@@ -25,7 +25,7 @@ import {
 	type Locale,
 } from 'ckeditor5/src/utils';
 
-import { icons } from 'ckeditor5/src/core';
+import { icons, type Editor } from 'ckeditor5/src/core';
 
 import type LinkCommand from '../linkcommand';
 import type ManualDecorator from '../utils/manualdecorator';
@@ -39,9 +39,10 @@ import { debounce } from 'lodash-es';
 import { keyCodes } from '@ckeditor/ckeditor5-utils/src/keyboard';
 
 import CoverListView from './coverlistview';
-import CoverListItemView from './coverlistitemview';
+import CoverListItemView, { CoverListItemViewOptions } from './coverlistitemview';
 
 import { first } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 
 const handledKeyCodes = [
@@ -52,10 +53,16 @@ const handledKeyCodes = [
 ];
 
 
-function isHandledKey( keyCode ) {
+function isHandledKey( keyCode: any ) {
 	return handledKeyCodes.includes( keyCode );
 }
 
+type selfRequestFunc = {
+	createCover: (coverName: string) => Observable<any>,
+	getCovers: () => Observable<any>,
+	getCoverUrl: (cover: any) => string,
+	getMatchingCovers: (term: string, covers: any) => any[],
+};
 
 /**
  * The link form view controller class.
@@ -110,7 +117,9 @@ export default class LinkFormView extends View {
 	 */
 	private readonly _focusCycler: FocusCycler;
 
-	private readonly _items: Collection<CoverListItemView>;
+	private readonly _items: Collection<CoverListItemViewOptions>;
+
+	private readonly editor: Editor;
 
 	private readonly filterCoversDebounced: any;
 
@@ -124,9 +133,11 @@ export default class LinkFormView extends View {
 	 * @param locale The localization services instance.
 	 * @param linkCommand Reference to {@link module:link/linkcommand~LinkCommand}.
 	 */
-	constructor( editor: any, linkCommand: LinkCommand ) {
+	constructor( editor: Editor, linkCommand: LinkCommand ) {
 		const locale = editor.locale;
 		super( locale );
+
+		this.editor = editor;
 
 		const t = locale.t;
 
@@ -277,7 +288,7 @@ export default class LinkFormView extends View {
 		}, { priority: 'highest' } ); // Required to override the Enter key.
 
 		fieldView.on( 'input', () => {
-			this.filterCoversDebounced(this.editor, fieldView.element.value)
+			this.filterCoversDebounced(this.editor, fieldView.element?.value)
 		});
 
 		return labeledInput;
@@ -434,16 +445,17 @@ export default class LinkFormView extends View {
 	 * Creates a {@link module:ui/viewcollection~ViewCollection} of {@link module:ui/button/buttonview~ButtonView}
 	 * made based on {@link module:link/linkcommand~LinkCommand#decorators}.
 	 **/
-	filterCovers(editor, value) {
+	filterCovers(editor: Editor, value: any) {
 		this._items.clear();
 		if (!value) {
 			return;
 		}
-		this.editor.config._config.selfrequest.getCovers().pipe(first()).subscribe((covers) => {
+		const selfrequest: selfRequestFunc = editor.config.get('selfrequest') as selfRequestFunc;
+		selfrequest.getCovers().pipe(first()).subscribe((covers: any[]) => {
 			if (value) {
-				covers = this.editor.config._config.selfrequest.getMatchingCovers(value, covers);
+				covers = selfrequest.getMatchingCovers(value, covers);
 			}
-			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase().split(' ').filter(value => value).join('-'))) {
+			if (value && ! covers.find(c => c.cover_name.toLowerCase() === value.toLowerCase().split(' ').filter((value: any) => value).join('-'))) {
 				const valueToCoverName = value.toUpperCase().replace(' ', '-');
 				this._items.add({label: `Create grain ${valueToCoverName}`, value: valueToCoverName, isNew: true});
 			}

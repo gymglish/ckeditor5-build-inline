@@ -180,7 +180,7 @@ export default class LinkEditing extends Plugin {
 			automaticDecorators.add( {
 				id: 'linkIsExternal',
 				mode: DECORATOR_AUTOMATIC,
-				callback: url => !!url && EXTERNAL_LINKS_REGEXP.test( url ),
+				callback: (url: string) => !!url && EXTERNAL_LINKS_REGEXP.test( url ),
 				attributes: {
 					target: '_blank',
 					rel: 'noopener noreferrer'
