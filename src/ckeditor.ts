@@ -9,7 +9,7 @@ import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor
 import { Essentials } from '@ckeditor/ckeditor5-essentials';
 import { UploadAdapter } from '@ckeditor/ckeditor5-adapter-ckfinder';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
-import { Bold, Italic } from '@ckeditor/ckeditor5-basic-styles';
+import { Bold, Italic, Strikethrough, Underline } from '@ckeditor/ckeditor5-basic-styles';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
 import { CKBox } from '@ckeditor/ckeditor5-ckbox';
 import { CKFinder } from '@ckeditor/ckeditor5-ckfinder';
@@ -25,6 +25,8 @@ import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
 import { Table, TableToolbar } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
+import { Highlight } from '@ckeditor/ckeditor5-highlight';
+import { Mention } from '@ckeditor/ckeditor5-mention';
 
 export default class InlineEditor extends InlineEditorBase {
 	public static override builtinPlugins = [
@@ -33,12 +35,15 @@ export default class InlineEditor extends InlineEditorBase {
 		Autoformat,
 		Bold,
 		Italic,
+		Underline,
+		Strikethrough,
 		BlockQuote,
 		CKBox,
 		CKFinder,
 		CloudServices,
 		EasyImage,
 		Heading,
+		Highlight,
 		Image,
 		ImageCaption,
 		ImageStyle,
@@ -48,6 +53,7 @@ export default class InlineEditor extends InlineEditorBase {
 		Link,
 		List,
 		MediaEmbed,
+		Mention,
 		Paragraph,
 		PasteFromOffice,
 		PictureEditing,
@@ -63,6 +69,7 @@ export default class InlineEditor extends InlineEditorBase {
 				'|',
 				'bold',
 				'italic',
+				'underline',
 				'link',
 				'bulletedList',
 				'numberedList',
