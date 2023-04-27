@@ -28,6 +28,8 @@ import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 import { Highlight } from '@ckeditor/ckeditor5-highlight';
 import { Mention } from '@ckeditor/ckeditor5-mention';
 
+import SelfRequest from '../packages/ckeditor5-self-request/src/link';
+
 export default class InlineEditor extends InlineEditorBase {
 	public static override builtinPlugins = [
 		Essentials,
@@ -59,7 +61,9 @@ export default class InlineEditor extends InlineEditorBase {
 		PictureEditing,
 		Table,
 		TableToolbar,
-		TextTransformation
+		TextTransformation,
+
+		SelfRequest,
 	];
 
 	public static override defaultConfig = {
