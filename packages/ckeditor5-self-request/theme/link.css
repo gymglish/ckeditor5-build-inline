@@ -18,6 +18,11 @@ a9-self-request {
 }
 
 
+.ck.ck-list__item-selfrequest {
+	padding: 0 0.5em;
+}
+
+
 .ck.ck-list__item-selfrequest:hover {
 	background: var(--ck-color-list-button-hover-background);
 }

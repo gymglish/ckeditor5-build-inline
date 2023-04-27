@@ -391,7 +391,22 @@ export default class LinkFormView extends View {
 			tag: 'ul',
 			children: [{
 				tag: 'li',
-				children: [ this.urlInputView, this.coverListView ],
+				children: [
+					{
+					tag: 'div',
+					attributes: {
+						class: [
+							'd-flex',
+							'mb-1',
+						],
+						style: {
+							'width': 'fit-content',
+						}
+					},
+					children: [ this.urlInputView, this.cancelButtonView ],
+					},
+					this.coverListView,
+				],
 				attributes: {
 					class: [
 						'ck',
@@ -434,8 +449,6 @@ export default class LinkFormView extends View {
 			} );
 			children.add( additionalButtonsView );
 		}
-
-		children.add( this.cancelButtonView );
 
 		return children;
 	}
