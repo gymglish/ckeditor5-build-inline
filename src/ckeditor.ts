@@ -9,7 +9,8 @@ import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor
 import { Essentials } from '@ckeditor/ckeditor5-essentials';
 import { UploadAdapter } from '@ckeditor/ckeditor5-adapter-ckfinder';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
-import { Bold, Italic, Strikethrough, Underline } from '@ckeditor/ckeditor5-basic-styles';
+import { Bold, Italic, Strikethrough, Underline, Subscript, Superscript } from '@ckeditor/ckeditor5-basic-styles';
+import { SpecialCharacters, SpecialCharactersEssentials } from '@ckeditor/ckeditor5-special-characters';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
 import { CKBox } from '@ckeditor/ckeditor5-ckbox';
 import { CKFinder } from '@ckeditor/ckeditor5-ckfinder';
@@ -38,7 +39,11 @@ export default class InlineEditor extends InlineEditorBase {
 		Bold,
 		Italic,
 		Underline,
+		Subscript,
+		Superscript,
 		Strikethrough,
+		SpecialCharacters,
+		SpecialCharactersEssentials,
 		BlockQuote,
 		CKBox,
 		CKFinder,
