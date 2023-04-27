@@ -54,7 +54,7 @@ export function isLinkElement( node: ViewNode | ViewDocumentFragment ): boolean 
  */
 export function createLinkElement( href: string, { writer }: DowncastConversionApi ): ViewAttributeElement {
 	// Priority 5 - https://github.com/ckeditor/ckeditor5-link/issues/121.
-	const linkElement = writer.createAttributeElement( 'a', { href }, { priority: 5 } );
+	const linkElement = writer.createAttributeElement( 'a9-self-request', { 'data-covername': href }, { priority: 5 } );
 
 	writer.setCustomProperty( 'selfrequest', true, linkElement );
 

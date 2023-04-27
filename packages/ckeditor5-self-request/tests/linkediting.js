@@ -803,7 +803,7 @@ describe( 'LinkEditing', () => {
 								// Very simplified downcast just for test assertion.
 								const viewWriter = conversionApi.writer;
 								const linkElement = viewWriter.createAttributeElement(
-									'a',
+									'a9-self-request',
 									{
 										href: data.attributeNewValue
 									}, {
@@ -1049,7 +1049,7 @@ describe( 'LinkEditing', () => {
 			it( 'should not follow the link if "a" element doesn\'t have "href" attribute', () => {
 				editor.conversion.attributeToElement( {
 					model: 'customLink',
-					view: 'a'
+					view: 'a9-self-request'
 				} );
 
 				setModelData( model, '<paragraph><$text customLink="">Bar[]</$text></paragraph>' );
@@ -1074,7 +1074,7 @@ describe( 'LinkEditing', () => {
 				expect( eventPreventDefault.calledOnce ).to.be.false;
 			} );
 
-			function fireClickEvent( options, tagName = 'a' ) {
+			function fireClickEvent( options, tagName = 'a9-self-request' ) {
 				const linkElement = editor.ui.getEditableElement().getElementsByTagName( tagName )[ 0 ];
 
 				eventPreventDefault = sinon.spy();
@@ -1364,7 +1364,7 @@ describe( 'LinkEditing', () => {
 			editor.conversion.for( 'downcast' ).attributeToElement( {
 				model: 'linkTarget',
 				view: ( attributeValue, { writer } ) => {
-					return writer.createAttributeElement( 'a', { target: attributeValue }, { priority: 5 } );
+					return writer.createAttributeElement( 'a9-self-request', { target: attributeValue }, { priority: 5 } );
 				},
 				converterPriority: 'low'
 			} );

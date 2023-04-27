@@ -33,7 +33,7 @@ describe( 'utils', () => {
 		} );
 
 		it( 'should return false for other AttributeElements', () => {
-			expect( isLinkElement( new AttributeElement( 'a' ) ) ).to.be.false;
+			expect( isLinkElement( new AttributeElement( 'a9-self-request' ) ) ).to.be.false;
 		} );
 
 		it( 'should return false for ContainerElements', () => {
@@ -53,7 +53,7 @@ describe( 'utils', () => {
 			expect( isLinkElement( element ) ).to.be.true;
 			expect( element.priority ).to.equal( 5 );
 			expect( element.getAttribute( 'href' ) ).to.equal( 'http://cksource.com' );
-			expect( element.name ).to.equal( 'a' );
+			expect( element.name ).to.equal( 'a9-self-request' );
 		} );
 	} );
 

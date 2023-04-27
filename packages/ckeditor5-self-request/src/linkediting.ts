@@ -138,7 +138,7 @@ export default class LinkEditing extends Plugin {
 		twoStepCaretMovementPlugin.registerAttribute( 'selfRequestHref' );
 
 		// Setup highlight over selected link.
-		inlineHighlight( editor, 'selfRequestHref', 'a', HIGHLIGHT_CLASS );
+		inlineHighlight( editor, 'selfRequestHref', 'a9-self-request', HIGHLIGHT_CLASS );
 
 		// Handle link following by CTRL+click or ALT+ENTER
 		this._enableLinkOpen();
@@ -230,7 +230,7 @@ export default class LinkEditing extends Plugin {
 					}
 
 					if ( manualDecoratorValue ) {
-						const element = writer.createAttributeElement( 'a', decorator.attributes, { priority: 5 } );
+						const element = writer.createAttributeElement( 'a9-self-request', decorator.attributes, { priority: 5 } );
 
 						if ( decorator.classes ) {
 							writer.addClass( decorator.classes, element );
@@ -249,7 +249,7 @@ export default class LinkEditing extends Plugin {
 
 			editor.conversion.for( 'upcast' ).elementToAttribute( {
 				view: {
-					name: 'a',
+					name: 'a9-self-request',
 					...decorator._createPattern()
 				},
 				model: {
@@ -277,8 +277,8 @@ export default class LinkEditing extends Plugin {
 
 			let clickedElement: Element | null = data.domTarget;
 
-			if ( clickedElement.tagName.toLowerCase() != 'a' ) {
-				clickedElement = clickedElement.closest( 'a' );
+			if ( clickedElement.tagName.toLowerCase() != 'a9-self-request' ) {
+				clickedElement = clickedElement.closest( 'a9-self-request' );
 			}
 
 			if ( !clickedElement ) {

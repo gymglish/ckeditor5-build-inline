@@ -86,7 +86,7 @@ describe( 'LinkActionsView', () => {
 
 		describe( 'preview button view', () => {
 			it( 'is an anchor', () => {
-				expect( view.previewButtonView.element.tagName.toLowerCase() ).to.equal( 'a' );
+				expect( view.previewButtonView.element.tagName.toLowerCase() ).to.equal( 'a9-self-request' );
 			} );
 
 			it( 'has a CSS class', () => {

@@ -115,7 +115,7 @@ describe( 'LinkImageUI', () => {
 
 			viewDocument.fire( 'click', domEventDataMock );
 
-			expect( imageWidget.getChild( 0 ).name ).to.equal( 'a' );
+			expect( imageWidget.getChild( 0 ).name ).to.equal( 'a9-self-request' );
 			expect( data.preventDefault.called ).to.be.true;
 		} );
 

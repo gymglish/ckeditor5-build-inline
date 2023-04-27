@@ -68,7 +68,7 @@ export default class AutomaticDecorators {
 				const viewSelection = viewWriter.document.selection;
 
 				for ( const item of this._definitions ) {
-					const viewElement = viewWriter.createAttributeElement( 'a', item.attributes, {
+					const viewElement = viewWriter.createAttributeElement( 'a9-self-request', item.attributes, {
 						priority: 5
 					} );
 
@@ -107,7 +107,7 @@ export default class AutomaticDecorators {
 			dispatcher.on<DowncastAttributeEvent<Element>>( 'attribute:selfRequestHref:imageBlock', ( evt, data, { writer, mapper } ) => {
 				const viewFigure = mapper.toViewElement( data.item )!;
 				const linkInImage = Array.from( viewFigure.getChildren() )
-					.find( ( child ): child is ViewElement => child.is( 'element', 'a' ) )!;
+					.find( ( child ): child is ViewElement => child.is( 'element', 'a9-self-request' ) )!;
 
 				for ( const item of this._definitions ) {
 					const attributes = toMap( item.attributes );

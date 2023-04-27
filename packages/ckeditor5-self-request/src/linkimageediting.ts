@@ -201,7 +201,7 @@ function downcastImageLink( editor: Editor ): ( dispatcher: DowncastDispatcher )
 
 			// But we need to check whether the link element exists.
 			const linkInImage = Array.from( viewFigure.getChildren() )
-				.find( ( child ): child is ViewElement => child.is( 'element', 'a' ) );
+				.find( ( child ): child is ViewElement => child.is( 'element', 'a9-self-request' ) );
 			const viewImage = imageUtils.findViewImgElement( viewFigure )!;
 			// <picture>...<img/></picture> or <img/>
 			const viewImgOrPicture = viewImage.parent!.is( 'element', 'picture' ) ? viewImage.parent : viewImage;
@@ -217,7 +217,7 @@ function downcastImageLink( editor: Editor ): ( dispatcher: DowncastDispatcher )
 			} else {
 				// But if it does not exist. Let's wrap already converted image by newly created link element.
 				// 1. Create an empty link element.
-				const linkElement = writer.createContainerElement( 'a', { href: data.attributeNewValue } );
+				const linkElement = writer.createContainerElement( 'a9-self-request', { href: data.attributeNewValue } );
 
 				// 2. Insert link inside the associated image.
 				writer.insert( writer.createPositionAt( viewFigure, 0 ), linkElement );
@@ -237,7 +237,7 @@ function downcastImageLinkManualDecorator( decorator: ManualDecorator ): ( dispa
 		dispatcher.on<DowncastAttributeEvent<Element>>( `attribute:${ decorator.id }:imageBlock`, ( evt, data, conversionApi ) => {
 			const viewFigure = conversionApi.mapper.toViewElement( data.item )!;
 			const linkInImage = Array.from( viewFigure.getChildren() )
-				.find( ( child ): child is ViewElement => child.is( 'element', 'a' ) );
+				.find( ( child ): child is ViewElement => child.is( 'element', 'a9-self-request' ) );
 
 			// The <a> element was removed by the time this converter is executed.
 			// It may happen when the base `selfRequestHref` and decorator attributes are removed
