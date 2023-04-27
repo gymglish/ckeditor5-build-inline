@@ -209,7 +209,7 @@ Internal changes only (updated dependencies, documentation, etc.).
 
 ### Bug fixes
 
-* Link feature should not create empty text nodes with `linkHref` attribute. Closes [#169](https://github.com/ckeditor/ckeditor5-link/issues/169). ([0641978](https://github.com/ckeditor/ckeditor5-link/commit/0641978))
+* Link feature should not create empty text nodes with `selfRequestHref` attribute. Closes [#169](https://github.com/ckeditor/ckeditor5-link/issues/169). ([0641978](https://github.com/ckeditor/ckeditor5-link/commit/0641978))
 
 ### Other changes
 

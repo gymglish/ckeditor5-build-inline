@@ -21,7 +21,7 @@ describe( 'LinkCommand', () => {
 
 				model.schema.extend( '$text', {
 					allowIn: '$root',
-					allowAttributes: [ 'linkHref', 'bold' ]
+					allowAttributes: [ 'selfRequestHref', 'bold' ]
 				} );
 
 				model.schema.register( 'paragraph', { inheritAllFrom: '$block' } );
@@ -40,7 +40,7 @@ describe( 'LinkCommand', () => {
 			model.schema.register( 'x', { inheritAllFrom: '$block' } );
 
 			model.schema.addAttributeCheck( ( ctx, attributeName ) => {
-				if ( ctx.endsWith( 'x $text' ) && attributeName == 'linkHref' ) {
+				if ( ctx.endsWith( 'x $text' ) && attributeName == 'selfRequestHref' ) {
 					return false;
 				}
 			} );
@@ -74,30 +74,30 @@ describe( 'LinkCommand', () => {
 					model.schema.register( 'linkableBlock', {
 						isBlock: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 				} );
 
 				it( 'should be true when a linkable is selected', () => {
-					setData( model, '[<linkableBlock linkHref="foo"></linkableBlock>]' );
+					setData( model, '[<linkableBlock selfRequestHref="foo"></linkableBlock>]' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
 
 				it( 'should be true when a linkable and a text are selected', () => {
-					setData( model, '[<linkableBlock linkHref="foo"></linkableBlock>Foo]' );
+					setData( model, '[<linkableBlock selfRequestHref="foo"></linkableBlock>Foo]' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
 
 				it( 'should be true when a text and a linkable are selected', () => {
-					setData( model, '[Foo<linkableBlock linkHref="foo"></linkableBlock>]' );
+					setData( model, '[Foo<linkableBlock selfRequestHref="foo"></linkableBlock>]' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
 
 				it( 'should be true when two linkables are selected', () => {
-					setData( model, '[<linkableBlock linkHref="foo"></linkableBlock><linkableBlock linkHref="foo"></linkableBlock>]' );
+					setData( model, '[<linkableBlock selfRequestHref="foo"></linkableBlock><linkableBlock selfRequestHref="foo"></linkableBlock>]' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
@@ -110,9 +110,9 @@ describe( 'LinkCommand', () => {
 					expect( command.isEnabled ).to.be.false;
 				} );
 
-				it( 'should be false if a linkable does not accept the `linkHref` attribute in given context', () => {
+				it( 'should be false if a linkable does not accept the `selfRequestHref` attribute in given context', () => {
 					model.schema.addAttributeCheck( ( ctx, attributeName ) => {
-						if ( ctx.endsWith( '$root linkableBlock' ) && attributeName == 'linkHref' ) {
+						if ( ctx.endsWith( '$root linkableBlock' ) && attributeName == 'selfRequestHref' ) {
 							return false;
 						}
 					} );
@@ -129,24 +129,24 @@ describe( 'LinkCommand', () => {
 						isObject: true,
 						isInline: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 				} );
 
 				it( 'should be true when a linkable is selected', () => {
-					setData( model, '<paragraph>foo [<linkableInline linkHref="foo"></linkableInline>]</paragraph>' );
+					setData( model, '<paragraph>foo [<linkableInline selfRequestHref="foo"></linkableInline>]</paragraph>' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
 
 				it( 'should be true when a linkable and a text are selected', () => {
-					setData( model, '<paragraph>foo [<linkableInline linkHref="foo"></linkableInline>bar]</paragraph>' );
+					setData( model, '<paragraph>foo [<linkableInline selfRequestHref="foo"></linkableInline>bar]</paragraph>' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
 
 				it( 'should be true when a text and a linkable are selected', () => {
-					setData( model, '<paragraph>[foo<linkableInline linkHref="foo"></linkableInline>]</paragraph>' );
+					setData( model, '<paragraph>[foo<linkableInline selfRequestHref="foo"></linkableInline>]</paragraph>' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
@@ -155,15 +155,15 @@ describe( 'LinkCommand', () => {
 					setData( model,
 						'<paragraph>' +
 							'foo ' +
-							'[<linkableInline linkHref="foo"></linkableInline><linkableInline linkHref="foo"></linkableInline>]' +
+							'[<linkableInline selfRequestHref="foo"></linkableInline><linkableInline selfRequestHref="foo"></linkableInline>]' +
 						'</paragraph>' );
 
 					expect( command.isEnabled ).to.be.true;
 				} );
 
-				it( 'should be false if a linkable does not accept the `linkHref` attribute in given context', () => {
+				it( 'should be false if a linkable does not accept the `selfRequestHref` attribute in given context', () => {
 					model.schema.addAttributeCheck( ( ctx, attributeName ) => {
-						if ( ctx.endsWith( 'linkableInline' ) && attributeName == 'linkHref' ) {
+						if ( ctx.endsWith( 'linkableInline' ) && attributeName == 'selfRequestHref' ) {
 							return false;
 						}
 					} );
@@ -178,13 +178,13 @@ describe( 'LinkCommand', () => {
 
 	describe( 'value', () => {
 		describe( 'collapsed selection', () => {
-			it( 'should be equal attribute value when selection is placed inside element with `linkHref` attribute', () => {
-				setData( model, '<$text linkHref="url">foo[]bar</$text>' );
+			it( 'should be equal attribute value when selection is placed inside element with `selfRequestHref` attribute', () => {
+				setData( model, '<$text selfRequestHref="url">foo[]bar</$text>' );
 
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should be undefined when selection is placed inside element without `linkHref` attribute', () => {
+			it( 'should be undefined when selection is placed inside element without `selfRequestHref` attribute', () => {
 				setData( model, '<$text bold="true">foo[]bar</$text>' );
 
 				expect( command.value ).to.be.undefined;
@@ -192,14 +192,14 @@ describe( 'LinkCommand', () => {
 		} );
 
 		describe( 'non-collapsed selection', () => {
-			it( 'should be equal attribute value when selection contains only elements with `linkHref` attribute', () => {
-				setData( model, 'fo[<$text linkHref="url">ob</$text>]ar' );
+			it( 'should be equal attribute value when selection contains only elements with `selfRequestHref` attribute', () => {
+				setData( model, 'fo[<$text selfRequestHref="url">ob</$text>]ar' );
 
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should be undefined when selection contains not only elements with `linkHref` attribute', () => {
-				setData( model, 'f[o<$text linkHref="url">ob</$text>]ar' );
+			it( 'should be undefined when selection contains not only elements with `selfRequestHref` attribute', () => {
+				setData( model, 'f[o<$text selfRequestHref="url">ob</$text>]ar' );
 
 				expect( command.value ).to.be.undefined;
 			} );
@@ -210,20 +210,20 @@ describe( 'LinkCommand', () => {
 				model.schema.register( 'linkableBlock', {
 					isBlock: true,
 					allowWhere: '$text',
-					allowAttributes: [ 'linkHref' ]
+					allowAttributes: [ 'selfRequestHref' ]
 				} );
 			} );
 
 			it( 'should read the value from a selected linkable', () => {
-				setData( model, '[<linkableBlock linkHref="foo"></linkableBlock>]' );
+				setData( model, '[<linkableBlock selfRequestHref="foo"></linkableBlock>]' );
 
 				expect( command.value ).to.be.equal( 'foo' );
 			} );
 
 			it( 'should read the value from a selected linkable and ignore a text node', () => {
 				setData( model,
-					'[<linkableBlock linkHref="foo"></linkableBlock>' +
-					'<paragraph><$text linkHref="bar">bar</$text>]</paragraph>'
+					'[<linkableBlock selfRequestHref="foo"></linkableBlock>' +
+					'<paragraph><$text selfRequestHref="bar">bar</$text>]</paragraph>'
 				);
 
 				expect( command.value ).to.be.equal( 'foo' );
@@ -231,7 +231,7 @@ describe( 'LinkCommand', () => {
 
 			it( 'should read the value from a selected text node and ignore a linkable', () => {
 				setData( model,
-					'<paragraph>[<$text linkHref="bar">bar</$text></paragraph><linkableBlock linkHref="foo"></linkableBlock>]'
+					'<paragraph>[<$text selfRequestHref="bar">bar</$text></paragraph><linkableBlock selfRequestHref="foo"></linkableBlock>]'
 				);
 
 				expect( command.value ).to.be.equal( 'bar' );
@@ -252,12 +252,12 @@ describe( 'LinkCommand', () => {
 					isObject: true,
 					isInline: true,
 					allowWhere: '$text',
-					allowAttributes: [ 'linkHref' ]
+					allowAttributes: [ 'selfRequestHref' ]
 				} );
 			} );
 
 			it( 'should read the value from a selected linkable', () => {
-				setData( model, '<paragraph>[<linkableInline linkHref="foo"></linkableInline>]</paragraph>' );
+				setData( model, '<paragraph>[<linkableInline selfRequestHref="foo"></linkableInline>]</paragraph>' );
 
 				expect( command.value ).to.be.equal( 'foo' );
 			} );
@@ -267,7 +267,7 @@ describe( 'LinkCommand', () => {
 			// in this case.
 			it( 'should not read the value from a selected linkable when a linked text follows it', () => {
 				setData( model,
-					'<paragraph>[<linkableInline linkHref="foo"></linkableInline><$text linkHref="bar">bar</$text>]</paragraph>'
+					'<paragraph>[<linkableInline selfRequestHref="foo"></linkableInline><$text selfRequestHref="bar">bar</$text>]</paragraph>'
 				);
 
 				expect( command.value ).to.be.undefined;
@@ -275,7 +275,7 @@ describe( 'LinkCommand', () => {
 
 			it( 'should read the value from a selected text node and ignore a linkable', () => {
 				setData( model,
-					'<paragraph>[<$text linkHref="bar">bar</$text><linkableInline linkHref="foo"></linkableInline>]</paragraph>'
+					'<paragraph>[<$text selfRequestHref="bar">bar</$text><linkableInline selfRequestHref="foo"></linkableInline>]</paragraph>'
 				);
 
 				expect( command.value ).to.be.equal( 'bar' );
@@ -285,18 +285,18 @@ describe( 'LinkCommand', () => {
 
 	describe( 'execute()', () => {
 		describe( 'non-collapsed selection', () => {
-			it( 'should set `linkHref` attribute to selected text', () => {
+			it( 'should set `selfRequestHref` attribute to selected text', () => {
 				setData( model, 'f[ooba]r' );
 
 				expect( command.value ).to.be.undefined;
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( 'f[<$text linkHref="url">ooba</$text>]r' );
+				expect( getData( model ) ).to.equal( 'f[<$text selfRequestHref="url">ooba</$text>]r' );
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should set `linkHref` attribute to selected text when text already has attributes', () => {
+			it( 'should set `selfRequestHref` attribute to selected text when text already has attributes', () => {
 				setData( model, 'f[o<$text bold="true">oba]r</$text>' );
 
 				expect( command.value ).to.be.undefined;
@@ -305,25 +305,25 @@ describe( 'LinkCommand', () => {
 
 				expect( command.value ).to.equal( 'url' );
 				expect( getData( model ) ).to.equal(
-					'f[<$text linkHref="url">o</$text>' +
-					'<$text bold="true" linkHref="url">oba</$text>]' +
+					'f[<$text selfRequestHref="url">o</$text>' +
+					'<$text bold="true" selfRequestHref="url">oba</$text>]' +
 					'<$text bold="true">r</$text>'
 				);
 			} );
 
-			it( 'should overwrite existing `linkHref` attribute when selected text wraps text with `linkHref` attribute', () => {
-				setData( model, 'f[o<$text linkHref="other url">o</$text>ba]r' );
+			it( 'should overwrite existing `selfRequestHref` attribute when selected text wraps text with `selfRequestHref` attribute', () => {
+				setData( model, 'f[o<$text selfRequestHref="other url">o</$text>ba]r' );
 
 				expect( command.value ).to.be.undefined;
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( 'f[<$text linkHref="url">ooba</$text>]r' );
+				expect( getData( model ) ).to.equal( 'f[<$text selfRequestHref="url">ooba</$text>]r' );
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should split text and overwrite attribute value when selection is inside text with `linkHref` attribute', () => {
-				setData( model, 'f<$text linkHref="other url">o[ob]a</$text>r' );
+			it( 'should split text and overwrite attribute value when selection is inside text with `selfRequestHref` attribute', () => {
+				setData( model, 'f<$text selfRequestHref="other url">o[ob]a</$text>r' );
 
 				expect( command.value ).to.equal( 'other url' );
 
@@ -331,40 +331,40 @@ describe( 'LinkCommand', () => {
 
 				expect( getData( model ) ).to.equal(
 					'f' +
-					'<$text linkHref="other url">o</$text>' +
-					'[<$text linkHref="url">ob</$text>]' +
-					'<$text linkHref="other url">a</$text>' +
+					'<$text selfRequestHref="other url">o</$text>' +
+					'[<$text selfRequestHref="url">ob</$text>]' +
+					'<$text selfRequestHref="other url">a</$text>' +
 					'r'
 				);
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should overwrite `linkHref` attribute of selected text only, ' +
-				'when selection start inside text with `linkHref` attribute',
+			it( 'should overwrite `selfRequestHref` attribute of selected text only, ' +
+				'when selection start inside text with `selfRequestHref` attribute',
 			() => {
-				setData( model, 'f<$text linkHref="other url">o[o</$text>ba]r' );
+				setData( model, 'f<$text selfRequestHref="other url">o[o</$text>ba]r' );
 
 				expect( command.value ).to.equal( 'other url' );
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( 'f<$text linkHref="other url">o</$text>[<$text linkHref="url">oba</$text>]r' );
+				expect( getData( model ) ).to.equal( 'f<$text selfRequestHref="other url">o</$text>[<$text selfRequestHref="url">oba</$text>]r' );
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should overwrite `linkHref` attribute of selected text only, when selection end inside text with `linkHref` ' +
+			it( 'should overwrite `selfRequestHref` attribute of selected text only, when selection end inside text with `selfRequestHref` ' +
 				'attribute', () => {
-				setData( model, 'f[o<$text linkHref="other url">ob]a</$text>r' );
+				setData( model, 'f[o<$text selfRequestHref="other url">ob]a</$text>r' );
 
 				expect( command.value ).to.be.undefined;
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( 'f[<$text linkHref="url">oob</$text>]<$text linkHref="other url">a</$text>r' );
+				expect( getData( model ) ).to.equal( 'f[<$text selfRequestHref="url">oob</$text>]<$text selfRequestHref="other url">a</$text>r' );
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			it( 'should set `linkHref` attribute to selected text when text is split by $block element', () => {
+			it( 'should set `selfRequestHref` attribute to selected text when text is split by $block element', () => {
 				setData( model, '<paragraph>f[oo</paragraph><paragraph>ba]r</paragraph>' );
 
 				expect( command.value ).to.be.undefined;
@@ -372,17 +372,17 @@ describe( 'LinkCommand', () => {
 				command.execute( 'url' );
 
 				expect( getData( model ) ).to.equal(
-					'<paragraph>f[<$text linkHref="url">oo</$text></paragraph><paragraph><$text linkHref="url">ba</$text>]r</paragraph>'
+					'<paragraph>f[<$text selfRequestHref="url">oo</$text></paragraph><paragraph><$text selfRequestHref="url">ba</$text>]r</paragraph>'
 				);
 				expect( command.value ).to.equal( 'url' );
 			} );
 
-			describe( 'for block elements allowing linkHref', () => {
-				it( 'should set `linkHref` attribute to allowed elements', () => {
+			describe( 'for block elements allowing selfRequestHref', () => {
+				it( 'should set `selfRequestHref` attribute to allowed elements', () => {
 					model.schema.register( 'linkableBlock', {
 						isBlock: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 
 					setData( model, '<paragraph>f[oo<linkableBlock></linkableBlock>ba]r</paragraph>' );
@@ -393,19 +393,19 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>' +
-							'f[<$text linkHref="url">oo</$text>' +
-							'<linkableBlock linkHref="url"></linkableBlock>' +
-							'<$text linkHref="url">ba</$text>]r' +
+							'f[<$text selfRequestHref="url">oo</$text>' +
+							'<linkableBlock selfRequestHref="url"></linkableBlock>' +
+							'<$text selfRequestHref="url">ba</$text>]r' +
 						'</paragraph>'
 					);
 					expect( command.value ).to.equal( 'url' );
 				} );
 
-				it( 'should set `linkHref` attribute to nested allowed elements', () => {
+				it( 'should set `selfRequestHref` attribute to nested allowed elements', () => {
 					model.schema.register( 'linkableBlock', {
 						isBlock: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 					model.schema.register( 'blockQuote', { allowWhere: '$block', allowContentOf: '$root' } );
 
@@ -417,15 +417,15 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>foo</paragraph>' +
-							'[<blockQuote><linkableBlock linkHref="url"></linkableBlock></blockQuote>]' +
+							'[<blockQuote><linkableBlock selfRequestHref="url"></linkableBlock></blockQuote>]' +
 						'<paragraph>bar</paragraph>' );
 				} );
 
-				it( 'should set `linkHref` attribute to allowed elements on multi-selection', () => {
+				it( 'should set `selfRequestHref` attribute to allowed elements on multi-selection', () => {
 					model.schema.register( 'linkableBlock', {
 						isBlock: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 
 					setData( model, '<paragraph>[<linkableBlock></linkableBlock>][<linkableBlock></linkableBlock>]</paragraph>' );
@@ -434,12 +434,12 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>' +
-							'[<linkableBlock linkHref="url"></linkableBlock>][<linkableBlock linkHref="url"></linkableBlock>]' +
+							'[<linkableBlock selfRequestHref="url"></linkableBlock>][<linkableBlock selfRequestHref="url"></linkableBlock>]' +
 						'</paragraph>'
 					);
 				} );
 
-				it( 'should set `linkHref` attribute to allowed elements and omit disallowed', () => {
+				it( 'should set `selfRequestHref` attribute to allowed elements and omit disallowed', () => {
 					model.schema.register( 'linkableBlock', {
 						isBlock: true,
 						allowWhere: '$text'
@@ -453,18 +453,18 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>' +
-							'f[<$text linkHref="url">oo</$text>' +
-							'<linkableBlock><caption><$text linkHref="url">xxx</$text></caption></linkableBlock>' +
-							'<$text linkHref="url">ba</$text>]r' +
+							'f[<$text selfRequestHref="url">oo</$text>' +
+							'<linkableBlock><caption><$text selfRequestHref="url">xxx</$text></caption></linkableBlock>' +
+							'<$text selfRequestHref="url">ba</$text>]r' +
 						'</paragraph>'
 					);
 				} );
 
-				it( 'should set `linkHref` attribute to allowed elements and omit their children even if they accept the attribute', () => {
+				it( 'should set `selfRequestHref` attribute to allowed elements and omit their children even if they accept the attribute', () => {
 					model.schema.register( 'linkableBlock', {
 						isBlock: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 					model.schema.register( 'caption', { allowIn: 'linkableBlock' } );
 					model.schema.extend( '$text', { allowIn: 'caption' } );
@@ -475,21 +475,21 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>' +
-							'f[<$text linkHref="url">oo</$text>' +
-							'<linkableBlock linkHref="url"><caption>xxx</caption></linkableBlock>' +
-							'<$text linkHref="url">ba</$text>]r' +
+							'f[<$text selfRequestHref="url">oo</$text>' +
+							'<linkableBlock selfRequestHref="url"><caption>xxx</caption></linkableBlock>' +
+							'<$text selfRequestHref="url">ba</$text>]r' +
 						'</paragraph>'
 					);
 				} );
 			} );
 
-			describe( 'for inline elements allowing linkHref', () => {
-				it( 'should set `linkHref` attribute to allowed elements', () => {
+			describe( 'for inline elements allowing selfRequestHref', () => {
+				it( 'should set `selfRequestHref` attribute to allowed elements', () => {
 					model.schema.register( 'linkableInline', {
 						isObject: true,
 						isInline: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 
 					setData( model, '<paragraph>f[oo<linkableInline></linkableInline>ba]r</paragraph>' );
@@ -500,21 +500,21 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>' +
-							'f[<$text linkHref="url">oo</$text>' +
-							'<linkableInline linkHref="url"></linkableInline>' +
-							'<$text linkHref="url">ba</$text>]r' +
+							'f[<$text selfRequestHref="url">oo</$text>' +
+							'<linkableInline selfRequestHref="url"></linkableInline>' +
+							'<$text selfRequestHref="url">ba</$text>]r' +
 						'</paragraph>'
 					);
 
 					expect( command.value ).to.equal( 'url' );
 				} );
 
-				it( 'should set `linkHref` attribute to nested allowed elements', () => {
+				it( 'should set `selfRequestHref` attribute to nested allowed elements', () => {
 					model.schema.register( 'linkableInline', {
 						isObject: true,
 						isInline: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 					model.schema.register( 'blockQuote', { allowWhere: '$block', allowContentOf: '$root' } );
 
@@ -528,17 +528,17 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>foo</paragraph>' +
-							'[<blockQuote><linkableInline linkHref="url"></linkableInline></blockQuote>]' +
+							'[<blockQuote><linkableInline selfRequestHref="url"></linkableInline></blockQuote>]' +
 						'<paragraph>bar</paragraph>'
 					);
 				} );
 
-				it( 'should set `linkHref` attribute to allowed elements on multi-selection', () => {
+				it( 'should set `selfRequestHref` attribute to allowed elements on multi-selection', () => {
 					model.schema.register( 'linkableInline', {
 						isObject: true,
 						isInline: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref' ]
+						allowAttributes: [ 'selfRequestHref' ]
 					} );
 
 					setData( model, '<paragraph>[<linkableInline></linkableInline>][<linkableInline></linkableInline>]</paragraph>' );
@@ -547,7 +547,7 @@ describe( 'LinkCommand', () => {
 
 					expect( getData( model ) ).to.equal(
 						'<paragraph>' +
-							'[<linkableInline linkHref="url"></linkableInline>][<linkableInline linkHref="url"></linkableInline>]' +
+							'[<linkableInline selfRequestHref="url"></linkableInline>][<linkableInline selfRequestHref="url"></linkableInline>]' +
 						'</paragraph>'
 					);
 				} );
@@ -555,15 +555,15 @@ describe( 'LinkCommand', () => {
 		} );
 
 		describe( 'collapsed selection', () => {
-			it( 'should insert text with `linkHref` attribute, text data equal to href and put the selection after the new link', () => {
+			it( 'should insert text with `selfRequestHref` attribute, text data equal to href and put the selection after the new link', () => {
 				setData( model, 'foo[]bar' );
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( 'foo<$text linkHref="url">url</$text>[]bar' );
+				expect( getData( model ) ).to.equal( 'foo<$text selfRequestHref="url">url</$text>[]bar' );
 			} );
 
-			it( 'should insert text with `linkHref` attribute, and selection attributes', () => {
+			it( 'should insert text with `selfRequestHref` attribute, and selection attributes', () => {
 				setData( model, '<$text bold="true">foo[]bar</$text>', {
 					selectionAttributes: { bold: true }
 				} );
@@ -571,21 +571,21 @@ describe( 'LinkCommand', () => {
 				command.execute( 'url' );
 
 				expect( getData( model ) ).to.equal(
-					'<$text bold="true">foo</$text><$text bold="true" linkHref="url">url</$text><$text bold="true">[]bar</$text>'
+					'<$text bold="true">foo</$text><$text bold="true" selfRequestHref="url">url</$text><$text bold="true">[]bar</$text>'
 				);
 			} );
 
-			it( 'should update `linkHref` attribute (text with `linkHref` attribute) and put the selection after the node', () => {
-				setData( model, '<$text linkHref="other url">foo[]bar</$text>' );
+			it( 'should update `selfRequestHref` attribute (text with `selfRequestHref` attribute) and put the selection after the node', () => {
+				setData( model, '<$text selfRequestHref="other url">foo[]bar</$text>' );
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( '<$text linkHref="url">foobar</$text>[]' );
+				expect( getData( model ) ).to.equal( '<$text selfRequestHref="url">foobar</$text>[]' );
 			} );
 
-			it( 'should not insert text with `linkHref` attribute when is not allowed in parent', () => {
+			it( 'should not insert text with `selfRequestHref` attribute when is not allowed in parent', () => {
 				model.schema.addAttributeCheck( ( ctx, attributeName ) => {
-					if ( ctx.endsWith( 'paragraph $text' ) && attributeName == 'linkHref' ) {
+					if ( ctx.endsWith( 'paragraph $text' ) && attributeName == 'selfRequestHref' ) {
 						return false;
 					}
 				} );
@@ -606,14 +606,14 @@ describe( 'LinkCommand', () => {
 			} );
 
 			// https://github.com/ckeditor/ckeditor5/issues/8210
-			it( 'should insert text with `linkHref` attribute just after text node with the same `linkHref` attribute', () => {
-				setData( model, '<$text linkHref="url">foo</$text>[]bar' );
+			it( 'should insert text with `selfRequestHref` attribute just after text node with the same `selfRequestHref` attribute', () => {
+				setData( model, '<$text selfRequestHref="url">foo</$text>[]bar' );
 
 				model.change( writer => writer.overrideSelectionGravity() );
 
 				command.execute( 'url' );
 
-				expect( getData( model ) ).to.equal( '<$text linkHref="url">foourl</$text>[]bar' );
+				expect( getData( model ) ).to.equal( '<$text selfRequestHref="url">foourl</$text>[]bar' );
 			} );
 		} );
 	} );
@@ -652,21 +652,21 @@ describe( 'LinkCommand', () => {
 
 					model.schema.extend( '$text', {
 						allowIn: '$root',
-						allowAttributes: [ 'linkHref', 'linkIsFoo', 'linkIsBar', 'linkIsSth' ]
+						allowAttributes: [ 'selfRequestHref', 'linkIsFoo', 'linkIsBar', 'linkIsSth' ]
 					} );
 
 					model.schema.register( 'linkableBlock', {
 						allowIn: '$root',
 						isObject: true,
 						isBlock: true,
-						allowAttributes: [ 'linkHref', 'linkIsFoo', 'linkIsBar', 'linkIsSth' ]
+						allowAttributes: [ 'selfRequestHref', 'linkIsFoo', 'linkIsBar', 'linkIsSth' ]
 					} );
 
 					model.schema.register( 'linkableInline', {
 						isObject: true,
 						isInline: true,
 						allowWhere: '$text',
-						allowAttributes: [ 'linkHref', 'linkIsFoo', 'linkIsBar', 'linkIsSth' ]
+						allowAttributes: [ 'selfRequestHref', 'linkIsFoo', 'linkIsBar', 'linkIsSth' ]
 					} );
 
 					model.schema.register( 'paragraph', { inheritAllFrom: '$block' } );
@@ -684,42 +684,42 @@ describe( 'LinkCommand', () => {
 				command.execute( 'url', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( 'foo<$text linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">url</$text>[]bar' );
+					.equal( 'foo<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">url</$text>[]bar' );
 			} );
 
 			it( 'should add additional attributes to link when link is modified', () => {
-				setData( model, 'f<$text linkHref="url">o[]oba</$text>r' );
+				setData( model, 'f<$text selfRequestHref="url">o[]oba</$text>r' );
 
 				command.execute( 'url', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( 'f<$text linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">ooba</$text>[]r' );
+					.equal( 'f<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">ooba</$text>[]r' );
 			} );
 
 			it( 'should remove additional attributes to link if those are falsy', () => {
-				setData( model, 'foo<$text linkHref="url" linkIsBar="true" linkIsFoo="true">u[]rl</$text>bar' );
+				setData( model, 'foo<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true">u[]rl</$text>bar' );
 
 				command.execute( 'url', { linkIsFoo: false, linkIsBar: false } );
 
-				expect( getData( model ) ).to.equal( 'foo<$text linkHref="url">url</$text>[]bar' );
+				expect( getData( model ) ).to.equal( 'foo<$text selfRequestHref="url">url</$text>[]bar' );
 			} );
 
 			it( 'should update content if href is equal to content', () => {
-				setData( model, '<$text linkHref="url">ur[]l</$text>' );
+				setData( model, '<$text selfRequestHref="url">ur[]l</$text>' );
 
 				command.execute( 'url2', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( '<$text linkHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">url2</$text>[]' );
+					.equal( '<$text selfRequestHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">url2</$text>[]' );
 			} );
 
 			it( 'should not add new attributes if there are falsy when href is equal to content', () => {
-				setData( model, '<$text linkHref="url">ur[]l</$text>' );
+				setData( model, '<$text selfRequestHref="url">ur[]l</$text>' );
 
 				command.execute( 'url2', { linkIsFoo: false, linkIsBar: false, linkIsSth: false } );
 
 				expect( getData( model ) ).to
-					.equal( '<$text linkHref="url2">url2</$text>[]' );
+					.equal( '<$text selfRequestHref="url2">url2</$text>[]' );
 			} );
 		} );
 
@@ -730,24 +730,24 @@ describe( 'LinkCommand', () => {
 				command.execute( 'url', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( 'f[<$text linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">ooba</$text>]r' );
+					.equal( 'f[<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">ooba</$text>]r' );
 			} );
 
 			it( 'should add additional attributes to link when link is modified', () => {
-				setData( model, 'f[<$text linkHref="foo">ooba</$text>]r' );
+				setData( model, 'f[<$text selfRequestHref="foo">ooba</$text>]r' );
 
 				command.execute( 'url', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( 'f[<$text linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">ooba</$text>]r' );
+					.equal( 'f[<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">ooba</$text>]r' );
 			} );
 
 			it( 'should remove additional attributes to link if those are falsy', () => {
-				setData( model, 'foo[<$text linkHref="url" linkIsBar="true" linkIsFoo="true">url</$text>]bar' );
+				setData( model, 'foo[<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true">url</$text>]bar' );
 
 				command.execute( 'url', { linkIsFoo: false, linkIsBar: false } );
 
-				expect( getData( model ) ).to.equal( 'foo[<$text linkHref="url">url</$text>]bar' );
+				expect( getData( model ) ).to.equal( 'foo[<$text selfRequestHref="url">url</$text>]bar' );
 			} );
 
 			it( 'should insert additional attributes to a linkable block when it is created', () => {
@@ -756,7 +756,7 @@ describe( 'LinkCommand', () => {
 				command.execute( 'url', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( '[<linkableBlock linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true"></linkableBlock>]' );
+					.equal( '[<linkableBlock selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true"></linkableBlock>]' );
 			} );
 
 			it( 'should insert additional attributes to a linkable inline element when it is created', () => {
@@ -766,55 +766,55 @@ describe( 'LinkCommand', () => {
 
 				expect( getData( model ) ).to.equal(
 					'<paragraph>' +
-						'foo[<linkableInline linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true"></linkableInline>]bar' +
+						'foo[<linkableInline selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true"></linkableInline>]bar' +
 					'</paragraph>'
 				);
 			} );
 
 			it( 'should update content if href is equal to content', () => {
-				setData( model, '[<$text linkHref="url">url</$text>]' );
+				setData( model, '[<$text selfRequestHref="url">url</$text>]' );
 
 				command.execute( 'url2', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
-					.equal( '[<$text linkHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">url2</$text>]' );
+					.equal( '[<$text selfRequestHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">url2</$text>]' );
 			} );
 
 			it( 'should not update content if href is equal to content but there is a non-link following in the selection', () => {
-				setData( model, '<paragraph>[<$text linkHref="url">url</$text>foo]</paragraph>' );
+				setData( model, '<paragraph>[<$text selfRequestHref="url">url</$text>foo]</paragraph>' );
 
 				command.execute( 'url2', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
 					.equal(
-						'<paragraph>[<$text linkHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">urlfoo</$text>]</paragraph>'
+						'<paragraph>[<$text selfRequestHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">urlfoo</$text>]</paragraph>'
 					);
 			} );
 
 			it( 'should not update content if href is equal to content but there is a non-link preceding in the selection', () => {
-				setData( model, '<paragraph>[foo<$text linkHref="url">url</$text>]</paragraph>' );
+				setData( model, '<paragraph>[foo<$text selfRequestHref="url">url</$text>]</paragraph>' );
 
 				command.execute( 'url2', { linkIsFoo: true, linkIsBar: true, linkIsSth: true } );
 
 				expect( getData( model ) ).to
 					.equal(
-						'<paragraph>[<$text linkHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">foourl</$text>]</paragraph>'
+						'<paragraph>[<$text selfRequestHref="url2" linkIsBar="true" linkIsFoo="true" linkIsSth="true">foourl</$text>]</paragraph>'
 					);
 			} );
 
 			it( 'should not add new attributes if there are falsy when href is equal to content', () => {
-				setData( model, '[<$text linkHref="url">url</$text>]' );
+				setData( model, '[<$text selfRequestHref="url">url</$text>]' );
 
 				command.execute( 'url2', { linkIsFoo: false, linkIsBar: false, linkIsSth: false } );
 
 				expect( getData( model ) ).to
-					.equal( '[<$text linkHref="url2">url2</$text>]' );
+					.equal( '[<$text selfRequestHref="url2">url2</$text>]' );
 			} );
 
 			it( 'should not update link which is equal its href if selection is on more than one element', () => {
 				setData( model,
 					'<paragraph>' +
-						'<$text linkHref="foo">[foo</$text>' +
+						'<$text selfRequestHref="foo">[foo</$text>' +
 					'</paragraph>' +
 					'<paragraph>bar</paragraph>' +
 					'<paragraph>baz]</paragraph>'
@@ -824,13 +824,13 @@ describe( 'LinkCommand', () => {
 
 				expect( getData( model ) ).to
 					.equal( '<paragraph>' +
-								'[<$text linkHref="foooo">foo</$text>' +
+								'[<$text selfRequestHref="foooo">foo</$text>' +
 							'</paragraph>' +
 							'<paragraph>' +
-								'<$text linkHref="foooo">bar</$text>' +
+								'<$text selfRequestHref="foooo">bar</$text>' +
 							'</paragraph>' +
 							'<paragraph>' +
-								'<$text linkHref="foooo">baz</$text>]' +
+								'<$text selfRequestHref="foooo">baz</$text>]' +
 							'</paragraph>'
 					);
 			} );
@@ -838,7 +838,7 @@ describe( 'LinkCommand', () => {
 
 		describe( 'restoreManualDecoratorStates()', () => {
 			it( 'synchronize values with current model state', () => {
-				setData( model, 'foo<$text linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">u[]rl</$text>bar' );
+				setData( model, 'foo<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="true">u[]rl</$text>bar' );
 
 				expect( decoratorStates( command.manualDecorators ) ).to.deep.equal( {
 					linkIsFoo: true,
@@ -864,7 +864,7 @@ describe( 'LinkCommand', () => {
 			} );
 
 			it( 'synchronize values with current model state when the decorator that is "on" default is "off"', () => {
-				setData( model, 'foo<$text linkHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="false">u[]rl</$text>bar' );
+				setData( model, 'foo<$text selfRequestHref="url" linkIsBar="true" linkIsFoo="true" linkIsSth="false">u[]rl</$text>bar' );
 
 				expect( decoratorStates( command.manualDecorators ) ).to.deep.equal( {
 					linkIsFoo: true,
@@ -892,21 +892,21 @@ describe( 'LinkCommand', () => {
 
 		describe( '_getDecoratorStateFromModel', () => {
 			it( 'obtain current values from the model', () => {
-				setData( model, 'foo[<$text linkHref="url" linkIsBar="true">url</$text>]bar' );
+				setData( model, 'foo[<$text selfRequestHref="url" linkIsBar="true">url</$text>]bar' );
 
 				expect( command._getDecoratorStateFromModel( 'linkIsFoo' ) ).to.be.undefined;
 				expect( command._getDecoratorStateFromModel( 'linkIsBar' ) ).to.be.true;
 			} );
 
 			it( 'obtain current values from the linkable block element', () => {
-				setData( model, '[<linkableBlock linkHref="url" linkIsBar="true"></linkableBlock>]' );
+				setData( model, '[<linkableBlock selfRequestHref="url" linkIsBar="true"></linkableBlock>]' );
 
 				expect( command._getDecoratorStateFromModel( 'linkIsFoo' ) ).to.be.undefined;
 				expect( command._getDecoratorStateFromModel( 'linkIsBar' ) ).to.be.true;
 			} );
 
 			it( 'obtain current values from the linkable inline element', () => {
-				setData( model, '<paragraph>[<linkableInline linkHref="url" linkIsBar="true"></linkableInline>]</paragraph>' );
+				setData( model, '<paragraph>[<linkableInline selfRequestHref="url" linkIsBar="true"></linkableInline>]</paragraph>' );
 
 				expect( command._getDecoratorStateFromModel( 'linkIsFoo' ) ).to.be.undefined;
 				expect( command._getDecoratorStateFromModel( 'linkIsBar' ) ).to.be.true;

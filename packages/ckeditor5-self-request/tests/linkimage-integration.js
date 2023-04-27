@@ -54,7 +54,7 @@ describe( 'LinkImage integration', () => {
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>Foo.</paragraph>' +
-				'[<imageBlock src="/assets/sample.png"><caption><$text linkHref="https://cksource.com">Foo.</$text></caption></imageBlock>]'
+				'[<imageBlock src="/assets/sample.png"><caption><$text selfRequestHref="https://cksource.com">Foo.</$text></caption></imageBlock>]'
 			);
 		} );
 
@@ -62,7 +62,7 @@ describe( 'LinkImage integration', () => {
 			setModelData(
 				model,
 				'<paragraph>Foo.</paragraph>' +
-				'[<imageBlock src="/assets/sample.png"><caption><$text linkHref="https://cksource.com">Foo.</$text></caption></imageBlock>]'
+				'[<imageBlock src="/assets/sample.png"><caption><$text selfRequestHref="https://cksource.com">Foo.</$text></caption></imageBlock>]'
 			);
 
 			expect( editor.commands.get( 'unlink' ).isEnabled ).to.equal( true );

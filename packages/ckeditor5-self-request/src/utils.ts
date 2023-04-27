@@ -139,14 +139,14 @@ export function normalizeDecorators( decorators?: Record<string, LinkDecoratorDe
 }
 
 /**
- * Returns `true` if the specified `element` can be linked (the element allows the `linkHref` attribute).
+ * Returns `true` if the specified `element` can be linked (the element allows the `selfRequestHref` attribute).
  */
 export function isLinkableElement( element: Element | null, schema: Schema ): element is Element {
 	if ( !element ) {
 		return false;
 	}
 
-	return schema.checkAttribute( element.name, 'linkHref' );
+	return schema.checkAttribute( element.name, 'selfRequestHref' );
 }
 
 /**

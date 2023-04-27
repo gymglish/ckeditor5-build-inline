@@ -52,7 +52,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute to a text link while typing', () => {
+		it( 'does not add selfRequestHref attribute to a text link while typing', () => {
 			simulateTyping( 'https://www.cksource.com' );
 
 			expect( getData( model ) ).to.equal(
@@ -60,15 +60,15 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'adds linkHref attribute to a text link after space', () => {
+		it( 'adds selfRequestHref attribute to a text link after space', () => {
 			simulateTyping( 'https://www.cksource.com ' );
 
 			expect( getData( model ) ).to.equal(
-				'<paragraph><$text linkHref="https://www.cksource.com">https://www.cksource.com</$text> []</paragraph>'
+				'<paragraph><$text selfRequestHref="https://www.cksource.com">https://www.cksource.com</$text> []</paragraph>'
 			);
 		} );
 
-		it( 'does not add linkHref attribute if linkHref is not allowed', () => {
+		it( 'does not add selfRequestHref attribute if selfRequestHref is not allowed', () => {
 			model.schema.addAttributeCheck( () => false ); // Disable all attributes.
 
 			simulateTyping( 'https://www.cksource.com ' );
@@ -78,7 +78,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute if plugin is force-disabled (on space)', () => {
+		it( 'does not add selfRequestHref attribute if plugin is force-disabled (on space)', () => {
 			editor.plugins.get( 'AutoLink' ).forceDisabled( 'test' );
 
 			simulateTyping( 'https://www.cksource.com ' );
@@ -88,7 +88,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute if plugin is force-disabled (on enter)', () => {
+		it( 'does not add selfRequestHref attribute if plugin is force-disabled (on enter)', () => {
 			setData( model, '<paragraph>https://www.cksource.com[]</paragraph>' );
 			editor.plugins.get( 'AutoLink' ).forceDisabled( 'test' );
 
@@ -100,7 +100,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute if plugin is force-disabled (on shift enter)', () => {
+		it( 'does not add selfRequestHref attribute if plugin is force-disabled (on shift enter)', () => {
 			setData( model, '<paragraph>https://www.cksource.com[]</paragraph>' );
 			editor.plugins.get( 'AutoLink' ).forceDisabled( 'test' );
 
@@ -111,7 +111,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute on enter when the link is selected', () => {
+		it( 'does not add selfRequestHref attribute on enter when the link is selected', () => {
 			setData( model, '<paragraph>[https://www.cksource.com]</paragraph>' );
 
 			editor.execute( 'enter' );
@@ -121,7 +121,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute on enter when the whole paragraph containing the link is selected', () => {
+		it( 'does not add selfRequestHref attribute on enter when the whole paragraph containing the link is selected', () => {
 			setData( model, '<paragraph>[This feature also works with e-mail addresses: https://www.cksource.com]</paragraph>' );
 
 			editor.execute( 'enter' );
@@ -131,18 +131,18 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'adds linkHref attribute on enter when the link (containing www) is partially selected (end)' +
+		it( 'adds selfRequestHref attribute on enter when the link (containing www) is partially selected (end)' +
 			'and the remaining fragment is a proper URL', () => {
 			setData( model, '<paragraph>https://www.foo.ba[r.com]</paragraph>' );
 
 			editor.execute( 'enter' );
 
 			expect( getData( model ) ).to.equal(
-				'<paragraph><$text linkHref="https://www.foo.ba">https://www.foo.ba</$text></paragraph><paragraph>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="https://www.foo.ba">https://www.foo.ba</$text></paragraph><paragraph>[]</paragraph>'
 			);
 		} );
 
-		it( 'does not add a linkHref attribute for links with www subdomain only, pressing enter with part of its end selected', () => {
+		it( 'does not add a selfRequestHref attribute for links with www subdomain only, pressing enter with part of its end selected', () => {
 			// https://github.com/ckeditor/ckeditor5/issues/8050.
 			setData( model, '<paragraph>https://www.ckso[urce.com]</paragraph>' );
 
@@ -153,7 +153,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute on enter when the link (that does not contain www) is partially selected (end)', () => {
+		it( 'does not add selfRequestHref attribute on enter when the link (that does not contain www) is partially selected (end)', () => {
 			setData( model, '<paragraph>https://ckso[urce.com]</paragraph>' );
 
 			editor.execute( 'enter' );
@@ -163,7 +163,7 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'does not add linkHref attribute on enter when the link is partially selected (beginning)', () => {
+		it( 'does not add selfRequestHref attribute on enter when the link is partially selected (beginning)', () => {
 			setData( model, '<paragraph>[https://www.ckso]urce.com</paragraph>' );
 
 			editor.execute( 'enter' );
@@ -173,17 +173,17 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'adds linkHref attribute to a text link after space (inside paragraph)', () => {
+		it( 'adds selfRequestHref attribute to a text link after space (inside paragraph)', () => {
 			setData( model, '<paragraph>Foo Bar [] Baz</paragraph>' );
 
 			simulateTyping( 'https://www.cksource.com ' );
 
 			expect( getData( model ) ).to.equal(
-				'<paragraph>Foo Bar <$text linkHref="https://www.cksource.com">https://www.cksource.com</$text> [] Baz</paragraph>'
+				'<paragraph>Foo Bar <$text selfRequestHref="https://www.cksource.com">https://www.cksource.com</$text> [] Baz</paragraph>'
 			);
 		} );
 
-		it( 'adds linkHref attribute to a text link on shift enter', () => {
+		it( 'adds selfRequestHref attribute to a text link on shift enter', () => {
 			setData( model, '<paragraph>https://www.cksource.com[]</paragraph>' );
 
 			editor.execute( 'shiftEnter' );
@@ -191,13 +191,13 @@ describe( 'AutoLink', () => {
 			// TODO: should test with selection but master has a bug. See: https://github.com/ckeditor/ckeditor5/issues/7459.
 			expect( getData( model, { withoutSelection: true } ) ).to.equal(
 				'<paragraph>' +
-				'<$text linkHref="https://www.cksource.com">https://www.cksource.com</$text>' +
+				'<$text selfRequestHref="https://www.cksource.com">https://www.cksource.com</$text>' +
 				'<softBreak></softBreak>' +
 				'</paragraph>'
 			);
 		} );
 
-		it( 'does not add linkHref attribute to a text link after double soft break', () => {
+		it( 'does not add selfRequestHref attribute to a text link after double soft break', () => {
 			setData( model, '<paragraph>https://www.cksource.com<softBreak></softBreak>[]</paragraph>' );
 
 			editor.execute( 'shiftEnter' );
@@ -207,14 +207,14 @@ describe( 'AutoLink', () => {
 			);
 		} );
 
-		it( 'adds linkHref attribute to a text link on enter', () => {
+		it( 'adds selfRequestHref attribute to a text link on enter', () => {
 			setData( model, '<paragraph>https://www.cksource.com[]</paragraph>' );
 
 			editor.execute( 'enter' );
 
 			expect( getData( model ) ).to.equal(
 				'<paragraph>' +
-				'<$text linkHref="https://www.cksource.com">https://www.cksource.com</$text>' +
+				'<$text selfRequestHref="https://www.cksource.com">https://www.cksource.com</$text>' +
 				'</paragraph>' +
 				'<paragraph>[]</paragraph>'
 			);
@@ -224,7 +224,7 @@ describe( 'AutoLink', () => {
 			simulateTyping( 'newsletter@cksource.com ' );
 
 			expect( getData( model ) ).to.equal(
-				'<paragraph><$text linkHref="mailto:newsletter@cksource.com">newsletter@cksource.com</$text> []</paragraph>'
+				'<paragraph><$text selfRequestHref="mailto:newsletter@cksource.com">newsletter@cksource.com</$text> []</paragraph>'
 			);
 		} );
 
@@ -233,7 +233,7 @@ describe( 'AutoLink', () => {
 			simulateTyping( 'www.cksource.com ' );
 
 			expect( getData( model ) ).to.equal(
-				'<paragraph><$text linkHref="http://www.cksource.com">www.cksource.com</$text> []</paragraph>'
+				'<paragraph><$text selfRequestHref="http://www.cksource.com">www.cksource.com</$text> []</paragraph>'
 			);
 		} );
 
@@ -247,7 +247,7 @@ describe( 'AutoLink', () => {
 		} );
 
 		it( 'does not autolink if link is already created', () => {
-			setData( model, '<paragraph><$text linkHref="http://www.cksource.com">http://www.cksource.com</$text>[]</paragraph>' );
+			setData( model, '<paragraph><$text selfRequestHref="http://www.cksource.com">http://www.cksource.com</$text>[]</paragraph>' );
 
 			const plugin = editor.plugins.get( 'AutoLink' );
 			const spy = sinon.spy( plugin, '_persistAutoLink' );
@@ -317,7 +317,7 @@ describe( 'AutoLink', () => {
 					simulateTyping( supportedURL + ' ' );
 
 					expect( getData( model ) ).to.equal(
-						`<paragraph><$text linkHref="${ supportedURL }">${ supportedURL }</$text> []</paragraph>` );
+						`<paragraph><$text selfRequestHref="${ supportedURL }">${ supportedURL }</$text> []</paragraph>` );
 				} );
 			}
 		} );
@@ -444,7 +444,7 @@ describe( 'AutoLink', () => {
 			viewDocument.fire( 'delete', deleteEvent );
 
 			expect( getData( model ) ).to.equal(
-				'<paragraph><$text linkHref="https://www.cksource.com">https://www.cksource.co</$text>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="https://www.cksource.com">https://www.cksource.co</$text>[]</paragraph>'
 			);
 		} );
 	} );

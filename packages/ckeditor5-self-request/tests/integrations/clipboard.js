@@ -39,7 +39,7 @@ describe( 'Link integration: clipboard paste', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equalMarkup(
-				'<paragraph><$text linkHref="http://ckedtior.com">foo</$text>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="http://ckedtior.com">foo</$text>[]</paragraph>'
 			);
 		} );
 
@@ -51,7 +51,7 @@ describe( 'Link integration: clipboard paste', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="ckedtior.com">foo</$text>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="ckedtior.com">foo</$text>[]</paragraph>'
 			);
 		} );
 	} );
@@ -83,7 +83,7 @@ describe( 'Link integration: clipboard paste', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equalMarkup(
-				'<paragraph><$text linkHref="http://ckedtior.com">foo</$text>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="http://ckedtior.com">foo</$text>[]</paragraph>'
 			);
 		} );
 
@@ -95,7 +95,7 @@ describe( 'Link integration: clipboard paste', () => {
 			} );
 
 			expect( getModelData( model ) ).to.equal(
-				'<paragraph><$text linkHref="http://www.ckedtior.com">foo</$text>[]</paragraph>'
+				'<paragraph><$text selfRequestHref="http://www.ckedtior.com">foo</$text>[]</paragraph>'
 			);
 		} );
 
@@ -108,8 +108,8 @@ describe( 'Link integration: clipboard paste', () => {
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>' +
-					'<$text linkHref="http://ckedtior.com">foo</$text>' +
-					'<$text linkHref="http://www.ckedtior.com">bar</$text>[]' +
+					'<$text selfRequestHref="http://ckedtior.com">foo</$text>' +
+					'<$text selfRequestHref="http://www.ckedtior.com">bar</$text>[]' +
 				'</paragraph>'
 			);
 		} );
@@ -127,7 +127,7 @@ describe( 'Link integration: clipboard paste', () => {
 
 			expect( getModelData( model ) ).to.equal(
 				'[<table><tableRow><tableCell><paragraph>' +
-					'<$text linkHref="http://ckedtior.com">foo</$text>' +
+					'<$text selfRequestHref="http://ckedtior.com">foo</$text>' +
 				'</paragraph></tableCell></tableRow></table>]'
 			);
 		} );
@@ -150,11 +150,11 @@ describe( 'Link integration: clipboard paste', () => {
 			expect( getModelData( model ) ).to.equal(
 				'[<table><tableRow>' +
 					'<tableCell><paragraph>' +
-						'<$text linkHref="http://ckedtior.com">foo</$text>' +
+						'<$text selfRequestHref="http://ckedtior.com">foo</$text>' +
 					'</paragraph></tableCell>' +
 					'<tableCell><paragraph>' +
-						'<$text linkHref="http://ckedtior.com">foo</$text>' +
-						'<$text linkHref="http://ckedtior2.com">foo</$text>' +
+						'<$text selfRequestHref="http://ckedtior.com">foo</$text>' +
+						'<$text selfRequestHref="http://ckedtior2.com">foo</$text>' +
 					'</paragraph></tableCell>' +
 				'</tableRow></table>]'
 			);

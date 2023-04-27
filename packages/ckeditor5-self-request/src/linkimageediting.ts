@@ -32,7 +32,7 @@ import type { ImageUtils } from '@ckeditor/ckeditor5-image';
 /**
  * The link image engine feature.
  *
- * It accepts the `linkHref="url"` attribute in the model for the {@link module:image/image~Image `<imageBlock>`} element
+ * It accepts the `selfRequestHref="url"` attribute in the model for the {@link module:image/image~Image `<imageBlock>`} element
  * which allows linking images.
  */
 export default class LinkImageEditing extends Plugin {
@@ -58,7 +58,7 @@ export default class LinkImageEditing extends Plugin {
 		const schema = editor.model.schema;
 
 		if ( editor.plugins.has( 'ImageBlockEditing' ) ) {
-			schema.extend( 'imageBlock', { allowAttributes: [ 'linkHref' ] } );
+			schema.extend( 'imageBlock', { allowAttributes: [ 'selfRequestHref' ] } );
 		}
 
 		editor.conversion.for( 'upcast' ).add( upcastLink( editor ) );
@@ -149,10 +149,10 @@ function upcastLink( editor: Editor ): ( dispatcher: UpcastDispatcher ) => void 
 				return;
 			}
 
-			const linkHref = viewLink.getAttribute( 'href' );
+			const selfRequestHref = viewLink.getAttribute( 'href' );
 
 			// Missing the 'href' attribute.
-			if ( !linkHref ) {
+			if ( !selfRequestHref ) {
 				return;
 			}
 
@@ -174,8 +174,8 @@ function upcastLink( editor: Editor ): ( dispatcher: UpcastDispatcher ) => void 
 			}
 
 			if ( modelElement && modelElement.is( 'element', 'imageBlock' ) ) {
-				// Set the linkHref attribute from link element on model image element.
-				conversionApi.writer.setAttribute( 'linkHref', linkHref, modelElement );
+				// Set the selfRequestHref attribute from link element on model image element.
+				conversionApi.writer.setAttribute( 'selfRequestHref', selfRequestHref, modelElement );
 			}
 		}, { priority: 'high' } );
 		// Using the same priority that `upcastImageLinkManualDecorator()` converter guarantees
@@ -190,7 +190,7 @@ function downcastImageLink( editor: Editor ): ( dispatcher: DowncastDispatcher )
 	const imageUtils: ImageUtils = editor.plugins.get( 'ImageUtils' );
 
 	return dispatcher => {
-		dispatcher.on<DowncastAttributeEvent<Element>>( 'attribute:linkHref:imageBlock', ( evt, data, conversionApi ) => {
+		dispatcher.on<DowncastAttributeEvent<Element>>( 'attribute:selfRequestHref:imageBlock', ( evt, data, conversionApi ) => {
 			if ( !conversionApi.consumable.consume( data.item, evt.name ) ) {
 				return;
 			}
@@ -240,7 +240,7 @@ function downcastImageLinkManualDecorator( decorator: ManualDecorator ): ( dispa
 				.find( ( child ): child is ViewElement => child.is( 'element', 'a' ) );
 
 			// The <a> element was removed by the time this converter is executed.
-			// It may happen when the base `linkHref` and decorator attributes are removed
+			// It may happen when the base `selfRequestHref` and decorator attributes are removed
 			// at the same time (see #8401).
 			if ( !linkInImage ) {
 				return;

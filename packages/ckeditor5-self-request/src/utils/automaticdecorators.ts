@@ -50,12 +50,12 @@ export default class AutomaticDecorators {
 	 */
 	public getDispatcher(): ( dispatcher: DowncastDispatcher ) => void {
 		return dispatcher => {
-			dispatcher.on<DowncastAttributeEvent>( 'attribute:linkHref', ( evt, data, conversionApi ) => {
+			dispatcher.on<DowncastAttributeEvent>( 'attribute:selfRequestHref', ( evt, data, conversionApi ) => {
 				// There is only test as this behavior decorates links and
 				// it is run before dispatcher which actually consumes this node.
 				// This allows on writing own dispatcher with highest priority,
 				// which blocks both native converter and this additional decoration.
-				if ( !conversionApi.consumable.test( data.item, 'attribute:linkHref' ) ) {
+				if ( !conversionApi.consumable.test( data.item, 'attribute:selfRequestHref' ) ) {
 					return;
 				}
 
@@ -104,7 +104,7 @@ export default class AutomaticDecorators {
 	 */
 	public getDispatcherForLinkedImage(): ( dispatcher: DowncastDispatcher ) => void {
 		return dispatcher => {
-			dispatcher.on<DowncastAttributeEvent<Element>>( 'attribute:linkHref:imageBlock', ( evt, data, { writer, mapper } ) => {
+			dispatcher.on<DowncastAttributeEvent<Element>>( 'attribute:selfRequestHref:imageBlock', ( evt, data, { writer, mapper } ) => {
 				const viewFigure = mapper.toViewElement( data.item )!;
 				const linkInImage = Array.from( viewFigure.getChildren() )
 					.find( ( child ): child is ViewElement => child.is( 'element', 'a' ) )!;

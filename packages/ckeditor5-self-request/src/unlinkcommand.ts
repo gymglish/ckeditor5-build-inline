@@ -28,22 +28,22 @@ export default class UnlinkCommand extends Command {
 		// A check for any integration that allows linking elements (e.g. `LinkImage`).
 		// Currently the selection reads attributes from text nodes only. See #7429 and #7465.
 		if ( isLinkableElement( selectedElement, model.schema ) ) {
-			this.isEnabled = model.schema.checkAttribute( selectedElement, 'linkHref' );
+			this.isEnabled = model.schema.checkAttribute( selectedElement, 'selfRequestHref' );
 		} else {
-			this.isEnabled = model.schema.checkAttributeInSelection( selection, 'linkHref' );
+			this.isEnabled = model.schema.checkAttributeInSelection( selection, 'selfRequestHref' );
 		}
 	}
 
 	/**
 	 * Executes the command.
 	 *
-	 * When the selection is collapsed, it removes the `linkHref` attribute from each node with the same `linkHref` attribute value.
-	 * When the selection is non-collapsed, it removes the `linkHref` attribute from each node in selected ranges.
+	 * When the selection is collapsed, it removes the `selfRequestHref` attribute from each node with the same `selfRequestHref` attribute value.
+	 * When the selection is non-collapsed, it removes the `selfRequestHref` attribute from each node in selected ranges.
 	 *
 	 * # Decorators
 	 *
 	 * If {@link module:link/linkconfig~LinkConfig#decorators `config.link.decorators`} is specified,
-	 * all configured decorators are removed together with the `linkHref` attribute.
+	 * all configured decorators are removed together with the `selfRequestHref` attribute.
 	 *
 	 * @fires execute
 	 */
@@ -58,15 +58,15 @@ export default class UnlinkCommand extends Command {
 			const rangesToUnlink = selection.isCollapsed ?
 				[ findAttributeRange(
 					selection.getFirstPosition()!,
-					'linkHref',
-					selection.getAttribute( 'linkHref' ),
+					'selfRequestHref',
+					selection.getAttribute( 'selfRequestHref' ),
 					model
 				) ] :
-				model.schema.getValidRanges( selection.getRanges(), 'linkHref' );
+				model.schema.getValidRanges( selection.getRanges(), 'selfRequestHref' );
 
-			// Remove `linkHref` attribute from specified ranges.
+			// Remove `selfRequestHref` attribute from specified ranges.
 			for ( const range of rangesToUnlink ) {
-				writer.removeAttribute( 'linkHref', range );
+				writer.removeAttribute( 'selfRequestHref', range );
 				// If there are registered custom attributes, then remove them during unlink.
 				if ( linkCommand ) {
 					for ( const manualDecorator of linkCommand.manualDecorators ) {

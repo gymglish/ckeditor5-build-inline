@@ -189,7 +189,7 @@ describe( 'LinkUI', () => {
 		it( 'should add #actionsView to the balloon and attach the balloon to the link element when collapsed selection is inside ' +
 			'that link',
 		() => {
-			setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+			setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 			const linkElement = editor.editing.view.getDomRoot().querySelector( 'a' );
 
 			linkUIFeature._showUI();
@@ -207,7 +207,7 @@ describe( 'LinkUI', () => {
 
 		// #https://github.com/ckeditor/ckeditor5-link/issues/181
 		it( 'should add #formView to the balloon when collapsed selection is inside the link and #actionsView is already visible', () => {
-			setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+			setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 			const linkElement = editor.editing.view.getDomRoot().querySelector( 'a' );
 
 			linkUIFeature._showUI();
@@ -268,7 +268,7 @@ describe( 'LinkUI', () => {
 			actionsView = linkUIFeature.actionsView;
 			formView.render();
 
-			setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+			setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 
 			// Mock some leftover value **in DOM**, e.g. after previous editing.
 			formView.urlInputView.fieldView.element.value = 'leftover';
@@ -317,7 +317,7 @@ describe( 'LinkUI', () => {
 			actionsView = linkUIFeature.actionsView;
 			formView.render();
 
-			setModelData( editor.model, '<paragraph>fo<$text linkHref="foo">o[] b</$text>ar</paragraph>' );
+			setModelData( editor.model, '<paragraph>fo<$text selfRequestHref="foo">o[] b</$text>ar</paragraph>' );
 			linkUIFeature._showUI();
 
 			const customView = new View();
@@ -375,7 +375,7 @@ describe( 'LinkUI', () => {
 
 			// https://github.com/ckeditor/ckeditor5-link/issues/113
 			it( 'updates the position of the panel – editing a link, then the selection remains in the link', () => {
-				setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+				setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 
 				linkUIFeature._showUI();
 				const spy = testUtils.sinon.stub( balloon, 'updatePosition' ).returns( {} );
@@ -428,7 +428,7 @@ describe( 'LinkUI', () => {
 				actionsView = linkUIFeature.actionsView;
 				formView.render();
 
-				setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+				setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 
 				linkUIFeature._showUI();
 
@@ -454,7 +454,7 @@ describe( 'LinkUI', () => {
 
 			// https://github.com/ckeditor/ckeditor5-link/issues/113
 			it( 'hides of the panel – editing a link, then the selection moved out of the link', () => {
-				setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text>bar</paragraph>' );
+				setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text>bar</paragraph>' );
 
 				linkUIFeature._showUI();
 
@@ -475,7 +475,7 @@ describe( 'LinkUI', () => {
 
 			// https://github.com/ckeditor/ckeditor5-link/issues/113
 			it( 'hides the panel – editing a link, then the selection expands', () => {
-				setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+				setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 
 				linkUIFeature._showUI();
 
@@ -784,7 +784,7 @@ describe( 'LinkUI', () => {
 		it( 'should add #actionsView to the balloon and attach the balloon to the link element when collapsed selection is inside ' +
 			'that link',
 		() => {
-			setModelData( editor.model, '<paragraph><$text linkHref="url">f[]oo</$text></paragraph>' );
+			setModelData( editor.model, '<paragraph><$text selfRequestHref="url">f[]oo</$text></paragraph>' );
 
 			linkUIFeature._addActionsView();
 			actionsView = linkUIFeature.actionsView;
@@ -968,7 +968,7 @@ describe( 'LinkUI', () => {
 		} );
 
 		it( 'should make stack with link visible on Ctrl+K keystroke - link', () => {
-			setModelData( editor.model, '<paragraph><$text linkHref="foo.html">f[]oo</$text></paragraph>' );
+			setModelData( editor.model, '<paragraph><$text selfRequestHref="foo.html">f[]oo</$text></paragraph>' );
 
 			const customView = new View();
 
@@ -1148,21 +1148,21 @@ describe( 'LinkUI', () => {
 			} );
 
 			it( 'should show the UI when collapsed selection is inside link element', () => {
-				setModelData( editor.model, '<$text linkHref="url">fo[]o</$text>' );
+				setModelData( editor.model, '<$text selfRequestHref="url">fo[]o</$text>' );
 
 				observer.fire( 'click', { target: document.body } );
 				sinon.assert.calledWithExactly( spy );
 			} );
 
 			it( 'should show the UI when selection exclusively encloses a link element (#1)', () => {
-				setModelData( editor.model, '[<$text linkHref="url">foo</$text>]' );
+				setModelData( editor.model, '[<$text selfRequestHref="url">foo</$text>]' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.calledWithExactly( spy );
 			} );
 
 			it( 'should show the UI when selection exclusively encloses a link element (#2)', () => {
-				setModelData( editor.model, '<$text linkHref="url">[foo]</$text>' );
+				setModelData( editor.model, '<$text selfRequestHref="url">[foo]</$text>' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.calledWithExactly( spy );
@@ -1187,7 +1187,7 @@ describe( 'LinkUI', () => {
 						)
 					} );
 
-				setModelData( editor.model, '<paragraph>[<inlineWidget linkHref="url"></inlineWidget>]</paragraph>' );
+				setModelData( editor.model, '<paragraph>[<inlineWidget selfRequestHref="url"></inlineWidget>]</paragraph>' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.calledWithExactly( spy );
@@ -1201,35 +1201,35 @@ describe( 'LinkUI', () => {
 			} );
 
 			it( 'should do nothing when selection is non-collapsed and doesn\'t enclose a link element (#1)', () => {
-				setModelData( editor.model, '<$text linkHref="url">f[o]o</$text>' );
+				setModelData( editor.model, '<$text selfRequestHref="url">f[o]o</$text>' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.notCalled( spy );
 			} );
 
 			it( 'should do nothing when selection is non-collapsed and doesn\'t enclose a link element (#2)', () => {
-				setModelData( editor.model, '<$text linkHref="url">[fo]o</$text>' );
+				setModelData( editor.model, '<$text selfRequestHref="url">[fo]o</$text>' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.notCalled( spy );
 			} );
 
 			it( 'should do nothing when selection is non-collapsed and doesn\'t enclose a link element (#3)', () => {
-				setModelData( editor.model, '<$text linkHref="url">f[oo]</$text>' );
+				setModelData( editor.model, '<$text selfRequestHref="url">f[oo]</$text>' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.notCalled( spy );
 			} );
 
 			it( 'should do nothing when selection is non-collapsed and doesn\'t enclose a link element (#4)', () => {
-				setModelData( editor.model, 'ba[r<$text linkHref="url">foo]</$text>' );
+				setModelData( editor.model, 'ba[r<$text selfRequestHref="url">foo]</$text>' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.notCalled( spy );
 			} );
 
 			it( 'should do nothing when selection is non-collapsed and doesn\'t enclose a link element (#5)', () => {
-				setModelData( editor.model, 'ba[r<$text linkHref="url">foo</$text>]' );
+				setModelData( editor.model, 'ba[r<$text selfRequestHref="url">foo</$text>]' );
 
 				observer.fire( 'click', { target: {} } );
 				sinon.assert.notCalled( spy );
@@ -1256,7 +1256,7 @@ describe( 'LinkUI', () => {
 					}
 				} );
 
-				setModelData( editor.model, '<paragraph>Foo [<inlineWidget linkHref="foo"></inlineWidget>] Foo.</paragraph>' );
+				setModelData( editor.model, '<paragraph>Foo [<inlineWidget selfRequestHref="foo"></inlineWidget>] Foo.</paragraph>' );
 
 				observer.fire( 'click', { target: document.body } );
 				sinon.assert.calledWithExactly( spy );
@@ -1396,7 +1396,7 @@ describe( 'LinkUI', () => {
 
 					editor.model.schema.extend( '$text', {
 						allowIn: '$root',
-						allowAttributes: 'linkHref'
+						allowAttributes: 'selfRequestHref'
 					} );
 
 					return { editor, formView };
@@ -1514,7 +1514,7 @@ describe( 'LinkUI', () => {
 				} );
 			} );
 
-			it( 'should propagate the protocol to the link\'s `linkHref` attribute in model', () => {
+			it( 'should propagate the protocol to the link\'s `selfRequestHref` attribute in model', () => {
 				return createEditorWithDefaultProtocol( 'http://' ).then( ( { editor, formView } ) => {
 					setModelData( editor.model, '[ckeditor.com]' );
 
@@ -1522,7 +1522,7 @@ describe( 'LinkUI', () => {
 					formView.fire( 'submit' );
 
 					expect( getModelData( editor.model ) ).to.equal(
-						'[<$text linkHref="http://ckeditor.com">ckeditor.com</$text>]'
+						'[<$text selfRequestHref="http://ckeditor.com">ckeditor.com</$text>]'
 					);
 
 					return editor.destroy();
@@ -1538,7 +1538,7 @@ describe( 'LinkUI', () => {
 
 					expect( formView.urlInputView.fieldView.value ).to.equal( 'mailto:email@example.com' );
 					expect( getModelData( editor.model ) ).to.equal(
-						'[<$text linkHref="mailto:email@example.com">email@example.com</$text>]'
+						'[<$text selfRequestHref="mailto:email@example.com">email@example.com</$text>]'
 					);
 
 					return editor.destroy();
@@ -1554,7 +1554,7 @@ describe( 'LinkUI', () => {
 
 				expect( formView.urlInputView.fieldView.value ).to.equal( 'mailto:email@example.com' );
 				expect( getModelData( editor.model ) ).to.equal(
-					'<paragraph>[<$text linkHref="mailto:email@example.com">email@example.com</$text>]</paragraph>'
+					'<paragraph>[<$text selfRequestHref="mailto:email@example.com">email@example.com</$text>]</paragraph>'
 				);
 			} );
 
@@ -1706,7 +1706,7 @@ describe( 'LinkUI', () => {
 
 							model.schema.extend( '$text', {
 								allowIn: '$root',
-								allowAttributes: 'linkHref'
+								allowAttributes: 'selfRequestHref'
 							} );
 
 							linkUIFeature = editor.plugins.get( LinkUI );
@@ -1732,7 +1732,7 @@ describe( 'LinkUI', () => {
 				it( 'should gather information about manual decorators', () => {
 					const executeSpy = testUtils.sinon.spy( editor, 'execute' );
 
-					setModelData( model, 'f[<$text linkHref="url" linkIsFoo="true">ooba</$text>]r' );
+					setModelData( model, 'f[<$text selfRequestHref="url" linkIsFoo="true">ooba</$text>]r' );
 					expect( formView.urlInputView.fieldView.element.value ).to.equal( 'url' );
 					expect( formView.getDecoratorSwitchesState() ).to.deep.equal( { linkIsFoo: true } );
 
@@ -1743,7 +1743,7 @@ describe( 'LinkUI', () => {
 				} );
 
 				it( 'should reset switch state when form view is closed', () => {
-					setModelData( model, 'f[<$text linkHref="url" linkIsFoo="true">ooba</$text>]r' );
+					setModelData( model, 'f[<$text selfRequestHref="url" linkIsFoo="true">ooba</$text>]r' );
 
 					const manualDecorators = editor.commands.get( 'link' ).manualDecorators;
 					const firstDecoratorModel = manualDecorators.first;

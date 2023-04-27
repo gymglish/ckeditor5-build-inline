@@ -117,6 +117,6 @@ export default class LinkImageUI extends Plugin {
 		const selectedModelElement = selection.getSelectedElement();
 		const imageUtils: ImageUtils = this.editor.plugins.get( 'ImageUtils' );
 
-		return imageUtils.isImage( selectedModelElement ) && selectedModelElement.hasAttribute( 'linkHref' );
+		return imageUtils.isImage( selectedModelElement ) && selectedModelElement.hasAttribute( 'selfRequestHref' );
 	}
 }

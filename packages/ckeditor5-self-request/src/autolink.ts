@@ -244,7 +244,7 @@ export default class AutoLink extends Plugin {
 
 		// Enqueue change to make undo step.
 		model.enqueueChange( writer => {
-			writer.setAttribute( 'linkHref', url, range );
+			writer.setAttribute( 'selfRequestHref', url, range );
 
 			model.enqueueChange( () => {
 				deletePlugin.requestUndoOnBackspace();
@@ -265,10 +265,10 @@ function getUrlAtTextEnd( text: string ): string | null {
 }
 
 function isLinkAllowedOnRange( range: Range, model: Model ): boolean {
-	return model.schema.checkAttributeInSelection( model.createSelection( range ), 'linkHref' );
+	return model.schema.checkAttributeInSelection( model.createSelection( range ), 'selfRequestHref' );
 }
 
 function linkIsAlreadySet( range: Range ): boolean {
 	const item = range.start.nodeAfter;
-	return !!item && item.hasAttribute( 'linkHref' );
+	return !!item && item.hasAttribute( 'selfRequestHref' );
 }

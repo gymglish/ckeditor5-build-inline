@@ -256,7 +256,7 @@ describe( 'utils', () => {
 
 			schema.register( 'imageBlock', {
 				allowIn: '$root',
-				allowAttributes: [ 'linkHref' ]
+				allowAttributes: [ 'selfRequestHref' ]
 			} );
 
 			expect( isLinkableElement( element, schema ) ).to.equal( true );
@@ -268,7 +268,7 @@ describe( 'utils', () => {
 
 			schema.register( 'imageInline', {
 				allowIn: '$root',
-				allowAttributes: [ 'linkHref' ]
+				allowAttributes: [ 'selfRequestHref' ]
 			} );
 
 			expect( isLinkableElement( element, schema ) ).to.equal( true );
