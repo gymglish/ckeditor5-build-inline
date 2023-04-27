@@ -13,7 +13,7 @@ ClassicEditor
 	.create( document.querySelector( '#editor-insert' ), {
 		image: { toolbar: [ 'toggleImageCaption', 'imageTextAlternative' ] },
 		plugins: [ ArticlePluginSet ],
-		toolbar: [ 'undo', 'redo', 'link' ]
+		toolbar: [ 'undo', 'redo', 'selfrequest' ]
 	} )
 	.then( editor => {
 		const element = document.querySelector( '#button-insert' );
@@ -30,7 +30,7 @@ ClassicEditor
 	.create( document.querySelector( '#editor-delete' ), {
 		image: { toolbar: [ 'toggleImageCaption', 'imageTextAlternative' ] },
 		plugins: [ ArticlePluginSet ],
-		toolbar: [ 'undo', 'redo', 'link' ]
+		toolbar: [ 'undo', 'redo', 'selfrequest' ]
 	} )
 	.then( editor => {
 		const element = document.querySelector( '#button-delete' );

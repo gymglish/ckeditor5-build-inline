@@ -20,7 +20,7 @@ import Bold from '@ckeditor/ckeditor5-basic-styles/src/bold';
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ Bold, Typing, Paragraph, Undo, Enter, ShiftEnter, Link, AutoLink ],
-		toolbar: [ 'link', 'undo', 'redo' ]
+		toolbar: [ 'selfrequest', 'undo', 'redo' ]
 	} )
 	.then( editor => {
 		window.editor = editor;

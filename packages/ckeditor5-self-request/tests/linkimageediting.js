@@ -484,7 +484,7 @@ describe( 'LinkImageEditing', () => {
 					'<paragraph>[foo<imageInline src="/assets/sample.png" alt="alt text"></imageInline>bar]</paragraph>'
 				);
 
-				editor.execute( 'link', 'https://cksource.com' );
+				editor.execute( 'selfrequest', 'https://cksource.com' );
 
 				expect( getViewData( editor.editing.view ) ).to.equal(
 					'<p>' +
@@ -1075,7 +1075,7 @@ describe( 'LinkImageEditing', () => {
 					'</paragraph>'
 				);
 
-				editor.execute( 'link', 'https://cksource.com', {
+				editor.execute( 'selfrequest', 'https://cksource.com', {
 					linkIsDownloadable: true,
 					linkIsExternal: true,
 					linkIsGallery: true,
@@ -1086,7 +1086,7 @@ describe( 'LinkImageEditing', () => {
 					writer.setSelection( model.document.getRoot().getChild( 1 ).getChild( 0 ), 'on' );
 				} );
 
-				editor.execute( 'link', 'https://cksource.com', {
+				editor.execute( 'selfrequest', 'https://cksource.com', {
 					linkIsDownloadable: true,
 					linkIsExternal: true,
 					linkIsGallery: true,
@@ -1115,7 +1115,7 @@ describe( 'LinkImageEditing', () => {
 					'[<imageBlock alt="bar" src="sample.jpg"></imageBlock>]'
 				);
 
-				editor.execute( 'link', 'https://cksource.com', {
+				editor.execute( 'selfrequest', 'https://cksource.com', {
 					linkIsDownloadable: true,
 					linkIsExternal: true,
 					linkIsGallery: true,

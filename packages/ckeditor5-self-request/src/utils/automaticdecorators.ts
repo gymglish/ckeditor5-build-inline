@@ -80,7 +80,7 @@ export default class AutomaticDecorators {
 						viewWriter.setStyle( key, item.styles[ key ], viewElement );
 					}
 
-					viewWriter.setCustomProperty( 'link', true, viewElement );
+					viewWriter.setCustomProperty( 'selfrequest', true, viewElement );
 
 					if ( item.callback( data.attributeNewValue as string | null ) ) {
 						if ( data.item.is( 'selection' ) ) {

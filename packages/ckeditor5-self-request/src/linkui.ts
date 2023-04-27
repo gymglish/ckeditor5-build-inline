@@ -36,7 +36,7 @@ import linkIcon from '../theme/icons/link.svg';
 const VISUAL_SELECTION_MARKER_NAME = 'link-ui';
 
 /**
- * The link UI plugin. It introduces the `'link'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
+ * The link UI plugin. It introduces the `'selfrequest'` and `'unlink'` buttons and support for the <kbd>Ctrl+K</kbd> keystroke.
  *
  * It uses the
  * {@link module:ui/panel/balloon/contextualballoon~ContextualBalloon contextual balloon plugin}.
@@ -136,7 +136,7 @@ export default class LinkUI extends Plugin {
 	private _createActionsView(): LinkActionsView {
 		const editor = this.editor;
 		const actionsView = new LinkActionsView( editor.locale );
-		const linkCommand: LinkCommand = editor.commands.get( 'link' )!;
+		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const unlinkCommand: UnlinkCommand = editor.commands.get( 'unlink' )!;
 
 		actionsView.bind( 'href' ).to( linkCommand, 'value' );
@@ -174,7 +174,7 @@ export default class LinkUI extends Plugin {
 	 */
 	private _createFormView(): LinkFormView & ViewWithCssTransitionDisabler {
 		const editor = this.editor;
-		const linkCommand: LinkCommand = editor.commands.get( 'link' )!;
+		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const defaultProtocol = editor.config.get( 'link.defaultProtocol' );
 
 		const formView = new ( CssTransitionDisablerMixin( LinkFormView ) )( editor.locale, linkCommand );
@@ -189,7 +189,7 @@ export default class LinkUI extends Plugin {
 		this.listenTo( formView, 'submit', () => {
 			const { value } = formView.urlInputView.fieldView.element!;
 			const parsedUrl = addLinkProtocolIfApplicable( value, defaultProtocol );
-			editor.execute( 'link', parsedUrl, formView.getDecoratorSwitchesState() );
+			editor.execute( 'selfrequest', parsedUrl, formView.getDecoratorSwitchesState() );
 			this._closeFormView();
 		} );
 
@@ -213,10 +213,10 @@ export default class LinkUI extends Plugin {
 	 */
 	private _createToolbarLinkButton(): void {
 		const editor = this.editor;
-		const linkCommand: LinkCommand = editor.commands.get( 'link' )!;
+		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const t = editor.t;
 
-		editor.ui.componentFactory.add( 'link', locale => {
+		editor.ui.componentFactory.add( 'selfrequest', locale => {
 			const button = new ButtonView( locale );
 
 			button.isEnabled = true;
@@ -261,7 +261,7 @@ export default class LinkUI extends Plugin {
 			// Prevent focusing the search bar in FF, Chrome and Edge. See https://github.com/ckeditor/ckeditor5/issues/4811.
 			cancel();
 
-			if ( editor.commands.get( 'link' )!.isEnabled ) {
+			if ( editor.commands.get( 'selfrequest' )!.isEnabled ) {
 				this._showUI( true );
 			}
 		} );
@@ -335,7 +335,7 @@ export default class LinkUI extends Plugin {
 		}
 
 		const editor = this.editor;
-		const linkCommand: LinkCommand = editor.commands.get( 'link' )!;
+		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 
 		this.formView!.disableCssTransitions();
 
@@ -368,7 +368,7 @@ export default class LinkUI extends Plugin {
 	 * switch buttons responsible for manual decorator handling is restored.
 	 */
 	private _closeFormView(): void {
-		const linkCommand: LinkCommand = this.editor.commands.get( 'link' )!;
+		const linkCommand: LinkCommand = this.editor.commands.get( 'selfrequest' )!;
 
 		// Restore manual decorator states to represent the current model state. This case is important to reset the switch buttons
 		// when the user cancels the editing form.

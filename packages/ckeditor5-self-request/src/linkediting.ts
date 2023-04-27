@@ -62,7 +62,7 @@ const EXTERNAL_LINKS_REGEXP = /^(https?:)?\/\//;
  * The link engine feature.
  *
  * It introduces the `selfRequestHref="url"` attribute in the model which renders to the view as a `<a href="url">` element
- * as well as `'link'` and `'unlink'` commands.
+ * as well as `'selfrequest'` and `'unlink'` commands.
  */
 export default class LinkEditing extends Plugin {
 	/**
@@ -86,7 +86,7 @@ export default class LinkEditing extends Plugin {
 	constructor( editor: Editor ) {
 		super( editor );
 
-		editor.config.define( 'link', {
+		editor.config.define( 'selfrequest', {
 			addTargetToExternalLinks: false
 		} );
 	}
@@ -123,7 +123,7 @@ export default class LinkEditing extends Plugin {
 			} );
 
 		// Create linking commands.
-		editor.commands.add( 'link', new LinkCommand( editor ) );
+		editor.commands.add( 'selfrequest', new LinkCommand( editor ) );
 		editor.commands.add( 'unlink', new UnlinkCommand( editor ) );
 
 		const linkDecorators = getLocalizedDecorators( editor.t, normalizeDecorators( editor.config.get( 'link.decorators' ) ) );
@@ -172,7 +172,7 @@ export default class LinkEditing extends Plugin {
 		const editor = this.editor;
 		// Store automatic decorators in the command instance as we do the same with manual decorators.
 		// Thanks to that, `LinkImageEditing` plugin can re-use the same definitions.
-		const command: LinkCommand = editor.commands.get( 'link' )!;
+		const command: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const automaticDecorators = command.automaticDecorators;
 
 		// Adds a default decorator for external links.
@@ -210,7 +210,7 @@ export default class LinkEditing extends Plugin {
 		}
 
 		const editor = this.editor;
-		const command: LinkCommand = editor.commands.get( 'link' )!;
+		const command: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const manualDecorators = command.manualDecorators;
 
 		manualDecoratorDefinitions.forEach( decoratorDefinition => {
@@ -240,7 +240,7 @@ export default class LinkEditing extends Plugin {
 							writer.setStyle( key, decorator.styles[ key ], element );
 						}
 
-						writer.setCustomProperty( 'link', true, element );
+						writer.setCustomProperty( 'selfrequest', true, element );
 
 						return element;
 					}
@@ -299,7 +299,7 @@ export default class LinkEditing extends Plugin {
 
 		// Open link on Alt+Enter.
 		this.listenTo<ViewDocumentKeyDownEvent>( viewDocument, 'keydown', ( evt, data ) => {
-			const linkCommand: LinkCommand = editor.commands.get( 'link' )!;
+			const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
 			const url = linkCommand!.value;
 			const shouldOpen = !!url && data.keyCode === keyCodes.enter && data.altKey;
 
@@ -697,5 +697,5 @@ function isTyping( editor: Editor ): boolean {
 function getLinkAttributesAllowedOnText( schema: Schema ): Array<string> {
 	const textAttributes = schema.getDefinition( '$text' )!.allowAttributes;
 
-	return textAttributes.filter( attribute => attribute.startsWith( 'link' ) );
+	return textAttributes.filter( attribute => attribute.startsWith( 'selfrequest' ) );
 }

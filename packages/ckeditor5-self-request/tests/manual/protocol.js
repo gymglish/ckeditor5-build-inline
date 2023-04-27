@@ -22,7 +22,7 @@ function createEditorWithDefaultProtocol( editor, defaultProtocol ) {
 	return ClassicEditor
 		.create( document.querySelector( editor ), {
 			plugins: [ Link, Typing, Paragraph, Undo, Enter, Superscript ],
-			toolbar: [ 'link', 'undo', 'redo' ],
+			toolbar: [ 'selfrequest', 'undo', 'redo' ],
 			link: {
 				addTargetToExternalLinks: true,
 				...defaultProtocol && { defaultProtocol }

@@ -12,7 +12,7 @@ ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		image: { toolbar: [ 'toggleImageCaption', 'imageTextAlternative' ] },
 		plugins: [ ArticlePluginSet ],
-		toolbar: [ 'undo', 'redo', 'link' ],
+		toolbar: [ 'undo', 'redo', 'selfrequest' ],
 		link: {
 			decorators: {
 				isDownloadable: {

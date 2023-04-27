@@ -46,7 +46,7 @@ export const LINK_KEYSTROKE = 'Ctrl+K';
  * Returns `true` if a given view node is the link element.
  */
 export function isLinkElement( node: ViewNode | ViewDocumentFragment ): boolean {
-	return node.is( 'attributeElement' ) && !!node.getCustomProperty( 'link' );
+	return node.is( 'attributeElement' ) && !!node.getCustomProperty( 'selfrequest' );
 }
 
 /**
@@ -56,7 +56,7 @@ export function createLinkElement( href: string, { writer }: DowncastConversionA
 	// Priority 5 - https://github.com/ckeditor/ckeditor5-link/issues/121.
 	const linkElement = writer.createAttributeElement( 'a', { href }, { priority: 5 } );
 
-	writer.setCustomProperty( 'link', true, linkElement );
+	writer.setCustomProperty( 'selfrequest', true, linkElement );
 
 	return linkElement;
 }

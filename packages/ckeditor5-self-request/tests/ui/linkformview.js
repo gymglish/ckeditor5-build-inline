@@ -421,7 +421,7 @@ describe( 'LinkFormView', () => {
 			return ClassicTestEditor
 				.create( editorElement, {
 					plugins: [ Link ],
-					toolbar: [ 'link' ],
+					toolbar: [ 'selfrequest' ],
 					language: 'pl',
 					link: {
 						decorators: {
@@ -437,7 +437,7 @@ describe( 'LinkFormView', () => {
 				} )
 				.then( newEditor => {
 					editor = newEditor;
-					linkFormView = new LinkFormView( editor.locale, editor.commands.get( 'link' ) );
+					linkFormView = new LinkFormView( editor.locale, editor.commands.get( 'selfrequest' ) );
 				} );
 		} );
 

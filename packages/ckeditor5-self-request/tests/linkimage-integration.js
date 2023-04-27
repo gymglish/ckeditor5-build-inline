@@ -50,7 +50,7 @@ describe( 'LinkImage integration', () => {
 				'<paragraph>Foo.</paragraph>[<imageBlock src="/assets/sample.png"><caption>Foo.</caption></imageBlock>]'
 			);
 
-			editor.execute( 'link', 'https://cksource.com' );
+			editor.execute( 'selfrequest', 'https://cksource.com' );
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>Foo.</paragraph>' +

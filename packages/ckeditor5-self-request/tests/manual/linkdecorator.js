@@ -17,7 +17,7 @@ window.editors = {};
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		plugins: [ ArticlePluginSet, LinkImage ],
-		toolbar: [ 'link', 'undo', 'redo' ],
+		toolbar: [ 'selfrequest', 'undo', 'redo' ],
 		link: {
 			decorators: {
 				isExternal: {
@@ -59,7 +59,7 @@ ClassicEditor
 ClassicEditor
 	.create( document.querySelector( '#editor2' ), {
 		plugins: [ ArticlePluginSet, LinkImage ],
-		toolbar: [ 'link', 'undo', 'redo' ],
+		toolbar: [ 'selfrequest', 'undo', 'redo' ],
 		link: {
 			decorators: {
 				isTelephone: {

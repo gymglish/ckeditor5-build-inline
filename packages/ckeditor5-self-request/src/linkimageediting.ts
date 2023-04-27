@@ -75,7 +75,7 @@ export default class LinkImageEditing extends Plugin {
 	 */
 	private _enableAutomaticDecorators(): void {
 		const editor = this.editor;
-		const command: LinkCommand = editor.commands.get( 'link' )!;
+		const command: LinkCommand = editor.commands.get( 'selfrequest' )!;
 		const automaticDecorators = command.automaticDecorators;
 
 		if ( automaticDecorators.length ) {
@@ -89,7 +89,7 @@ export default class LinkImageEditing extends Plugin {
 	 */
 	private _enableManualDecorators(): void {
 		const editor = this.editor;
-		const command: LinkCommand = editor.commands.get( 'link' )!;
+		const command: LinkCommand = editor.commands.get( 'selfrequest' )!;
 
 		for ( const decorator of command.manualDecorators ) {
 			if ( editor.plugins.has( 'ImageBlockEditing' ) ) {
