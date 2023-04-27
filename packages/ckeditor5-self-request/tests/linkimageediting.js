@@ -1125,7 +1125,7 @@ describe( 'LinkImageEditing', () => {
 				// Attributes will be removed along with the link, but the downcast will be fired.
 				// The lack of link should not affect the downcasting.
 				expect( () => {
-					editor.execute( 'unlink', 'https://cksource.com', {
+					editor.execute( 'unselfrequest', 'https://cksource.com', {
 						linkIsDownloadable: true,
 						linkIsExternal: true,
 						linkIsGallery: true,

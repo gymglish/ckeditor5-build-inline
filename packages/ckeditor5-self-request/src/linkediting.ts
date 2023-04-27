@@ -62,7 +62,7 @@ const EXTERNAL_LINKS_REGEXP = /^(https?:)?\/\//;
  * The link engine feature.
  *
  * It introduces the `selfRequestHref="url"` attribute in the model which renders to the view as a `<a href="url">` element
- * as well as `'selfrequest'` and `'unlink'` commands.
+ * as well as `'selfrequest'` and `'unselfrequest'` commands.
  */
 export default class LinkEditing extends Plugin {
 	/**
@@ -124,7 +124,7 @@ export default class LinkEditing extends Plugin {
 
 		// Create linking commands.
 		editor.commands.add( 'selfrequest', new LinkCommand( editor ) );
-		editor.commands.add( 'unlink', new UnlinkCommand( editor ) );
+		editor.commands.add( 'unselfrequest', new UnlinkCommand( editor ) );
 
 		const linkDecorators = getLocalizedDecorators( editor.t, normalizeDecorators( editor.config.get( 'link.decorators' ) ) );
 

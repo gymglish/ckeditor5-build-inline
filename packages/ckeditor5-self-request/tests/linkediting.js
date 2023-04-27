@@ -314,7 +314,7 @@ describe( 'LinkEditing', () => {
 		} );
 
 		it( 'should register unlink command', () => {
-			const command = editor.commands.get( 'unlink' );
+			const command = editor.commands.get( 'unselfrequest' );
 
 			expect( command ).to.be.instanceOf( UnlinkCommand );
 		} );

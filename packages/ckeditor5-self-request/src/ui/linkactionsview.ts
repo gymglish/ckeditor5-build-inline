@@ -78,7 +78,7 @@ export default class LinkActionsView extends View {
 		const t = locale.t;
 
 		this.previewButtonView = this._createPreviewButton();
-		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unlink' );
+		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unselfrequest' );
 		this.editButtonView = this._createButton( t( 'Edit link' ), icons.pencil, 'edit' );
 
 		this.set( 'href', undefined );
@@ -237,6 +237,6 @@ export type EditEvent = {
  * @eventName ~LinkActionsView#unlink
  */
 export type UnlinkEvent = {
-	name: 'unlink';
+	name: 'unselfrequest';
 	args: [];
 };
