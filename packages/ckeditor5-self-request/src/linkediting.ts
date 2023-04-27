@@ -172,7 +172,7 @@ export default class LinkEditing extends Plugin {
 		const editor = this.editor;
 		// Store automatic decorators in the command instance as we do the same with manual decorators.
 		// Thanks to that, `LinkImageEditing` plugin can re-use the same definitions.
-		const command: LinkCommand = editor.commands.get( 'selfrequest' )!;
+		const command: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 		const automaticDecorators = command.automaticDecorators;
 
 		// Adds a default decorator for external links.
@@ -210,7 +210,7 @@ export default class LinkEditing extends Plugin {
 		}
 
 		const editor = this.editor;
-		const command: LinkCommand = editor.commands.get( 'selfrequest' )!;
+		const command: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 		const manualDecorators = command.manualDecorators;
 
 		manualDecoratorDefinitions.forEach( decoratorDefinition => {
@@ -299,7 +299,7 @@ export default class LinkEditing extends Plugin {
 
 		// Open link on Alt+Enter.
 		this.listenTo<ViewDocumentKeyDownEvent>( viewDocument, 'keydown', ( evt, data ) => {
-			const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
+			const linkCommand: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 			const url = linkCommand!.value;
 			const shouldOpen = !!url && data.keyCode === keyCodes.enter && data.altKey;
 

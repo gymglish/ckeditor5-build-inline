@@ -51,7 +51,7 @@ export default class UnlinkCommand extends Command {
 		const editor = this.editor;
 		const model = this.editor.model;
 		const selection = model.document.selection;
-		const linkCommand: LinkCommand | undefined = editor.commands.get( 'selfrequest' );
+		const linkCommand: LinkCommand | any | undefined = editor.commands.get( 'selfrequest' );
 
 		model.change( writer => {
 			// Get ranges to unlink.

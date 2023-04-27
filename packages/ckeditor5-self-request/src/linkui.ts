@@ -145,7 +145,7 @@ export default class LinkUI extends Plugin {
 	private _createActionsView(): LinkActionsView {
 		const editor = this.editor;
 		const actionsView = new LinkActionsView( editor );
-		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
+		const linkCommand: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 		const unlinkCommand: UnlinkCommand = editor.commands.get( 'unselfrequest' )!;
 
 		actionsView.bind( 'href' ).to( linkCommand, 'value' );
@@ -183,7 +183,7 @@ export default class LinkUI extends Plugin {
 	 */
 	private _createFormView(): LinkFormView & ViewWithCssTransitionDisabler {
 		const editor = this.editor;
-		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
+		const linkCommand: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 		const defaultProtocol = editor.config.get( 'link.defaultProtocol' );
 
 		const formView = new ( CssTransitionDisablerMixin( LinkFormView ) )( editor, linkCommand );
@@ -231,7 +231,7 @@ export default class LinkUI extends Plugin {
 	 */
 	private _createToolbarLinkButton(): void {
 		const editor = this.editor;
-		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
+		const linkCommand: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 		const t = editor.t;
 
 		editor.ui.componentFactory.add( 'selfrequest', locale => {
@@ -354,7 +354,7 @@ export default class LinkUI extends Plugin {
 		}
 
 		const editor = this.editor;
-		const linkCommand: LinkCommand = editor.commands.get( 'selfrequest' )!;
+		const linkCommand: LinkCommand | any = editor.commands.get( 'selfrequest' )!;
 
 		this.formView!.disableCssTransitions();
 
@@ -390,7 +390,7 @@ export default class LinkUI extends Plugin {
 	 * switch buttons responsible for manual decorator handling is restored.
 	 */
 	private _closeFormView(): void {
-		const linkCommand: LinkCommand = this.editor.commands.get( 'selfrequest' )!;
+		const linkCommand: LinkCommand | any = this.editor.commands.get( 'selfrequest' )!;
 
 		// Restore manual decorator states to represent the current model state. This case is important to reset the switch buttons
 		// when the user cancels the editing form.
