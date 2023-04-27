@@ -13,7 +13,6 @@ export { default as LinkUI } from './linkui';
 export { default as LinkImage } from './linkimage';
 export { default as LinkImageEditing } from './linkimageediting';
 export { default as LinkImageUI } from './linkimageui';
-export { default as AutoLink } from './autolink';
 
 export { LinkConfig } from './linkconfig';
 export { default as LinkCommand } from './linkcommand';

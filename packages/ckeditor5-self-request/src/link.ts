@@ -10,7 +10,6 @@
 import { Plugin } from 'ckeditor5/src/core';
 import LinkEditing from './linkediting';
 import LinkUI from './linkui';
-import AutoLink from './autolink';
 
 /**
  * The link plugin.
@@ -23,7 +22,7 @@ export default class SelfRequest extends Plugin {
 	 * @inheritDoc
 	 */
 	public static get requires() {
-		return [ LinkEditing, LinkUI, AutoLink ] as const;
+		return [ LinkEditing, LinkUI ] as const;
 	}
 
 	/**

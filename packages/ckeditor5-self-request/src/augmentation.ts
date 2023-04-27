@@ -5,7 +5,6 @@
 
 import type {
 	LinkConfig,
-	AutoLink,
 	Link,
 	LinkEditing,
 	LinkImage,
@@ -28,7 +27,6 @@ declare module '@ckeditor/ckeditor5-core' {
 	}
 
 	interface PluginsMap {
-		[ AutoLink.pluginName ]: AutoLink;
 		[ Link.pluginName ]: Link;
 		[ LinkEditing.pluginName ]: LinkEditing;
 		[ LinkImage.pluginName ]: LinkImage;
