@@ -18,7 +18,7 @@ import AutoLink from './autolink';
  * This is a "glue" plugin that loads the {@link module:link/linkediting~LinkEditing link editing feature}
  * and {@link module:link/linkui~LinkUI link UI feature}.
  */
-export default class Link extends Plugin {
+export default class SelfRequest extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
@@ -29,7 +29,7 @@ export default class Link extends Plugin {
 	/**
 	 * @inheritDoc
 	 */
-	public static get pluginName(): 'Link' {
-		return 'Link';
+	public static get pluginName(): 'SelfRequest' {
+		return 'SelfRequest';
 	}
 }
