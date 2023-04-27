@@ -54,6 +54,8 @@
     "@ckeditor/ckeditor5-dev-translations": "^37.0.1",
     "@ckeditor/ckeditor5-dev-utils": "^37.0.1",
     "@ckeditor/ckeditor5-theme-lark": "^37.0.1",
+    "@types/lodash-es": "^4.17.7",
+    "ckeditor5": "^37.0.1",
     "eslint": "^8.38.0",
     "eslint-config-ckeditor5": "^4.4.0",
     "husky": "^8.0.0",
