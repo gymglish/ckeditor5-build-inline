@@ -54,6 +54,12 @@
     "@ckeditor/ckeditor5-dev-translations": "^37.0.1",
     "@ckeditor/ckeditor5-dev-utils": "^37.0.1",
     "@ckeditor/ckeditor5-theme-lark": "^37.0.1",
+    "eslint": "^8.38.0",
+    "eslint-config-ckeditor5": "^4.4.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.1",
+    "stylelint": "^15.5.0",
+    "stylelint-config-ckeditor5": "^4.4.0",
     "terser-webpack-plugin": "^4.2.3",
     "typescript": "^4.8.4",
     "webpack": "^5.58.1",
@@ -75,6 +81,20 @@
   "scripts": {
     "build": "webpack --mode production",
     "postbuild": "tsc -p ./tsconfig.types.json",
+    "lint": "eslint --quiet '**/*.js'",
+    "stylelint": "stylelint --quiet --allow-empty-input 'theme/**/*.css' 'docs/**/*.css'",
     "preversion": "npm run build"
-  }
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "eslint --quiet"
+    ],
+    "**/*.css": [
+      "stylelint --quiet --allow-empty-input"
+    ]
+  },
+  "eslintIgnore": [
+    "build/**",
+    "packages/**"
+  ]
 }
