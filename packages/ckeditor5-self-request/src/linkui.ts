@@ -183,14 +183,22 @@ export default class LinkUI extends Plugin {
 
 		// Form elements should be read-only when corresponding commands are disabled.
 		formView.urlInputView.bind( 'isEnabled' ).to( linkCommand, 'isEnabled' );
-		formView.saveButtonView.bind( 'isEnabled' ).to( linkCommand );
 
 		// Execute link command after clicking the "Save" button.
-		this.listenTo( formView, 'submit', () => {
-			const { value } = formView.urlInputView.fieldView.element!;
-			const parsedUrl = addLinkProtocolIfApplicable( value, defaultProtocol );
-			editor.execute( 'selfrequest', parsedUrl, formView.getDecoratorSwitchesState() );
-			this._closeFormView();
+		this.listenTo( formView, 'selected', (evt) => {
+			if (evt.source.isNew) {
+				const func = editor.config._config.selfrequest.createCover;
+				func(evt.source.value).subscribe(() => {
+					// Close the form first to be sure we don't get the change event in angular before the fake selection is removed.
+					this._closeFormView();
+					editor.execute( 'selfrequest', evt.source.value, formView.getDecoratorSwitchesState() );
+				});
+			} else {
+				// formView.urlInputView.fieldView.element.value = evt.source.value;
+				// Close the form first to be sure we don't get the change event in angular before the fake selection is removed.
+				this._closeFormView();
+				editor.execute( 'selfrequest', evt.source.value, formView.getDecoratorSwitchesState() );
+			}
 		} );
 
 		// Hide the panel after clicking the "Cancel" button.
@@ -220,8 +228,9 @@ export default class LinkUI extends Plugin {
 			const button = new ButtonView( locale );
 
 			button.isEnabled = true;
-			button.label = t( 'Link' );
-			button.icon = linkIcon;
+			button.label = t( 'Self request' );
+			button.withText = true;
+			// button.icon = linkIcon;
 			button.keystroke = LINK_KEYSTROKE;
 			button.tooltip = true;
 			button.isToggleable = true;
@@ -358,6 +367,9 @@ export default class LinkUI extends Plugin {
 		// https://github.com/ckeditor/ckeditor5-link/issues/78
 		// https://github.com/ckeditor/ckeditor5-link/issues/123
 		this.formView!.urlInputView.fieldView.element!.value = linkCommand.value || '';
+
+		// Init the covers
+		this.formView.filterCovers(editor, linkCommand.value);
 	}
 
 	/**
@@ -386,10 +398,6 @@ export default class LinkUI extends Plugin {
 	 */
 	private _removeFormView(): void {
 		if ( this._isFormInPanel ) {
-			// Blur the input element before removing it from DOM to prevent issues in some browsers.
-			// See https://github.com/ckeditor/ckeditor5/issues/1501.
-			this.formView!.saveButtonView.focus();
-
 			this._balloon.remove( this.formView! );
 
 			// Because the form has an input which has focus, the focus must be brought back

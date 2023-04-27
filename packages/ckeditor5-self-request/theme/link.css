@@ -8,3 +8,22 @@
  * it acts as a message to the builder telling that it should look for the corresponding styles
  * **in the theme** when compiling the editor.
  */
+
+a9-self-request {
+	background-color: rgba(255, 255, 0, 1);
+}
+
+.ck .ck-fake-link-selection {
+	background-color: var(--ck-color-link-selected-background);
+}
+
+
+.ck.ck-list__item-selfrequest:hover {
+	background: var(--ck-color-list-button-hover-background);
+}
+
+
+.ck.ck-list__item-selfrequest.ck-on {
+	background: var(--ck-color-list-button-on-background);
+	color: var(--ck-color-list-button-on-text);
+}

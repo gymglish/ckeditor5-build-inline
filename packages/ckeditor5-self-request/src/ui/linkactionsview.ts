@@ -72,14 +72,17 @@ export default class LinkActionsView extends View {
 	/**
 	 * @inheritDoc
 	 */
-	constructor( locale: Locale ) {
+	constructor( editor: { locale: Locale } ) {
+		const locale = editor.locale;
 		super( locale );
 
 		const t = locale.t;
 
+		this.editor = editor;
+
 		this.previewButtonView = this._createPreviewButton();
-		this.unlinkButtonView = this._createButton( t( 'Unlink' ), unlinkIcon, 'unselfrequest' );
-		this.editButtonView = this._createButton( t( 'Edit link' ), icons.pencil, 'edit' );
+		this.unlinkButtonView = this._createButton( t( 'Unlink self request' ), unlinkIcon, 'unselfrequest' );
+		this.editButtonView = this._createButton( t( 'Edit self request' ), icons.pencil, 'edit' );
 
 		this.set( 'href', undefined );
 
@@ -183,17 +186,40 @@ export default class LinkActionsView extends View {
 
 	/**
 	 * Creates a link href preview button.
+	 * @param href The href attribute of the link.
+	 * @returns The button view instance.
+	 * @private
+	 * @returns {string}
+	 * @memberof LinkActionsView
+	 */
+	private getUrl(href) {
+		const matchingCover = this.covers.find(c => c.cover_name === href);
+		if (matchingCover) {
+			return this.editor.config._config.selfrequest.getCoverUrl(matchingCover);
+		}
+		return null;
+	}
+
+	/**
+	 * Creates a link href preview button.
 	 *
 	 * @returns The button view instance.
 	 */
 	private _createPreviewButton(): ButtonView {
+
+		const obs = this.editor.config._config.selfrequest.getCovers;
+		if (obs) {
+			this.coverSub = obs().subscribe((covers) => {
+				this.covers = covers;
+			});
+		}
 		const button = new ButtonView( this.locale );
 		const bind = this.bindTemplate;
 		const t = this.t;
 
 		button.set( {
 			withText: true,
-			tooltip: t( 'Open link in new tab' )
+			tooltip: t( 'Open grain in new tab' )
 		} );
 
 		button.extendTemplate( {
@@ -202,14 +228,14 @@ export default class LinkActionsView extends View {
 					'ck',
 					'ck-link-actions__preview'
 				],
-				href: bind.to( 'href', href => href && ensureSafeUrl( href ) ),
+				href: bind.to( 'href', href => href && this.getUrl( href ) ),
 				target: '_blank',
 				rel: 'noopener noreferrer'
 			}
 		} );
 
 		button.bind( 'label' ).to( this, 'href', href => {
-			return href || t( 'This link has no URL' );
+			return href || t( 'This grain does not exist.' );
 		} );
 
 		button.bind( 'isEnabled' ).to( this, 'href', href => !!href );
@@ -218,6 +244,13 @@ export default class LinkActionsView extends View {
 		button.template!.eventListeners = {};
 
 		return button;
+	}
+
+	destroy() {
+		if (this.coverSub) {
+			this.coverSub.unsubscribe();
+		}
+		super.destroy();
 	}
 }
 
