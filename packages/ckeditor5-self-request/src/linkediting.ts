@@ -111,14 +111,14 @@ export default class LinkEditing extends Plugin {
 		editor.conversion.for( 'upcast' )
 			.elementToAttribute( {
 				view: {
-					name: 'a',
+					name: 'a9-self-request',
 					attributes: {
-						href: true
+						'data-covername': true
 					}
 				},
 				model: {
 					key: 'selfRequestHref',
-					value: ( viewElement: ViewElement ) => viewElement.getAttribute( 'href' )
+					value: ( viewElement: ViewElement ) => viewElement.getAttribute( 'data-covername' )
 				}
 			} );
 
