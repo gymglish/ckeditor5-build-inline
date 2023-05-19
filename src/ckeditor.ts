@@ -17,7 +17,6 @@ import { CKFinder } from '@ckeditor/ckeditor5-ckfinder';
 import { EasyImage } from '@ckeditor/ckeditor5-easy-image';
 import { Heading } from '@ckeditor/ckeditor5-heading';
 import { Image, ImageCaption, ImageStyle, ImageToolbar, ImageUpload, PictureEditing } from '@ckeditor/ckeditor5-image';
-import { Indent } from '@ckeditor/ckeditor5-indent';
 import { Link } from '@ckeditor/ckeditor5-link';
 import { List } from '@ckeditor/ckeditor5-list';
 import { MediaEmbed } from '@ckeditor/ckeditor5-media-embed';
@@ -56,7 +55,6 @@ export default class InlineEditor extends InlineEditorBase {
 		ImageStyle,
 		ImageToolbar,
 		ImageUpload,
-		Indent,
 		Link,
 		List,
 		MediaEmbed,
@@ -82,9 +80,6 @@ export default class InlineEditor extends InlineEditorBase {
 				'link',
 				'bulletedList',
 				'numberedList',
-				'|',
-				'outdent',
-				'indent',
 				'|',
 				'uploadImage',
 				'blockQuote',
