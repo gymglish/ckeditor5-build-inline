@@ -26,6 +26,7 @@ import type {
 } from './linkconfig';
 
 import { upperFirst } from 'lodash-es';
+import { Observable } from 'rxjs';
 
 const ATTRIBUTE_WHITESPACES = /[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205f\u3000]/g; // eslint-disable-line no-control-regex
 const SAFE_URL = /^(?:(?:https?|ftps?|mailto):|[^a-z]|[a-z+.-]+(?:[^a-z+.:-]|$))/i;
@@ -183,6 +184,16 @@ export function linkHasProtocol( link: string ): boolean {
 export function openLink( link: string ): void {
 	window.open( link, '_blank', 'noopener' );
 }
+
+/**
+ * Type selfRequestFunc
+*/
+export type selfRequestFunc = {
+	createCover: (coverName: string) => Observable<any>,
+	getCovers: () => Observable<any>,
+	getCoverUrl: (cover: any) => string,
+	getMatchingCovers: (term: string, covers: any) => any[],
+};
 
 export type NormalizedLinkDecoratorAutomaticDefinition = LinkDecoratorAutomaticDefinition & { id: string };
 export type NormalizedLinkDecoratorManualDefinition = LinkDecoratorManualDefinition & { id: string };

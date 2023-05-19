@@ -19,15 +19,8 @@ import '@ckeditor/ckeditor5-ui/theme/components/responsive-form/responsiveform.c
 import '../../theme/linkactions.css';
 
 import unlinkIcon from '../../theme/icons/unlink.svg';
-import { Observable, Subscription } from 'rxjs';
-
-
-type selfRequestFunc = {
-	createCover: (coverName: string) => Observable<any>,
-	getCovers: () => Observable<any>,
-	getCoverUrl: (cover: any) => string,
-	getMatchingCovers: (term: string, covers: any) => any[],
-};
+import { Subscription } from 'rxjs';
+import { selfRequestFunc } from '../utils';
 
 /**
  * The link actions view class. This view displays the link preview, allows

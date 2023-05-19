@@ -42,7 +42,7 @@ import CoverListView from './coverlistview';
 import CoverListItemView, { CoverListItemViewOptions } from './coverlistitemview';
 
 import { first } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { selfRequestFunc } from '../utils';
 
 
 const handledKeyCodes = [
@@ -56,13 +56,6 @@ const handledKeyCodes = [
 function isHandledKey( keyCode: any ) {
 	return handledKeyCodes.includes( keyCode );
 }
-
-type selfRequestFunc = {
-	createCover: (coverName: string) => Observable<any>,
-	getCovers: () => Observable<any>,
-	getCoverUrl: (cover: any) => string,
-	getMatchingCovers: (term: string, covers: any) => any[],
-};
 
 /**
  * The link form view controller class.
