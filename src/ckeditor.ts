@@ -27,6 +27,7 @@ import { Highlight } from '@ckeditor/ckeditor5-highlight';
 import { Mention } from '@ckeditor/ckeditor5-mention';
 
 import SelfRequest from '../packages/ckeditor5-self-request/src/link';
+import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 
 export default class InlineEditor extends InlineEditorBase {
 	public static override builtinPlugins = [
@@ -63,6 +64,7 @@ export default class InlineEditor extends InlineEditorBase {
 		TextTransformation,
 
 		SelfRequest,
+		WProofreader,
 	];
 
 	public static override defaultConfig = {

@@ -7,3 +7,11 @@ declare module '*.svg' {
 	const content: string;
 	export default content;
 }
+
+declare module '@webspellchecker/wproofreader-ckeditor5/src/wproofreader' {
+	import { Plugin } from '@ckeditor/ckeditor5-core';
+
+	export default class WProofreader extends Plugin {
+		static readonly pluginName: 'WProofreader';
+	}
+}
