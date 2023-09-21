@@ -23,9 +23,8 @@ import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 import { Highlight } from '@ckeditor/ckeditor5-highlight';
 import { Mention } from '@ckeditor/ckeditor5-mention';
 import SelfRequest from '../packages/ckeditor5-self-request/src/link';
-import WProofreader from '@webspellchecker/wproofreader-ckeditor5/src/wproofreader';
 export default class InlineEditor extends InlineEditorBase {
-    static builtinPlugins: (typeof TextTransformation | typeof Essentials | typeof Autoformat | typeof Superscript | typeof Subscript | typeof Bold | typeof Italic | typeof Strikethrough | typeof Underline | typeof SpecialCharacters | typeof SpecialCharactersEssentials | typeof BlockQuote | typeof CloudServices | typeof CKBox | typeof EasyImage | typeof Paragraph | typeof Heading | typeof Image | typeof ImageCaption | typeof ImageStyle | typeof ImageToolbar | typeof ImageUpload | typeof Link | typeof List | typeof MediaEmbed | typeof PasteFromOffice | typeof Table | typeof TableToolbar | typeof Highlight | typeof Mention | typeof SelfRequest | typeof PictureEditing | typeof WProofreader)[];
+    static builtinPlugins: (typeof TextTransformation | typeof Essentials | typeof Autoformat | typeof Superscript | typeof Subscript | typeof Bold | typeof Italic | typeof Strikethrough | typeof Underline | typeof SpecialCharacters | typeof SpecialCharactersEssentials | typeof BlockQuote | typeof CloudServices | typeof CKBox | typeof EasyImage | typeof Paragraph | typeof Heading | typeof Image | typeof ImageCaption | typeof ImageStyle | typeof ImageToolbar | typeof ImageUpload | typeof Link | typeof List | typeof MediaEmbed | typeof PasteFromOffice | typeof Table | typeof TableToolbar | typeof Highlight | typeof Mention | typeof SelfRequest | typeof PictureEditing)[];
     static defaultConfig: {
         toolbar: {
             items: string[];
